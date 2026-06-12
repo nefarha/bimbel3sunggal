@@ -25,7 +25,28 @@ const Login = () => {
 
       if (response.data && response.data.token) {
         localStorage.setItem('token', response.data.token);
-        navigate('/dashboard'); // Redirect to dashboard or desired page
+        if (response.data.user) {
+          localStorage.setItem('user', JSON.stringify(response.data.user));
+        }
+
+        // Role-based redirect
+        const role = response.data.user?.role;
+        switch (role) {
+          case 'admin':
+            navigate('/admin/dashboard');
+            break;
+          case 'tutor':
+            navigate('/tutor/dashboard');
+            break;
+          case 'siswa':
+            navigate('/siswa/dashboard');
+            break;
+          case 'pemilik':
+            navigate('/owner/dashboard');
+            break;
+          default:
+            navigate('/');
+        }
       }
     } catch (err) {
       console.error('Login failed:', err);

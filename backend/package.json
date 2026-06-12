@@ -1,16 +1,15 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Backend API with Express.js and MySQL",
+  "description": "Backend API with Express.js + MySQL (raw SQL via mysql2)",
   "main": "src/server.js",
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
-    "prisma:seed": "tsc prisma/seed.ts --outDir prisma --types node && cross-env DATABASE_URL=\"mysql://root:@127.0.0.1:3306/grand3sunggal\" node prisma/seed.js"
+    "seed": "node src/seed.js"
   },
   "dependencies": {
-    "@prisma/client": "^7.8.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
@@ -19,9 +18,6 @@
     "mysql2": "^3.10.1"
   },
   "devDependencies": {
-    "cross-env": "^10.1.0",
-    "nodemon": "^3.1.4",
-    "prisma": "^7.8.0",
-    "ts-node": "^10.9.2"
+    "nodemon": "^3.1.4"
   }
 }

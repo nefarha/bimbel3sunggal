@@ -1,34 +1,66 @@
-import { prisma } from '../../config/prisma.js';
+import { query, queryOne } from '../../config/query.js';
+
+const TABLE = 'siswa';
+
+const COLUMNS = [
+  'id_siswa', 'id_user', 'nama', 'tempat_lahir', 'tanggal_lahir',
+  'jenis_kelamin', 'kelas', 'jenis_kelas', 'asal_sekolah', 'alamat',
+  'tanggal_masuk', 'nama_ortu', 'pekerjaan_ortu', 'no_hp_ortu',
+  'pendidikan_ortu', 'spp', 'status',
+];
 
 export class SiswaRepository {
-  async findAll() {
-    return await prisma.siswa.findMany({
-      orderBy: { id_siswa: 'desc' },
-    });
+  async findAll(options = {}) {
+    const filters = options.where || {};
+    const whereKeys = Object.keys(filters);
+    const whereSql = whereKeys.length
+      ? 'WHERE ' + whereKeys.map((k) => `\`${k}\` = ?`).join(' AND ')
+      : '';
+    const params = whereKeys.map((k) => filters[k]);
+
+    return await query(
+      `SELECT ${COLUMNS.map((c) => `\`${c}\``).join(', ')} FROM \`${TABLE}\` ${whereSql} ORDER BY id_siswa DESC`,
+      params
+    );
   }
 
   async findById(id) {
-    return await prisma.siswa.findUnique({
-      where: { id_siswa: id },
-    });
+    return await queryOne(
+      `SELECT ${COLUMNS.map((c) => `\`${c}\``).join(', ')} FROM \`${TABLE}\` WHERE id_siswa = ? LIMIT 1`,
+      [id]
+    );
   }
 
   async create(data) {
-    return await prisma.siswa.create({
-      data,
-    });
+    const payload = { ...data };
+    // Auto-generate id_siswa if not provided
+    if (!payload.id_siswa) {
+      const maxRow = await queryOne(
+        `SELECT COALESCE(MAX(id_siswa), 0) + 1 AS next_id FROM \`${TABLE}\``
+      );
+      payload.id_siswa = maxRow?.next_id || 1;
+    }
+    const cols = Object.keys(payload);
+    const placeholders = cols.map(() => '?').join(', ');
+    const params = cols.map((c) => payload[c]);
+    const result = await query(
+      `INSERT INTO \`${TABLE}\` (${cols.map((c) => `\`${c}\``).join(', ')}) VALUES (${placeholders})`,
+      params
+    );
+    return await this.findById(result.insertId || payload.id_siswa);
   }
 
   async update(id, data) {
-    return await prisma.siswa.update({
-      where: { id_siswa: id },
-      data,
-    });
+    const cols = Object.keys(data);
+    if (cols.length === 0) return await this.findById(id);
+    const setSql = cols.map((c) => `\`${c}\` = ?`).join(', ');
+    const params = [...cols.map((c) => data[c]), id];
+    await query(`UPDATE \`${TABLE}\` SET ${setSql} WHERE id_siswa = ?`, params);
+    return await this.findById(id);
   }
 
   async delete(id) {
-    return await prisma.siswa.delete({
-      where: { id_siswa: id },
-    });
+    await query(`DELETE FROM \`${TABLE}\` WHERE id_siswa = ?`, [id]);
+    return { id_siswa: id };
   }
 }

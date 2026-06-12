@@ -17,7 +17,7 @@ CREATE TABLE users (
     id_user   INT          AUTO_INCREMENT PRIMARY KEY,
     username  VARCHAR(50)  NOT NULL UNIQUE,
     password  VARCHAR(255) NOT NULL,          -- hash bcrypt / argon2, bukan plain text
-    role      VARCHAR(20)  NOT NULL           -- 'admin' | 'tutor' | 'siswa' | 'pemilik'
+    role      ENUM('admin','tutor','siswa','pemilik') NOT NULL
 );
 
 -- ------------------------------------------------------------
@@ -40,7 +40,7 @@ CREATE TABLE siswa (
     no_hp_ortu      VARCHAR(15),
     pendidikan_ortu VARCHAR(20),
     spp             BIGINT       DEFAULT 0,   -- nominal bisa > 2 juta, pakai BIGINT
-    status          VARCHAR(20)  DEFAULT 'Aktif',  -- 'Aktif' | 'Nonaktif'
+    status          ENUM('Aktif','Nonaktif') DEFAULT 'Aktif',
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
@@ -58,7 +58,7 @@ CREATE TABLE tutor (
     pendidikan         VARCHAR(50),
     no_hp              VARCHAR(15),
     tanggal_bergabung  DATE,
-    status             VARCHAR(20)  DEFAULT 'Aktif',  -- 'Aktif' | 'Nonaktif'
+    status             ENUM('Aktif','Nonaktif') DEFAULT 'Aktif',
     FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE
 );
 
@@ -92,7 +92,7 @@ CREATE TABLE jadwal (
     id_jadwal   INT          AUTO_INCREMENT PRIMARY KEY,
     id_kelas    INT          NOT NULL,
     id_tutor    INT          NOT NULL,
-    hari        VARCHAR(10)  NOT NULL,        -- 'Senin' .. 'Jumat'
+    hari        ENUM('Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu') NOT NULL,
     jam         TIME         NOT NULL,
     FOREIGN KEY (id_kelas)  REFERENCES kelas(id_kelas)  ON DELETE CASCADE,
     FOREIGN KEY (id_tutor)  REFERENCES tutor(id_tutor)  ON DELETE CASCADE
@@ -108,8 +108,11 @@ CREATE TABLE pembayaran (
     tanggal_bayar      DATE         NOT NULL,
     jenis_pembayaran   VARCHAR(20),           -- 'SPP' | 'Modul' | 'Buku'
     jumlah             BIGINT       DEFAULT 0,
-    metode_pembayaran  VARCHAR(20),           -- 'Tunai' | 'Transfer'
+    metode_pembayaran  ENUM('Tunai','Transfer'),           -- 'Tunai' | 'Transfer'
     diskon             BIGINT       DEFAULT 0,
+    status             ENUM('Pending','Verified','Rejected') DEFAULT 'Pending',  -- 'Pending' | 'Verified' | 'Rejected'
+    tanggal_verifikasi DATE,
+    catatan            TEXT,
     FOREIGN KEY (id_siswa) REFERENCES siswa(id_siswa) ON DELETE CASCADE
 );
 
@@ -121,9 +124,12 @@ CREATE TABLE absensi_siswa (
     id_siswa            INT          NOT NULL,
     id_jadwal           INT          NOT NULL,
     tanggal             DATE         NOT NULL,
-    pertemuan           INT          DEFAULT 1,
-    status              VARCHAR(20)  NOT NULL,  -- 'Hadir' | 'Tidak Hadir' | 'Sakit' | 'Izin'
-    topik_pembelajaran  TEXT,                   
+    pertemuan          INT          DEFAULT 1,
+    status              ENUM('Hadir','Tidak Hadir','Sakit','Izin') NOT NULL,  -- 'Hadir' | 'Tidak Hadir' | 'Sakit' | 'Izin'
+    topik_pembelajaran  TEXT,
+    is_confirmed        TINYINT(1)   DEFAULT 0,  -- 0 = belum dikonfirmasi, 1 = sudah
+    confirmed_at        DATE,
+    confirmed_by        INT,
     FOREIGN KEY (id_siswa)  REFERENCES siswa(id_siswa)   ON DELETE CASCADE,
     FOREIGN KEY (id_jadwal) REFERENCES jadwal(id_jadwal) ON DELETE CASCADE
 );
@@ -135,7 +141,7 @@ CREATE TABLE absensi_tutor (
     id_absensi_tutor  INT          AUTO_INCREMENT PRIMARY KEY,  
     id_tutor          INT          NOT NULL,
     tanggal           DATE         NOT NULL,
-    status            VARCHAR(10)  NOT NULL,   -- 'Hadir' | 'Absen'  
+    status            ENUM('Hadir','Absen') NOT NULL,   -- 'Hadir' | 'Absen'
     FOREIGN KEY (id_tutor) REFERENCES tutor(id_tutor) ON DELETE CASCADE
 );
 
