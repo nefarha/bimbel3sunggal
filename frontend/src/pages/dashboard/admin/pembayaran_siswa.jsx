@@ -85,6 +85,7 @@ const PembayaranSiswa = () => {
   });
   const [paymentMode, setPaymentMode] = useState('all'); // 'all' | 'single'
   const [selectedPeriodIdx, setSelectedPeriodIdx] = useState(null);
+  const [toast, setToast] = useState(null); // { title, message } | null
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
@@ -103,6 +104,13 @@ const PembayaranSiswa = () => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Auto-dismiss toast
+  useEffect(() => {
+    if (!toast) return undefined;
+    const timer = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   // Debounce search
   useEffect(() => {
@@ -343,6 +351,10 @@ const PembayaranSiswa = () => {
           isTunggakan: true,
           periodeCount: periodsToPay.length,
         });
+        setToast({
+          title: 'Pembayaran Berhasil Disimpan',
+          message: `Tunggakan SPP atas nama ${form.selectedSiswa.nama} (${periodsToPay.length} periode) telah berhasil dicatat dan diverifikasi.`,
+        });
         handleReset();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
@@ -378,6 +390,10 @@ const PembayaranSiswa = () => {
         jumlah: jumlahNumeric,
         kembalian,
         total: totalTagihan,
+      });
+      setToast({
+        title: 'Pembayaran Berhasil Disimpan',
+        message: `Pembayaran ${form.jenisPembayaran} atas nama ${form.selectedSiswa.nama} telah berhasil dicatat dan diverifikasi.`,
       });
       handleReset();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -450,6 +466,39 @@ const PembayaranSiswa = () => {
                 Buat Pembayaran Lainnya
               </button>
             </section>
+          )}
+
+          {/* Toast dialog — auto dismiss */}
+          {toast && (
+            <div
+              className={styles.toastOverlay}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="toast-title"
+              onClick={() => setToast(null)}
+            >
+              <div
+                className={styles.toastDialog}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className={styles.toastIcon}>
+                  <MdCheckCircle />
+                </div>
+                <h3 id="toast-title" className={styles.toastTitle}>
+                  {toast.title}
+                </h3>
+                <p className={styles.toastMessage}>{toast.message}</p>
+                <div className={styles.toastActions}>
+                  <button
+                    type="button"
+                    className={styles.toastButton}
+                    onClick={() => setToast(null)}
+                  >
+                    OK
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
 
           <form className={styles.formGrid} onSubmit={handleSubmit}>
