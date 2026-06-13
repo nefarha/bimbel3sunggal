@@ -9,6 +9,7 @@ import Login from './pages/login/Login'
 import DashboardAdmin from './pages/dashboard/admin/dashboard_admin'
 import PendaftaranSiswa from './pages/dashboard/admin/pendaftaran_siswa'
 import PembayaranSiswa from './pages/dashboard/admin/pembayaran_siswa'
+import ManajemenSiswa from './pages/dashboard/admin/manajemen_siswa'
 import './App.css'
 
 function App() {
@@ -45,6 +46,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <PembayaranSiswa />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manajemen_siswa"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <ManajemenSiswa />
             </ProtectedRoute>
           }
         />
