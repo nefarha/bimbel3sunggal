@@ -1,0 +1,509 @@
+/* =========================================================
+   Tambah Tutor — Admin
+   Design tokens follow the global design system
+   (Deep Academic Blue + Energetic Orange, Inter, 8px radius).
+   ========================================================= */
+
+/* =========================================================
+   Page header (back button)
+   ========================================================= */
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.btnBack {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #ffffff;
+  color: #00236f;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btnBack:hover {
+  background-color: #f3f4f6;
+  border-color: #00236f;
+}
+
+/* =========================================================
+   Intro card (title + deskripsi)
+   ========================================================= */
+.introCard {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.introIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: rgba(0, 35, 111, 0.1);
+  color: #00236f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  flex-shrink: 0;
+}
+
+.formTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+  position: relative;
+  padding-bottom: 6px;
+}
+
+.formTitle::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 96px;
+  height: 3px;
+  background-color: #fea619; /* Energetic Orange */
+  border-radius: 2px;
+}
+
+.formSubtitle {
+  font-size: 0.9rem;
+  color: #444651;
+  margin: 8px 0 0;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   Alert / error
+   ========================================================= */
+.alertError {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background-color: #ffdad6;
+  color: #ba1a1a;
+  border: 1px solid #f5b5b0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.alertClose {
+  background: none;
+  border: none;
+  color: #ba1a1a;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+/* =========================================================
+   Success card (kredensial tutor)
+   ========================================================= */
+.successCard {
+  background-color: #ffffff;
+  border: 1px solid #c6efd6;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.successHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.successIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #d1fae5;
+  color: #047857;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.successTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #047857;
+  margin: 0;
+}
+
+.successSubtitle {
+  font-size: 0.85rem;
+  color: #444651;
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+
+.successClose {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.2s ease;
+}
+
+.successClose:hover {
+  color: #191c1e;
+}
+
+.credentialGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .credentialGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.credentialItem {
+  background-color: #f9fafb;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.credentialLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #757682;
+}
+
+.credentialValueWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.credentialValue {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #00236f;
+  background-color: #ffffff;
+  border: 1px dashed #c9d8f7;
+  border-radius: 6px;
+  padding: 6px 10px;
+  flex: 1;
+  word-break: break-all;
+}
+
+.iconBtn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #ffffff;
+  color: #00236f;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.iconBtn:hover {
+  background-color: #f3f4f6;
+  border-color: #00236f;
+}
+
+.copiedHint {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #047857;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.credentialHint {
+  font-size: 0.8rem;
+  color: #ba1a1a;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* WhatsApp CTA (green WA brand) */
+.btnWhatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #25d366; /* WhatsApp green */
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  text-decoration: none;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  align-self: flex-start;
+}
+
+.btnWhatsapp:hover {
+  background-color: #1ebe5d;
+}
+
+.btnWhatsapp:active {
+  opacity: 0.9;
+}
+
+.btnWhatsappIcon {
+  font-size: 1.15rem;
+}
+
+.btnWhatsappDisabled {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #cbd5e1;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  align-self: flex-start;
+  cursor: not-allowed;
+}
+
+/* =========================================================
+   Form card
+   ========================================================= */
+.formCard {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  padding: 8px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section {
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section:last-of-type {
+  border-bottom: none;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: rgba(0, 35, 111, 0.1);
+  color: #00236f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+.sectionHint {
+  font-size: 0.8rem;
+  color: #757682;
+  margin: 2px 0 0;
+}
+
+/* =========================================================
+   Form grid
+   ========================================================= */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px 18px;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fieldFull {
+  grid-column: 1 / -1;
+}
+
+.label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #444651;
+}
+
+.required {
+  color: #ba1a1a;
+  margin-left: 2px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #191c1e;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #94a3b8;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #00236f;
+  box-shadow: 0 0 0 2px rgba(0, 35, 111, 0.15);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+/* =========================================================
+   Form actions
+   ========================================================= */
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 4px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #00236f;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  background-color: #001a52;
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #444651;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background-color: #f3f4f6;
+  border-color: #94a3b8;
+}
+
+.btnSecondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnIcon {
+  font-size: 1.05rem;
+}

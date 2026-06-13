@@ -7,6 +7,7 @@ import { testConnection } from './config/database.js'
 import healthRoutes from './routes/health.js'
 import authRoutes from './routes/auth.js'
 import siswaRoutes from './routes/siswa.js'
+import tutorRoutes from './routes/tutor.js'
 import kelasRoutes from './routes/kelas.js'
 import jadwalRoutes from './routes/jadwal.js'
 import absensiSiswaRoutes from './routes/absensiSiswa.js'
@@ -32,6 +33,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use('/api/health', healthRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/siswa', siswaRoutes)
+app.use('/api/guru', tutorRoutes)
 app.use('/api/kelas', kelasRoutes)
 app.use('/api/jadwal', jadwalRoutes)
 app.use('/api/absensi-siswa', absensiSiswaRoutes)

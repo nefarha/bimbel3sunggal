@@ -10,6 +10,8 @@ import DashboardAdmin from './pages/dashboard/admin/dashboard_admin'
 import PendaftaranSiswa from './pages/dashboard/admin/pendaftaran_siswa'
 import PembayaranSiswa from './pages/dashboard/admin/pembayaran_siswa'
 import ManajemenSiswa from './pages/dashboard/admin/manajemen_siswa'
+import ManajemenTutor from './pages/dashboard/admin/manajemen_tutor'
+import TambahTutor from './pages/dashboard/admin/tambah_tutor'
 import './App.css'
 
 function App() {
@@ -54,6 +56,22 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <ManajemenSiswa />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/guru"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <ManajemenTutor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/guru/tambah"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <TambahTutor />
             </ProtectedRoute>
           }
         />

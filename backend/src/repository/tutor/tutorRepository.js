@@ -9,15 +9,110 @@ const COLUMNS = [
 ];
 
 export class TutorRepository {
-  async findAll() {
+  async findAll(options = {}) {
+    const filters = options.where || {};
+    const whereSql = filters.status ? 'WHERE t.status = ?' : '';
+    const params = filters.status ? [filters.status] : [];
+
     return await query(
-      `SELECT ${COLUMNS.map((c) => `\`${c}\``).join(', ')} FROM \`${TABLE}\` ORDER BY id_tutor DESC`
+      `SELECT
+         t.id_tutor,
+         t.id_user,
+         u.username,
+         t.nama_tutor,
+         t.tempat_lahir,
+         t.tanggal_lahir,
+         t.jenis_kelamin,
+         t.alamat,
+         t.pendidikan,
+         t.no_hp,
+         t.tanggal_bergabung,
+         t.status,
+         t.nama_tutor AS nama,
+         COALESCE(u.username, CONCAT('TUTOR-', t.id_tutor)) AS nip,
+         COALESCE(
+           GROUP_CONCAT(DISTINCT k.nama_kelas ORDER BY k.nama_kelas SEPARATOR ', '),
+           ''
+         ) AS mapel,
+         COALESCE(
+           GROUP_CONCAT(
+             DISTINCT j.hari
+             ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')
+             SEPARATOR ', '
+           ),
+           ''
+         ) AS jadwal
+       FROM \`${TABLE}\` t
+       LEFT JOIN \`users\` u ON u.id_user = t.id_user
+       LEFT JOIN \`kelas\` k ON k.id_tutor = t.id_tutor
+       LEFT JOIN \`jadwal\` j ON j.id_tutor = t.id_tutor
+       ${whereSql}
+       GROUP BY
+         t.id_tutor,
+         t.id_user,
+         u.username,
+         t.nama_tutor,
+         t.tempat_lahir,
+         t.tanggal_lahir,
+         t.jenis_kelamin,
+         t.alamat,
+         t.pendidikan,
+         t.no_hp,
+         t.tanggal_bergabung,
+         t.status
+       ORDER BY t.id_tutor DESC`,
+      params
     );
   }
 
   async findById(id) {
     return await queryOne(
-      `SELECT ${COLUMNS.map((c) => `\`${c}\``).join(', ')} FROM \`${TABLE}\` WHERE id_tutor = ? LIMIT 1`,
+      `SELECT
+         t.id_tutor,
+         t.id_user,
+         u.username,
+         t.nama_tutor,
+         t.tempat_lahir,
+         t.tanggal_lahir,
+         t.jenis_kelamin,
+         t.alamat,
+         t.pendidikan,
+         t.no_hp,
+         t.tanggal_bergabung,
+         t.status,
+         t.nama_tutor AS nama,
+         COALESCE(u.username, CONCAT('TUTOR-', t.id_tutor)) AS nip,
+         COALESCE(
+           GROUP_CONCAT(DISTINCT k.nama_kelas ORDER BY k.nama_kelas SEPARATOR ', '),
+           ''
+         ) AS mapel,
+         COALESCE(
+           GROUP_CONCAT(
+             DISTINCT j.hari
+             ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu')
+             SEPARATOR ', '
+           ),
+           ''
+         ) AS jadwal
+       FROM \`${TABLE}\` t
+       LEFT JOIN \`users\` u ON u.id_user = t.id_user
+       LEFT JOIN \`kelas\` k ON k.id_tutor = t.id_tutor
+       LEFT JOIN \`jadwal\` j ON j.id_tutor = t.id_tutor
+       WHERE t.id_tutor = ?
+       GROUP BY
+         t.id_tutor,
+         t.id_user,
+         u.username,
+         t.nama_tutor,
+         t.tempat_lahir,
+         t.tanggal_lahir,
+         t.jenis_kelamin,
+         t.alamat,
+         t.pendidikan,
+         t.no_hp,
+         t.tanggal_bergabung,
+         t.status
+       LIMIT 1`,
       [id]
     );
   }

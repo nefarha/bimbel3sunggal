@@ -97,14 +97,15 @@ const parseNumericInput = (value) => {
 
 const BIAYA_PENDAFTARAN = 150000;
 
-// Sanitasi string untuk username (huruf kecil, alfanumerik + underscore)
+// Sanitasi string untuk username (huruf kecil, alfanumerik + pemisah titik)
 const slugify = (value) =>
   String(value || '')
     .toLowerCase()
     .normalize('NFKD')
     .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9]+/g, '')
-    .trim();
+    .replace(/[^a-z0-9]+/g, '.')
+    .replace(/\.{2,}/g, '.')
+    .replace(/^\.|\.$/g, '');
 
 const formatDateStamp = (date) => {
   const y = date.getFullYear();

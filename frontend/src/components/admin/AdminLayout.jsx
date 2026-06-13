@@ -9,6 +9,7 @@ import {
   MdCalendarMonth,
   MdHowToReg,
   MdAssessment,
+  MdAccessTime,
   MdLogout,
 } from 'react-icons/md';
 import styles from './AdminLayout.module.css';
@@ -18,7 +19,8 @@ const NAV_ITEMS = [
   { label: 'Pendaftaran Siswa', icon: MdPersonAdd, to: '/admin/pendaftaran' },
   { label: 'Pembayaran Siswa', icon: MdPayments, to: '/admin/pembayaran' },
   { label: 'Manajemen Siswa', icon: MdGroup, to: '/admin/manajemen_siswa' },
-  { label: 'Sistem Manajemen Guru', icon: MdSchool, to: '/admin/guru' },
+  { label: 'Manajemen Tutor', icon: MdSchool, to: '/admin/guru' },
+  { label: 'Presensi Tutor', icon: MdAccessTime, to: '/admin/presensi_guru' },
   { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
   { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
   { label: 'Laporan', icon: MdAssessment, to: '/admin/laporan' },
