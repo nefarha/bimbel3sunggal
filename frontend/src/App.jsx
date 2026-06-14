@@ -13,6 +13,7 @@ import ManajemenSiswa from './pages/dashboard/admin/manajemen_siswa'
 import ManajemenTutor from './pages/dashboard/admin/manajemen_tutor'
 import TambahTutor from './pages/dashboard/admin/tambah_tutor'
 import PresensiTutor from './pages/dashboard/admin/presensi_tutor'
+import ManajemenJadwal from './pages/dashboard/admin/manajemen_jadwal'
 import './App.css'
 
 function App() {
@@ -81,6 +82,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <PresensiTutor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/jadwal"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <ManajemenJadwal />
             </ProtectedRoute>
           }
         />

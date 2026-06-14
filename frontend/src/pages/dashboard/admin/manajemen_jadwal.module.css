@@ -1,0 +1,337 @@
+.manajemenJadwal {
+  padding: 2rem;
+  background-color: var(--color-background-level-0);
+  min-height: calc(100vh - 80px); /* Adjust based on header height */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.header h1 {
+  font-size: 2rem;
+  color: var(--color-text-primary);
+}
+
+.addButton {
+  background-color: #1e3a8a; /* Deep Academic Blue */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.addButton:hover {
+  background-color: #00236f; /* Darker Deep Academic Blue */
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.filterGroup label {
+  margin-right: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.select {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--color-slate-300);
+  border-radius: 0.5rem;
+  background-color: white;
+  font-size: 1rem;
+}
+
+.searchBar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  padding: 0.5rem 1rem 0.5rem 2.5rem; /* Left padding for icon */
+  border: 1px solid var(--color-slate-300);
+  border-radius: 0.5rem;
+  width: 300px;
+  font-size: 1rem;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  color: var(--color-text-secondary);
+  font-size: 1.25rem;
+}
+
+.errorMessage {
+  color: #e74c3c;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.tableContainer {
+  overflow-x: auto;
+  background-color: var(--color-background-level-1);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 1rem;
+  box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.05);
+  margin-top: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.table thead tr {
+  background-color: #e0e7ff; /* A light blue, similar to primary-50 */
+  color: #1e3a8a; /* A darker blue, similar to primary-800 */
+  font-weight: 600;
+  text-transform: none;
+  font-size: 0.875rem;
+  letter-spacing: normal;
+}
+
+.table tbody tr {
+  background-color: white;
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f9fafb; /* neutral-50 */
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.actionButton {
+  background: none;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  color: #444651; /* on-surface-variant */
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: #f1f5f9; /* slate-100 */
+  border-color: #cbd5e1; /* slate-300 */
+}
+
+.deleteButton {
+  color: #e74c3c;
+  border-color: #fbd8d8; /* A very light red for border */
+}
+
+.deleteButton:hover {
+  background-color: #fbebeb; /* Lighter red for hover background */
+  border-color: #e74c3c;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  color: #757682; /* outline */
+  font-size: 0.875rem;
+}
+
+.paginationButton {
+  background-color: white;
+  color: #444651; /* on-surface-variant */
+  border: 1px solid #e2e8f0; /* slate-200 */
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.paginationButton:hover:not(:disabled) {
+  background-color: #f1f5f9; /* slate-100 */
+  border-color: #cbd5e1; /* slate-300 */
+  color: #1e3a8a; /* primary-800 */
+}
+
+.paginationButton:disabled {
+  background-color: #f9fafb;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  border-color: #e2e8f0;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.modalContent h2 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-primary);
+}
+
+.formGroup {
+  margin-bottom: 1rem;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.input {
+  width: calc(100% - 22px); /* Account for padding and border */
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-slate-300);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input:focus {
+  border-color: var(--color-deep-academic-blue);
+  box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+  outline: none;
+}
+
+.timeSelectGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.timeSelectGroup select {
+  flex: 1;
+  min-width: 0;
+}
+
+.timeSeparator {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #444651;
+  padding: 0 0.25rem;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.cancelButton {
+  background-color: #f1f5f9; /* slate-100 */
+  color: #444651; /* on-surface-variant */
+  border: 1px solid #e2e8f0; /* slate-200 */
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.cancelButton:hover {
+  background-color: #e2e8f0; /* slate-200 */
+  border-color: #cbd5e1; /* slate-300 */
+}
+
+.saveButton {
+  background-color: #1e3a8a; /* Deep Academic Blue */
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.saveButton:hover {
+  background-color: #00236f; /* Darker Deep Academic Blue */
+}
+
+.saveButton:disabled {
+  background-color: var(--color-slate-300);
+  cursor: not-allowed;
+}
+
+/* Toast notifications */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: bold;
+  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toast.success {
+  background-color: #27ae60;
+}
+
+.toast.error {
+  background-color: #e74c3c;
+}
