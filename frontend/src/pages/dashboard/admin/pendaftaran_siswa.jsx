@@ -88,7 +88,6 @@ const parseNumericInput = (value) => {
 
 const BIAYA_PENDAFTARAN = 150000;
 
-// Sanitasi string untuk username (huruf kecil, alfanumerik + pemisah titik)
 const slugify = (value) =>
   String(value || '')
     .toLowerCase()
@@ -102,7 +101,6 @@ const buildUsername = (nama) => {
   return slugify(nama);
 };
 
-// Random password 10 karakter (huruf besar, kecil, angka) — siswa bisa ubah nanti
 const generatePassword = (length = 10) => {
   const chars =
     'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -162,7 +160,6 @@ const PendaftaranSiswa = () => {
     diskonPromo: '',
   });
 
-  // State untuk hasil submit
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null); // { siswa, credentials, whatsappLink, message }
@@ -198,7 +195,6 @@ const PendaftaranSiswa = () => {
     fetchKelasOptions();
   }, [fetchMapelOptions, fetchKelasOptions]);
 
-  // Filter kelas berdasarkan mapel yang dipilih
   const filteredKelas = useMemo(() => {
     if (formData.jenisProgram.length === 0) return [];
     return kelasOptions.filter((k) => formData.jenisProgram.includes(k.id_mapel));
@@ -226,7 +222,7 @@ const PendaftaranSiswa = () => {
           : [...prev.jenisProgram, idMapel],
       };
     });
-    // Reset pilihan kelas saat mapel berubah
+
     setSelectedKelas([]);
   };
 
@@ -241,7 +237,7 @@ const PendaftaranSiswa = () => {
 
   const handleBiayaChange = (event) => {
     const { name, value } = event.target;
-    // numeric only
+
     const digitsOnly = value.replace(/\D/g, '');
     setBiaya((prev) => ({ ...prev, [name]: formatNumericInput(digitsOnly) }));
   };
@@ -288,7 +284,6 @@ const PendaftaranSiswa = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Validasi minimum: nama + no HP wali harus ada agar WhatsApp bisa dikirim
     if (!formData.namaLengkap.trim()) {
       setSubmitError('Nama lengkap siswa wajib diisi.');
       return;
@@ -319,7 +314,6 @@ const PendaftaranSiswa = () => {
     const totalTagihanLocal = BIAYA_PENDAFTARAN + sppNumeric + modulNumeric - diskonNumeric;
 
     try {
-      // 1) Buat akun user siswa (otomatis di-hash oleh backend)
       let userResponse;
       try {
         userResponse = await api.post('/auth/register', {
@@ -328,7 +322,6 @@ const PendaftaranSiswa = () => {
           role: 'siswa',
         });
       } catch (err) {
-        // Kalau username bentrok, generate ulang dengan suffix acak
         if (err.response?.status === 409) {
           const usernameRetry = `${baseUsername}_${Math.floor(1000 + Math.random() * 9000)}`;
           userResponse = await api.post('/auth/register', {
@@ -350,7 +343,6 @@ const PendaftaranSiswa = () => {
         throw new Error('Gagal mendapatkan id_user dari server.');
       }
 
-      // Update username dengan format: namaSlug + idUser
       const finalUsername = `${baseUsername}${idUser}`;
       try {
         await api.put('/auth/update-username', { id_user: idUser, username: finalUsername });
@@ -358,7 +350,6 @@ const PendaftaranSiswa = () => {
         console.error('Gagal update username:', err);
       }
 
-      // 2) Simpan data siswa
       const siswaPayload = {
         id_user: idUser,
         nama: formData.namaLengkap.trim(),
@@ -387,9 +378,6 @@ const PendaftaranSiswa = () => {
         throw new Error('Gagal mendapatkan id_siswa dari server.');
       }
 
-      // 3) Simpan data pembayaran awal (Pendaftaran)
-      // Catatan: backend menggunakan satu kolom jenis_pembayaran.
-      // Pembayaran yang langsung dilakukan saat pendaftaran otomatis berstatus 'Verified'.
       const pembayaranPayload = {
         id_siswa: idSiswa,
         bulan: buildBulanTagihan(today),
@@ -406,7 +394,6 @@ const PendaftaranSiswa = () => {
       };
       await api.post('/pembayaran', pembayaranPayload);
 
-      // 4) Siapkan tautan WhatsApp
       const message = buildWhatsAppMessage({
         nama: formData.namaLengkap,
         username: finalUsername,
@@ -421,7 +408,6 @@ const PendaftaranSiswa = () => {
         message,
       });
 
-      // Reset form setelah berhasil
       setFormData(INITIAL_FORM);
       setBiaya({ sppBulanan: '', modulBuku: '', diskonPromo: '' });
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -442,8 +428,8 @@ const PendaftaranSiswa = () => {
 
   return (
     <AdminLayout>
-      {/* Content (sidebar + topbar di-handle oleh AdminLayout) */}
-      {/* Page heading row */}
+      {}
+      {}
       <div className={styles.pageHeader}>
         <h2 className={styles.formTitle}>FORMULIR PENDAFTARAN SISWA</h2>
         <div className={styles.dateBadge}>
@@ -568,9 +554,9 @@ const PendaftaranSiswa = () => {
           )}
 
           <form className={styles.formGrid} onSubmit={handleSubmit}>
-            {/* Left column: form fields */}
+            {}
             <div className={styles.formColumn}>
-              {/* Data Siswa */}
+              {}
               <section className={styles.card}>
                 <header className={styles.cardHeader}>
                   <h3 className={styles.cardTitle}>
@@ -764,7 +750,7 @@ const PendaftaranSiswa = () => {
                 </div>
               </section>
 
-              {/* Data Orang Tua / Wali */}
+              {}
               <section className={styles.card}>
                 <header className={styles.cardHeader}>
                   <h3 className={styles.cardTitle}>
@@ -845,7 +831,7 @@ const PendaftaranSiswa = () => {
                 </div>
               </section>
 
-              {/* Form actions */}
+              {}
               <div className={styles.formActions}>
                 <button
                   type="button"
@@ -864,7 +850,7 @@ const PendaftaranSiswa = () => {
               </div>
             </div>
 
-            {/* Right column: cost summary */}
+            {}
             <aside className={styles.summaryColumn}>
               <section className={styles.summaryCard}>
                 <header className={styles.summaryHeader}>

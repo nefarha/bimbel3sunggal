@@ -24,7 +24,6 @@ const handleError = (res, error) => {
   res.status(500).json({ success: false, message: error.message });
 };
 
-// GET /api/absensi-tutor/today
 export const getTutorAttendanceToday = async (req, res) => {
   try {
     const today = new Date();
@@ -66,7 +65,6 @@ export const getTutorAttendanceToday = async (req, res) => {
   }
 };
 
-// POST /api/absensi-tutor/bulk
 export const saveTutorAttendanceBulk = async (req, res) => {
   try {
     const targetDate = req.body?.tanggal ? formatDateOnly(req.body.tanggal) : formatDateOnly(new Date());
@@ -128,7 +126,6 @@ export const saveTutorAttendanceBulk = async (req, res) => {
   }
 };
 
-// GET /api/absensi-tutor/recap
 export const getTutorAttendanceRecap = async (req, res) => {
   try {
     const { bulan, tahun } = req.query;
@@ -136,7 +133,6 @@ export const getTutorAttendanceRecap = async (req, res) => {
     const targetMonth = bulan ? parseInt(bulan, 10) : today.getMonth() + 1; // 1-12
     const targetYear = tahun ? parseInt(tahun, 10) : today.getFullYear();
 
-    // Get all active tutors and their classes
     const tutors = await query(
       `SELECT
          t.id_tutor,
@@ -150,7 +146,6 @@ export const getTutorAttendanceRecap = async (req, res) => {
        ORDER BY t.nama_tutor ASC`
     );
 
-    // Get attendance records for the selected month and year
     const attendanceRecords = await query(
       `SELECT id_tutor, DAY(tanggal) AS hari, status
        FROM absensi_tutor
@@ -158,7 +153,6 @@ export const getTutorAttendanceRecap = async (req, res) => {
       [targetMonth, targetYear]
     );
 
-    // Group attendance by tutor
     const attendanceMap = {};
     attendanceRecords.forEach((rec) => {
       if (!attendanceMap[rec.id_tutor]) {
@@ -167,7 +161,6 @@ export const getTutorAttendanceRecap = async (req, res) => {
       attendanceMap[rec.id_tutor][rec.hari] = rec.status;
     });
 
-    // Calculate number of days in the selected month
     const numDays = new Date(targetYear, targetMonth, 0).getDate();
 
     const data = tutors.map((tutor) => {
@@ -227,7 +220,6 @@ export const getTutorAttendanceRecap = async (req, res) => {
   }
 };
 
-// GET /api/absensi-tutor/recap/me
 export const getMyAttendanceRecap = async (req, res) => {
   try {
     const { bulan, tahun } = req.query;
@@ -235,7 +227,6 @@ export const getMyAttendanceRecap = async (req, res) => {
     const targetMonth = bulan ? parseInt(bulan, 10) : today.getMonth() + 1;
     const targetYear = tahun ? parseInt(tahun, 10) : today.getFullYear();
 
-    // Find tutor by user ID
     const tutorRow = await queryOne(
       `SELECT id_tutor, nama_tutor FROM tutor WHERE id_user = ? LIMIT 1`,
       [req.userId]
@@ -248,7 +239,6 @@ export const getMyAttendanceRecap = async (req, res) => {
     const idTutor = tutorRow.id_tutor;
     const namaTutor = tutorRow.nama_tutor;
 
-    // Get attendance records for the selected month and year
     const attendanceRecords = await query(
       `SELECT DAY(tanggal) AS hari, status
        FROM absensi_tutor
@@ -256,13 +246,11 @@ export const getMyAttendanceRecap = async (req, res) => {
       [idTutor, targetMonth, targetYear]
     );
 
-    // Build attendance map
     const attendanceMap = {};
     attendanceRecords.forEach((rec) => {
       attendanceMap[rec.hari] = rec.status;
     });
 
-    // Calculate number of days in the selected month
     const numDays = new Date(targetYear, targetMonth, 0).getDate();
 
     const days = [];
@@ -305,14 +293,12 @@ export const getMyAttendanceRecap = async (req, res) => {
       days.push({ day: d, status: displayStatus });
     }
 
-    // Total effective days (weekdays only)
     const totalEffectiveDays = days.filter((d) => d.status !== 'weekend').length;
     const totalTidakHadir = sakitCount + izinCount + absenCount;
     const persentase = totalEffectiveDays > 0
       ? Math.round((hadirCount / totalEffectiveDays) * 100)
       : 0;
 
-    // Build category table data
     const categories = [];
     if (hadirCount > 0) {
       categories.push({

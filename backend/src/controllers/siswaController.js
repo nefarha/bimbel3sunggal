@@ -9,7 +9,6 @@ const handleError = (res, error, defaultStatus = 500) => {
   res.status(defaultStatus).json({ success: false, message: error.message });
 };
 
-// GET /api/siswa
 export const getAllSiswa = async (req, res) => {
   try {
     const { status } = req.query;
@@ -23,7 +22,6 @@ export const getAllSiswa = async (req, res) => {
   }
 };
 
-// GET /api/siswa/by-user/:id_user
 export const getSiswaByUserId = async (req, res) => {
   try {
     const siswa = await siswaRepository.findByUserId(parseInt(req.params.id_user, 10));
@@ -36,7 +34,6 @@ export const getSiswaByUserId = async (req, res) => {
   }
 };
 
-// GET /api/siswa/:id
 export const getSiswaById = async (req, res) => {
   try {
     const siswa = await siswaRepository.findById(parseInt(req.params.id, 10));
@@ -49,7 +46,6 @@ export const getSiswaById = async (req, res) => {
   }
 };
 
-// POST /api/siswa
 export const createSiswa = async (req, res) => {
   try {
     const { id_user, nama } = req.body;
@@ -62,18 +58,15 @@ export const createSiswa = async (req, res) => {
       status: req.body.status || 'Aktif',
     };
 
-    // Hapus id_kelas dari payload — itu bukan kolom di tabel siswa,
-    // hanya dipakai untuk auto-enroll ke kelas_siswa
+
     delete payload.id_kelas;
 
-    // Handle mapel: if it's an array of IDs, stringify to JSON
     if (payload.mapel && Array.isArray(payload.mapel)) {
       payload.mapel = JSON.stringify(payload.mapel);
     }
 
     const siswa = await siswaRepository.create(payload);
 
-    // Auto-enroll ke kelas_siswa if id_kelas is provided
     if (req.body.id_kelas && Array.isArray(req.body.id_kelas) && req.body.id_kelas.length > 0) {
       for (const idKelas of req.body.id_kelas) {
         try {
@@ -82,7 +75,6 @@ export const createSiswa = async (req, res) => {
             id_kelas: Number(idKelas),
           });
         } catch (err) {
-          // Skip duplicate enrollment (UNIQUE constraint)
           if (err.code !== 'ER_DUP_ENTRY' && err.errno !== 1062) {
             console.error('Enrollment error:', err);
           }
@@ -96,19 +88,16 @@ export const createSiswa = async (req, res) => {
   }
 };
 
-// PUT /api/siswa/:id
 export const updateSiswa = async (req, res) => {
   try {
     const data = { ...req.body };
     if (data.spp !== undefined) data.spp = Number(data.spp);
 
-    // Extract id_kelas for kelas_siswa sync, remove from siswa data
     const idKelasArray = data.id_kelas;
     delete data.id_kelas;
 
     const siswa = await siswaRepository.update(parseInt(req.params.id, 10), data);
 
-    // Sync kelas_siswa enrollments
     if (idKelasArray && Array.isArray(idKelasArray)) {
       await kelasSiswaRepository.deleteBySiswaId(siswa.id_siswa);
       for (const idKelas of idKelasArray) {
@@ -134,7 +123,6 @@ export const updateSiswa = async (req, res) => {
   }
 };
 
-// GET /api/siswa/kelas/:id_kelas
 export const getSiswaByKelas = async (req, res) => {
   try {
     const siswa = await siswaRepository.findByKelas(parseInt(req.params.id_kelas, 10));
@@ -144,7 +132,6 @@ export const getSiswaByKelas = async (req, res) => {
   }
 };
 
-// GET /api/siswa/:id/kelas — get kelas_siswa enrollments for a siswa
 export const getSiswaKelas = async (req, res) => {
   try {
     const enrollments = await kelasSiswaRepository.findBySiswaId(parseInt(req.params.id, 10));
@@ -154,7 +141,6 @@ export const getSiswaKelas = async (req, res) => {
   }
 };
 
-// DELETE /api/siswa/:id
 export const deleteSiswa = async (req, res) => {
   try {
     await siswaRepository.delete(parseInt(req.params.id, 10));

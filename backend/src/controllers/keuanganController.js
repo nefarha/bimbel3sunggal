@@ -5,14 +5,12 @@ const handleError = (res, error) => {
   res.status(500).json({ success: false, message: error.message });
 };
 
-// GET /api/keuangan/rekap?bulan=&tahun=
 export const getRekapKeuangan = async (req, res) => {
   try {
     const { bulan, tahun } = req.query;
     const targetMonth = bulan ? parseInt(bulan, 10) : new Date().getMonth() + 1;
     const targetYear = tahun ? parseInt(tahun, 10) : new Date().getFullYear();
 
-    // Total pendapatan: Verified pembayaran in this month
     const pendapatanRow = await queryOne(
       `SELECT COALESCE(SUM(jumlah), 0) AS total
        FROM pembayaran
@@ -21,7 +19,6 @@ export const getRekapKeuangan = async (req, res) => {
     );
     const totalPendapatan = Number(pendapatanRow?.total || 0);
 
-    // Total pengeluaran: sum of total_gaji from gaji_tutor in this month
     const periodeStart = `${targetYear}-${String(targetMonth).padStart(2, '0')}-01 00:00:00`;
     const pengeluaranRow = await queryOne(
       `SELECT COALESCE(SUM(total_gaji), 0) AS total
@@ -47,7 +44,6 @@ export const getRekapKeuangan = async (req, res) => {
   }
 };
 
-// GET /api/keuangan/tahunan?tahun=
 export const getTahunanKeuangan = async (req, res) => {
   try {
     const { tahun } = req.query;

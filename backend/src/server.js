@@ -3,7 +3,6 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import { testConnection } from './config/database.js'
 
-// Routes
 import healthRoutes from './routes/health.js'
 import authRoutes from './routes/auth.js'
 import siswaRoutes from './routes/siswa.js'
@@ -23,7 +22,6 @@ dotenv.config()
 const app = express()
 const PORT = process.env.PORT || 5000
 
-// ─── Middleware ───────────────────────────────────────────────
 app.use(cors({
   origin: process.env.NODE_ENV === 'production'
     ? 'https://yourdomain.com'
@@ -33,7 +31,6 @@ app.use(cors({
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// ─── Routes ──────────────────────────────────────────────────
 app.use('/api/health', healthRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/siswa', siswaRoutes)
@@ -48,12 +45,10 @@ app.use('/api/dashboard', dashboardRoutes)
 app.use('/api/gaji', gajiRoutes)
 app.use('/api/keuangan', keuanganRoutes)
 
-// ─── 404 Handler ─────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' })
 })
 
-// ─── Global Error Handler ─────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error('❌ Error:', err.stack)
   res.status(err.status || 500).json({
@@ -62,7 +57,6 @@ app.use((err, req, res, next) => {
   })
 })
 
-// ─── Start Server ─────────────────────────────────────────────
 const startServer = async () => {
   await testConnection()
   app.listen(PORT, () => {

@@ -7,7 +7,6 @@ const handleError = (res, error, defaultStatus = 500) => {
   res.status(defaultStatus).json({ success: false, message: error.message });
 };
 
-// GET /api/guru
 export const getAllTutor = async (req, res) => {
   try {
     const { status, search, id_mapel, jenjang } = req.query;
@@ -24,7 +23,6 @@ export const getAllTutor = async (req, res) => {
   }
 };
 
-// GET /api/guru/:id
 export const getTutorById = async (req, res) => {
   try {
     const tutor = await tutorRepository.findById(parseInt(req.params.id, 10));
@@ -37,7 +35,6 @@ export const getTutorById = async (req, res) => {
   }
 };
 
-// GET /api/guru/by-user/:id_user
 export const getTutorByUserId = async (req, res) => {
   try {
     const tutor = await tutorRepository.findByUserId(parseInt(req.params.id_user, 10));
@@ -50,7 +47,6 @@ export const getTutorByUserId = async (req, res) => {
   }
 };
 
-// POST /api/guru
 export const createTutor = async (req, res) => {
   try {
     const { id_user, nama_tutor } = req.body;
@@ -62,7 +58,6 @@ export const createTutor = async (req, res) => {
       return res.status(400).json({ success: false, message: 'nama_tutor wajib diisi' });
     }
 
-    // Validasi jenis_kelamin sesuai ENUM schema ('L' | 'P')
     const validGender = ['L', 'P'];
     if (req.body.jenis_kelamin && !validGender.includes(req.body.jenis_kelamin)) {
       return res.status(400).json({
@@ -71,7 +66,6 @@ export const createTutor = async (req, res) => {
       });
     }
 
-    // Validasi status sesuai ENUM schema ('Aktif' | 'Nonaktif')
     const validStatus = ['Aktif', 'Nonaktif'];
     if (req.body.status && !validStatus.includes(req.body.status)) {
       return res.status(400).json({
@@ -107,7 +101,6 @@ export const createTutor = async (req, res) => {
   }
 };
 
-// PUT /api/guru/:id
 export const updateTutor = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
@@ -116,7 +109,6 @@ export const updateTutor = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Tutor tidak ditemukan' });
     }
 
-    // Validasi jenis_kelamin jika dikirim
     if (req.body.jenis_kelamin !== undefined && req.body.jenis_kelamin !== null) {
       if (!['L', 'P'].includes(req.body.jenis_kelamin)) {
         return res.status(400).json({
@@ -126,7 +118,6 @@ export const updateTutor = async (req, res) => {
       }
     }
 
-    // Validasi status jika dikirim
     if (req.body.status !== undefined && !['Aktif', 'Nonaktif'].includes(req.body.status)) {
       return res.status(400).json({
         success: false,
@@ -144,7 +135,6 @@ export const updateTutor = async (req, res) => {
   }
 };
 
-// DELETE /api/guru/:id
 export const deleteTutor = async (req, res) => {
   try {
     await tutorRepository.delete(parseInt(req.params.id, 10));

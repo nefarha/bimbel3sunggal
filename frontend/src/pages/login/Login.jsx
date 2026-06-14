@@ -29,7 +29,6 @@ const Login = () => {
           localStorage.setItem('user', JSON.stringify(response.data.user));
         }
 
-        // Role-based redirect
         const role = response.data.user?.role;
         switch (role) {
           case 'admin':
@@ -124,7 +123,7 @@ const Login = () => {
       </div>
 
       <div className={styles.imageContainer}>
-        {/* Placeholder for image */}
+        {}
       </div>
     </div>
   );

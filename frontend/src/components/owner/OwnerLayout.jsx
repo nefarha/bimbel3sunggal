@@ -35,7 +35,6 @@ function OwnerLayout({ children }) {
     navigate('/login', { replace: true });
   };
 
-  // Determine page title from current path
   const getPageTitle = () => {
     if (location.pathname.includes('kelola-gaji')) return 'Kelola Gaji';
     if (location.pathname.includes('laporan-keuangan')) return 'Laporan Keuangan';
@@ -44,7 +43,7 @@ function OwnerLayout({ children }) {
 
   return (
     <div className={styles.appShell}>
-      {/* Sidebar */}
+      {}
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <div className={styles.brandLogo}>
@@ -86,9 +85,9 @@ function OwnerLayout({ children }) {
         </div>
       </aside>
 
-      {/* Main wrapper */}
+      {}
       <main className={styles.main}>
-        {/* Header */}
+        {}
         <header className={styles.topBar}>
           <h1 className={styles.pageTitle}>{getPageTitle()}</h1>
           <div className={styles.userBlock}>
@@ -99,7 +98,7 @@ function OwnerLayout({ children }) {
           </div>
         </header>
 
-        {/* Content */}
+        {}
         <section className={styles.content}>{children}</section>
       </main>
     </div>

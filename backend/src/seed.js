@@ -30,10 +30,7 @@ const toMySQLDateTime = (date) => {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 };
 
-/**
- * Upsert helper: insert jika belum ada berdasarkan kolom unik, kalau ada skip.
- * Mengembalikan insertId jika baris baru, atau null jika sudah ada.
- */
+
 const upsert = async (conn, sql, params) => {
   const [result] = await conn.execute(sql, params);
   return result.insertId ?? null;
@@ -89,7 +86,6 @@ const nextId = async (conn, table, pk) => {
 async function main() {
   console.log('Start seeding...');
 
-  // ─── Users ──────────────────────────────────────────────────
   const adminPassword = await bcrypt.hash('admin123', 10);
   const ownerPassword = await bcrypt.hash('owner123', 10);
   const tutorPassword = await bcrypt.hash('tutor123', 10);
@@ -99,7 +95,6 @@ async function main() {
   try {
     await conn.beginTransaction();
 
-    // admin
     let adminId = await findUserId(conn, 'admin');
     if (!adminId) {
       adminId = await nextId(conn, 'users', 'id_user');
@@ -112,7 +107,6 @@ async function main() {
       console.log(`✔ admin user (id: ${adminId}, exists)`);
     }
 
-    // owner
     let ownerId = await findUserId(conn, 'owner');
     if (!ownerId) {
       ownerId = await nextId(conn, 'users', 'id_user');
@@ -125,7 +119,6 @@ async function main() {
       console.log(`✔ owner user (id: ${ownerId}, exists)`);
     }
 
-    // ─── Mapel (create first so tutors & siswa can reference IDs) ─
     await conn.execute('DELETE FROM absensi_siswa');
     await conn.execute('DELETE FROM kelas_siswa');
     await conn.execute('DELETE FROM jadwal');
@@ -151,10 +144,8 @@ async function main() {
     }
     console.log(`✔ ${mapel.length} mapel`);
 
-    // Helper: get mapel ID by name
     const mapelId = (name) => mapel.find((m) => m.nama_mapel === name)?.id_mapel;
 
-    // ─── Tutors ────────────────────────────────────────────────
     const tutors = [];
     const tutorData = [
       { username: 'budi.setiawan', nama: 'Budi Setiawan', jenis_kelamin: 'L', no_hp: '081234567001', mapel: ['SD', 'SMP'] },
@@ -186,7 +177,6 @@ async function main() {
     }
     console.log(`✔ ${tutors.length} tutors`);
 
-    // ─── Siswa ─────────────────────────────────────────────────
     const siswa = [];
     const siswaData = [
       { username: 'rizky.pratama', nama: 'Rizky Pratama', spp: 550000, no_hp_ortu: '081234500001', mapel: ['SMA', 'MAFIA'] },
@@ -226,7 +216,6 @@ async function main() {
     }
     console.log(`✔ ${siswa.length} siswa`);
 
-    // ─── Kelas ─────────────────────────────────────────────────
     const kelas = [];
     const kelasData = [
       { nama_kelas: 'SD A1', nama_mapel: 'SD', id_tutor: tutors[0].id_tutor },
@@ -255,11 +244,9 @@ async function main() {
     }
     console.log(`✔ ${kelas.length} kelas`);
 
-    // ─── Jadwal ────────────────────────────────────────────────
     const today = new Date();
     const todayName = HARI_MAP_ID[today.getDay()];
 
-    // Bersihkan jadwal lama supaya "Kelas Hari Ini" selalu tersedia
     await conn.execute('DELETE FROM jadwal');
 
     const jadwalData = [
@@ -284,7 +271,6 @@ async function main() {
     }
     console.log(`✔ jadwal seeded (hari ini: ${todayName})`);
 
-    // ─── KelasSiswa (enrollment) ───────────────────────────────
     let enrollments = 0;
     for (const s of siswa) {
       for (const k of kelas) {
@@ -304,10 +290,8 @@ async function main() {
     }
     console.log(`✔ ${enrollments} enrollments baru`);
 
-    // ─── Absensi Siswa hari ini ───────────────────────────────
     const todayStr = toMySQLDate(today);
 
-    // Hapus absensi hari ini
     await conn.execute('DELETE FROM absensi_siswa WHERE tanggal = ?', [todayStr]);
 
     const [jadwalHariIniRows] = await conn.execute(
@@ -336,13 +320,11 @@ async function main() {
     }
     console.log(`✔ ${absensiCount} absensi siswa hari ini (semua belum dikonfirmasi)`);
 
-    // ─── Pembayaran ───────────────────────────────────────────
     await conn.execute('DELETE FROM pembayaran');
 
     const currentMonth = `${MONTHS_ID[today.getMonth()]} ${today.getFullYear()}`;
     const todayDateTime = toMySQLDateTime(today);
 
-    // 8 siswa pertama → Pending
     for (let i = 0; i < Math.min(8, siswa.length); i++) {
       const s = siswa[i];
       const idBayar = await nextId(conn, 'pembayaran', 'id_pembayaran');
@@ -358,7 +340,6 @@ async function main() {
       );
     }
 
-    // 4 siswa berikutnya → Verified
     for (let i = 8; i < Math.min(12, siswa.length); i++) {
       const s = siswa[i];
       const idBayar = await nextId(conn, 'pembayaran', 'id_pembayaran');

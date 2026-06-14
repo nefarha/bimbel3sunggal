@@ -8,7 +8,6 @@ const handleError = (res, error) => {
   res.status(500).json({ success: false, message: error.message });
 };
 
-// GET /api/kelas
 export const getAllKelas = async (req, res) => {
   try {
     const kelas = await kelasRepository.findAll();
@@ -18,7 +17,6 @@ export const getAllKelas = async (req, res) => {
   }
 };
 
-// GET /api/kelas/jenjang
 export const getJenjangOptions = async (req, res) => {
   try {
     const rows = await query(
@@ -30,7 +28,6 @@ export const getJenjangOptions = async (req, res) => {
   }
 };
 
-// GET /api/kelas/:id
 export const getKelasById = async (req, res) => {
   try {
     const kelas = await kelasRepository.findById(parseInt(req.params.id, 10));
@@ -43,7 +40,6 @@ export const getKelasById = async (req, res) => {
   }
 };
 
-// POST /api/kelas
 export const createKelas = async (req, res) => {
   try {
     const { nama_kelas, id_mapel } = req.body;
@@ -65,7 +61,6 @@ export const createKelas = async (req, res) => {
   }
 };
 
-// PUT /api/kelas/:id
 export const updateKelas = async (req, res) => {
   try {
     const payload = { ...req.body };
@@ -89,7 +84,6 @@ export const updateKelas = async (req, res) => {
   }
 };
 
-// DELETE /api/kelas/:id
 export const deleteKelas = async (req, res) => {
   try {
     await kelasRepository.delete(parseInt(req.params.id, 10));

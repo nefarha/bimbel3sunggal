@@ -13,7 +13,6 @@ import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './tambah_tutor.module.css';
 
-// Opsi pendidikan terakhir tutor
 const PENDIDIKAN_OPTIONS = [
   'SMA/SMK',
   'D3',
@@ -22,7 +21,6 @@ const PENDIDIKAN_OPTIONS = [
   'S3',
 ];
 
-// Sanitasi string untuk username (huruf kecil, alfanumerik + pemisah titik)
 const slugify = (value) =>
   String(value || '')
     .toLowerCase()
@@ -36,7 +34,6 @@ const buildUsername = (nama) => {
   return slugify(nama);
 };
 
-// Random password 10 karakter (huruf besar, kecil, angka) — tutor bisa ubah nanti
 const generatePassword = (length = 10) => {
   const chars =
     'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -49,11 +46,10 @@ const generatePassword = (length = 10) => {
 
 const normalizePhone = (raw) => String(raw || '').replace(/\D/g, '');
 
-// Format nomor HP untuk WhatsApp link:
-// - Dimulai '0'  → ganti prefix jadi '62' (cth: 0812... → 62812...)
-// - Diawali '+'  → hapus '+' sehingga menjadi '62' (cth: +62812... → 62812...)
-// - Sudah '62'   → biarkan
-// - Lainnya      → prepend '62' (asumsi nomor seluler Indonesia mulai 8...)
+
+
+
+
 const formatPhoneForWhatsApp = (raw) => {
   const digits = normalizePhone(raw);
   if (!digits) return '';
@@ -134,7 +130,7 @@ const TambahTutor = () => {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null);
-  // submitResult: { tutor, credentials: { username, password } }
+
   const [copiedField, setCopiedField] = useState(null);
 
   const handleInputChange = (event) => {
@@ -186,12 +182,10 @@ const TambahTutor = () => {
 
     setSubmitting(true);
 
-    // Bangun username otomatis dari nama (slug + id user)
     const baseUsername = buildUsername(formData.namaTutor);
     const password = generatePassword(10);
 
     try {
-      // 1) Buat akun user dengan role 'tutor'
       let userResponse;
       try {
         userResponse = await api.post('/auth/register', {
@@ -200,7 +194,6 @@ const TambahTutor = () => {
           role: 'tutor',
         });
       } catch (err) {
-        // Username bentrok → generate suffix acak
         if (err.response?.status === 409) {
           const usernameRetry = `${baseUsername}_${Math.floor(
             1000 + Math.random() * 9000
@@ -224,7 +217,6 @@ const TambahTutor = () => {
         throw new Error('Gagal mendapatkan id_user dari server.');
       }
 
-      // Update username dengan format: namaSlug + idUser
       const finalUsername = `${baseUsername}${idUser}`;
       try {
         await api.put('/auth/update-username', { id_user: idUser, username: finalUsername });
@@ -232,7 +224,6 @@ const TambahTutor = () => {
         console.error('Gagal update username:', err);
       }
 
-      // 2) Simpan data tutor
       const tutorPayload = {
         id_user: idUser,
         nama_tutor: formData.namaTutor.trim(),
@@ -254,7 +245,6 @@ const TambahTutor = () => {
         throw new Error('Gagal mendapatkan data tutor dari server.');
       }
 
-      // Siapkan tautan WhatsApp untuk pengiriman kredensial
       const whatsappMessage = buildWhatsAppMessage({
         nama: formData.namaTutor,
         username: finalUsername,
@@ -418,7 +408,7 @@ const TambahTutor = () => {
 
       {!submitResult && (
         <form className={styles.formCard} onSubmit={handleSubmit} noValidate>
-          {/* Section: Data Pribadi */}
+          {}
           <section className={styles.section}>
             <header className={styles.sectionHeader}>
               <div className={styles.sectionIcon}>
@@ -516,7 +506,7 @@ const TambahTutor = () => {
             </div>
           </section>
 
-          {/* Section: Data Kepegawaian */}
+          {}
           <section className={styles.section}>
             <header className={styles.sectionHeader}>
               <div className={styles.sectionIcon}>

@@ -89,7 +89,6 @@ const PembayaranSiswa = () => {
   const searchRef = useRef(null);
   const dropdownRef = useRef(null);
 
-  // Tutup dropdown ketika klik di luar
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -105,14 +104,12 @@ const PembayaranSiswa = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Auto-dismiss toast
   useEffect(() => {
     if (!toast) return undefined;
     const timer = setTimeout(() => setToast(null), 3500);
     return () => clearTimeout(timer);
   }, [toast]);
 
-  // Debounce search
   useEffect(() => {
     const keyword = form.search.trim();
     if (!keyword) {
@@ -122,7 +119,7 @@ const PembayaranSiswa = () => {
       return;
     }
     if (form.selectedSiswa && form.selectedSiswa.nama === keyword) {
-      // Tidak perlu cari ulang untuk siswa yang sudah dipilih
+
       return;
     }
 
@@ -152,7 +149,6 @@ const PembayaranSiswa = () => {
     return () => clearTimeout(timer);
   }, [form.search, form.selectedSiswa]);
 
-  // ─── Hitung tunggakan SPP (bulan yang belum dibayar & Verified) ───
   useEffect(() => {
     const siswa = form.selectedSiswa;
     if (!siswa || form.jenisPembayaran !== 'SPP') {
@@ -197,7 +193,7 @@ const PembayaranSiswa = () => {
     setForm((prev) => ({
       ...prev,
       search: value,
-      // Reset siswa yang dipilih jika query berubah
+
       selectedSiswa: prev.selectedSiswa && prev.selectedSiswa.nama === value
         ? prev.selectedSiswa
         : null,
@@ -227,7 +223,6 @@ const PembayaranSiswa = () => {
     }
   };
 
-  // ─── Hitung ringkasan ─────────────────────────────────────────
   const totalTagihan = useMemo(() => {
     if (!form.selectedSiswa) return 0;
     if (form.jenisPembayaran === 'SPP') {
@@ -245,7 +240,6 @@ const PembayaranSiswa = () => {
     ? Math.max(totalTagihan - jumlahNumeric, 0)
     : 0;
 
-  // ─── Submit & reset ───────────────────────────────────────────
   const handleReset = () => {
     setForm(INITIAL_FORM);
     setSubmitError(null);
@@ -283,7 +277,6 @@ const PembayaranSiswa = () => {
     setSubmitting(true);
 
     try {
-      // ── Flow tunggakan (> 2 bulan) ───────────────────────────
       if (isTunggakanFlow) {
         const spp = Number(form.selectedSiswa.spp) || 0;
         let periodsToPay = [];
@@ -321,8 +314,6 @@ const PembayaranSiswa = () => {
           const payload = {
             id_siswa: form.selectedSiswa.id_siswa,
             bulan: p.bulan,
-            // Switched: tanggal_bayar = kapan transaksi dilakukan (hari ini),
-            // tanggal_verifikasi = periode tunggakan yang dibayar (bulan sebelumnya)
             tanggal_bayar: formatISODate(today),
             jenis_pembayaran: 'SPP',
             jumlah: spp,
@@ -332,7 +323,7 @@ const PembayaranSiswa = () => {
             tanggal_verifikasi: p.tanggal_bayar,
             catatan: `Pembayaran tunggakan (${paymentMode === 'all' ? 'bulk' : '1 periode'})`,
           };
-          // eslint-disable-next-line no-await-in-loop
+
           const res = await api.post('/pembayaran', payload);
           const created = res.data?.data;
           if (created?.id_pembayaran) createdIds.push(created.id_pembayaran);
@@ -360,7 +351,6 @@ const PembayaranSiswa = () => {
         return;
       }
 
-      // ── Flow normal (non-tunggakan) ──────────────────────────
       if (jumlahNumeric <= 0) {
         setSubmitError('Jumlah uang dibayar harus lebih dari 0.');
         setSubmitting(false);
@@ -412,7 +402,7 @@ const PembayaranSiswa = () => {
 
   return (
     <AdminLayout>
-      {/* Content (sidebar + topbar di-handle oleh AdminLayout) */}
+      {}
       <div className={styles.pageHeader}>
         <h2 className={styles.formTitle}>PEMBAYARAN SISWA</h2>
       </div>
@@ -468,7 +458,7 @@ const PembayaranSiswa = () => {
             </section>
           )}
 
-          {/* Toast dialog — auto dismiss */}
+          {}
           {toast && (
             <div
               className={styles.toastOverlay}
@@ -502,7 +492,7 @@ const PembayaranSiswa = () => {
           )}
 
           <form className={styles.formGrid} onSubmit={handleSubmit}>
-            {/* Left column: form fields */}
+            {}
             <div className={styles.formColumn}>
               <section className={styles.card}>
                 <header className={styles.cardHeader}>
@@ -513,7 +503,7 @@ const PembayaranSiswa = () => {
                 </header>
 
                 <div className={styles.cardBody}>
-                  {/* 1. Cari Nama Siswa */}
+                  {}
                   <div className={styles.field}>
                     <label className={styles.label} htmlFor="search">
                       Cari Nama Siswa
@@ -558,7 +548,7 @@ const PembayaranSiswa = () => {
                     </div>
                   </div>
 
-                  {/* 2 & 3. Nama Lengkap & Kelas */}
+                  {}
                   <div className={styles.fieldRow}>
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="namaLengkap">
@@ -591,7 +581,7 @@ const PembayaranSiswa = () => {
                     </div>
                   </div>
 
-                  {/* 4 & 5. Jenis & Metode Pembayaran */}
+                  {}
                   <div className={styles.fieldRow}>
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="jenisPembayaran">
@@ -633,7 +623,7 @@ const PembayaranSiswa = () => {
                     </div>
                   </div>
 
-                  {/* Tunggakan info (hanya untuk SPP) */}
+                  {}
                   {form.jenisPembayaran === 'SPP' && form.selectedSiswa && (
                     <>
                       {tunggakan.loading && (
@@ -741,7 +731,7 @@ const PembayaranSiswa = () => {
                     </>
                   )}
 
-                  {/* 6. Jumlah Uang Dibayar — disembunyikan saat flow tunggakan */}
+                  {}
                   {!(form.jenisPembayaran === 'SPP' && tunggakan.months.length > 1) && (
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="jumlahDibayar">
@@ -760,7 +750,7 @@ const PembayaranSiswa = () => {
                     </div>
                   )}
 
-                  {/* 7 & 8. Tombol Simpan & Reset */}
+                  {}
                   <div className={styles.actionRow}>
                     <button
                       type="submit"
@@ -789,7 +779,7 @@ const PembayaranSiswa = () => {
               </section>
             </div>
 
-            {/* Right column: ringkasan */}
+            {}
             <aside className={styles.summaryColumn}>
               <section className={`${styles.card} ${styles.summaryCard}`}>
                 <header className={styles.summaryHeader}>

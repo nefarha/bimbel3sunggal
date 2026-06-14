@@ -26,7 +26,6 @@ const RekapAbsensi = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Generate years list (e.g., from 2022 to current year + 1)
   const years = [];
   const currentYear = today.getFullYear();
   for (let y = currentYear - 2; y <= currentYear + 1; y++) {

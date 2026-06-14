@@ -81,11 +81,9 @@ const ManajemenTutor = () => {
   const [mapelFilter, setMapelFilter] = useState('all');
   const [mapelOptions, setMapelOptions] = useState([]);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
-  // Modal edit
   const [viewingTutor, setViewingTutor] = useState(null);
   const [editingTutor, setEditingTutor] = useState(null);
   const [editForm, setEditForm] = useState(initialEditForm);
@@ -93,7 +91,6 @@ const ManajemenTutor = () => {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
 
-  // Auto-dismiss toast
   useEffect(() => {
     if (!toast) return undefined;
     const timer = setTimeout(() => setToast(null), 3500);
@@ -109,8 +106,6 @@ const ManajemenTutor = () => {
       setTutorList(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Fetch tutor error:', err);
-      // Endpoint belum tersedia: tampilkan list kosong tanpa error agar admin
-      // bisa menavigasi halaman tanpa seed. Error hanya dicatat di console.
       setTutorList([]);
       setError(null);
     } finally {
@@ -134,7 +129,6 @@ const ManajemenTutor = () => {
     fetchMapelOptions();
   }, [fetchTutor, fetchMapelOptions]);
 
-  // Daftar mapel unik yang muncul di data (untuk filter)
   const availableMapel = useMemo(() => {
     const set = new Set();
     tutorList.forEach((t) => {
@@ -150,7 +144,6 @@ const ManajemenTutor = () => {
     return Array.from(set);
   }, [mapelOptions, tutorList]);
 
-  // Filter + search
   const filteredTutor = useMemo(() => {
     const keyword = search.trim().toLowerCase();
     return tutorList.filter((t) => {
@@ -168,7 +161,6 @@ const ManajemenTutor = () => {
     });
   }, [tutorList, search, statusFilter, mapelFilter, mapelOptions]);
 
-  // Stats
   const stats = useMemo(() => {
     const total = tutorList.length;
     const aktif = tutorList.filter((t) => t.status === 'Aktif').length;
@@ -176,7 +168,6 @@ const ManajemenTutor = () => {
     return { total, aktif, nonaktif };
   }, [tutorList]);
 
-  // Pagination derived
   const totalPages = Math.max(1, Math.ceil(filteredTutor.length / pageSize));
   const safePage = Math.min(currentPage, totalPages);
   const pageStart = (safePage - 1) * pageSize;
@@ -189,7 +180,6 @@ const ManajemenTutor = () => {
     if (currentPage > totalPages) setCurrentPage(totalPages);
   }, [currentPage, totalPages]);
 
-  // ─── Edit handlers ──────────────────────────────────────────
   const openEditModal = (tutor) => {
     setEditingTutor(tutor);
     setEditForm({
@@ -297,7 +287,7 @@ const ManajemenTutor = () => {
 
   return (
     <AdminLayout>
-      {/* Page header */}
+      {}
       <div className={styles.pageHeader}>
         <h2 className={styles.pageTitle}>MANAJEMEN TUTOR</h2>
         <button
@@ -311,7 +301,7 @@ const ManajemenTutor = () => {
         </button>
       </div>
 
-      {/* Toast */}
+      {}
       {toast && (
         <div
           className={styles.toastOverlay}
@@ -344,7 +334,7 @@ const ManajemenTutor = () => {
         </div>
       )}
 
-      {/* Stats row (header layout mengikuti desain) */}
+      {}
       <section className={styles.statsGrid}>
         <article className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.statIconPrimary}`}>
@@ -377,7 +367,7 @@ const ManajemenTutor = () => {
         </article>
       </section>
 
-      {/* Action bar: Tambah Tutor + Search */}
+      {}
       <section className={styles.actionBar}>
         <button
           type="button"
@@ -436,7 +426,7 @@ const ManajemenTutor = () => {
         </div>
       </section>
 
-      {/* Table */}
+      {}
       <section className={styles.tableCard}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
@@ -540,7 +530,7 @@ const ManajemenTutor = () => {
           </table>
         </div>
 
-        {/* Footer pagination */}
+        {}
         <div className={styles.tableFooter}>
           <span className={styles.tableCount}>
             Menampilkan {rangeStart} sampai {rangeEnd} dari {filteredTutor.length} data
@@ -583,7 +573,7 @@ const ManajemenTutor = () => {
         </div>
       </section>
 
-      {/* Modal detail */}
+      {}
       {viewingTutor && (
         <div
           className={styles.modalOverlay}
@@ -694,7 +684,7 @@ const ManajemenTutor = () => {
         </div>
       )}
 
-      {/* Modal edit */}
+      {}
       {editingTutor && (
         <div
           className={styles.modalOverlay}
@@ -855,7 +845,7 @@ const ManajemenTutor = () => {
                 />
               </div>
 
-              {/* Mata Pelajaran (multi-select chip by ID) */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label}>Mata Pelajaran</label>
                 <div className={styles.chipSelectGroup}>

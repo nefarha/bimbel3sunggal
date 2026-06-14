@@ -22,7 +22,7 @@ const formatDateShort = (date) => {
 };
 
 const toMySQLDateTime = (date) => {
-  // Menghasilkan string 'YYYY-MM-DD HH:MM:SS' yang aman untuk perbandingan di MySQL
+
   const d = new Date(date);
   const pad = (n) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
@@ -45,7 +45,6 @@ const diffDays = (a, b) => {
   return Math.max(0, Math.floor(ms / (1000 * 60 * 60 * 24)));
 };
 
-// GET /api/dashboard/stats
 export const getDashboardStats = async (req, res) => {
   try {
     const today = new Date();
@@ -53,7 +52,6 @@ export const getDashboardStats = async (req, res) => {
     const dayStart = toMySQLDateTime(startOfDay(today));
     const dayEnd = toMySQLDateTime(endOfDay(today));
 
-    // Hitung semua statistik secara paralel
     const [
       totalSiswaAktif,
       totalKelasHariIni,
@@ -116,7 +114,6 @@ export const getDashboardStats = async (req, res) => {
       ),
     ]);
 
-    // Aggregate absensi per kelas
     const kelasMap = new Map();
     for (const row of absensiHariIniRaw) {
       const key = row.id_kelas;
@@ -139,7 +136,6 @@ export const getDashboardStats = async (req, res) => {
     }
     const absensiHariIni = Array.from(kelasMap.values());
 
-    // Map transaksi pending
     const transaksiPending = transaksiPendingRaw.map((row) => ({
       id: row.id_pembayaran,
       id_pembayaran: row.id_pembayaran,
@@ -173,7 +169,6 @@ export const getDashboardStats = async (req, res) => {
   }
 };
 
-// GET /api/dashboard/absensi-hari-ini
 export const getAbsensiHariIni = async (req, res) => {
   try {
     const today = new Date();
@@ -226,7 +221,6 @@ export const getAbsensiHariIni = async (req, res) => {
   }
 };
 
-// GET /api/dashboard/transaksi-pending
 export const getTransaksiPending = async (req, res) => {
   try {
     const limit = Math.min(parseInt(req.query.limit, 10) || 25, 100);
@@ -264,16 +258,15 @@ export const getTransaksiPending = async (req, res) => {
   }
 };
 
-// GET /api/dashboard/piutang
-// Logika: untuk setiap siswa Aktif, generate list bulan dari
-// (tanggal_masuk + 1 bulan) sampai bulan sekarang. Untuk setiap
-// bulan tersebut, cek apakah ada pembayaran dengan status 'Verified'
-// yang `tanggal_verifikasi`-nya jatuh di bulan tersebut (periode tagihan
-// yang sudah dibayar). Jika tidak ada → siswa punya tunggakan. Tiap
-// siswa hanya ditampilkan 1 baris (piutang terlama) dengan info
-// tambahan "tunggakan" = jumlah bulan nunggak.
-// Due date tiap bulan: tanggal_masuk + N bulan (N = 1, 2, 3, ...).
-// "Keterlambatan" = hari ini - due date piutang terlama.
+
+
+
+
+
+
+
+
+
 export const getPiutangSiswa = async (req, res) => {
   try {
     const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
@@ -283,9 +276,8 @@ export const getPiutangSiswa = async (req, res) => {
     const now = new Date();
     const today = startOfDay(now);
 
-    // Ambil semua siswa Aktif dengan tanggal_masuk tidak NULL.
-    // WHERE tanggal_masuk <= tanggal_masuk + INTERVAL 1 MONTH
-    // memastikan siswa baru (kurang dari 1 bulan) tidak diproses.
+
+
     const siswaList = await query(
       `SELECT id_siswa, nama, spp, no_hp_ortu, tanggal_masuk
        FROM siswa
@@ -295,11 +287,10 @@ export const getPiutangSiswa = async (req, res) => {
        ORDER BY nama ASC`
     );
 
-    // Ambil semua pembayaran Verified. Periode dibayar ditentukan dari
-    // `tanggal_verifikasi` (bukan `bulan` lagi) — setelah perubahan
-    // semantic, `tanggal_verifikasi` merepresentasikan due-date periode
-    // yang dilunasi (untuk tunggakan = tanggal_jatuh_tempo bulan
-    // sebelumnya; untuk pembayaran normal = hari ini → bulan berjalan).
+
+
+
+
     const pembayaranList = await query(
       `SELECT id_siswa, tanggal_verifikasi
        FROM pembayaran
@@ -307,8 +298,7 @@ export const getPiutangSiswa = async (req, res) => {
          AND tanggal_verifikasi IS NOT NULL`
     );
 
-    // Build map: id_siswa → Set<bulan> yang sudah dibayar,
-    // diturunkan dari bulan/tahun `tanggal_verifikasi`.
+
     const paidMap = new Map();
     for (const p of pembayaranList) {
       const tv = p.tanggal_verifikasi instanceof Date
@@ -320,12 +310,11 @@ export const getPiutangSiswa = async (req, res) => {
       paidMap.get(p.id_siswa).add(bulanStr);
     }
 
-    // Generate piutang: 1 row per siswa yang punya tunggakan
     const piutangList = [];
     for (const s of siswaList) {
-      // Parse tanggal_masuk ke local Date agar konsisten
-      // di semua timezone (MySQL DATE bisa datang sebagai Date
-      // object atau 'YYYY-MM-DD' string tergantung driver).
+
+
+
       const tglMasuk = s.tanggal_masuk instanceof Date
         ? new Date(
             s.tanggal_masuk.getFullYear(),
@@ -339,7 +328,7 @@ export const getPiutangSiswa = async (req, res) => {
       const paidSet = paidMap.get(s.id_siswa) || new Set();
 
       const unpaidPeriods = [];
-      // Mulai dari 1 bulan setelah tanggal_masuk
+
       let cursor = new Date(tglMasuk.getFullYear(), tglMasuk.getMonth() + 1, 1);
       const endMonth = new Date(now.getFullYear(), now.getMonth(), 1);
       let monthsFromMasuk = 1;
@@ -348,7 +337,7 @@ export const getPiutangSiswa = async (req, res) => {
         const bulanStr = `${MONTHS_ID[cursor.getMonth()]} ${cursor.getFullYear()}`;
 
         if (!paidSet.has(bulanStr)) {
-          // Due date = tanggal_masuk + N bulan
+
           const dueDate = new Date(
             tglMasuk.getFullYear(),
             tglMasuk.getMonth() + monthsFromMasuk,
@@ -361,14 +350,13 @@ export const getPiutangSiswa = async (req, res) => {
           });
         }
 
-        // Next month
         cursor = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 1);
         monthsFromMasuk += 1;
       }
 
       if (unpaidPeriods.length > 0) {
         const oldest = unpaidPeriods[0];
-        // Nominal total = tunggakan (jumlah bulan) × spp siswa
+
         const totalNominal = unpaidPeriods.length * Number(s.spp || 0);
         piutangList.push({
           id: s.id_siswa,
@@ -382,7 +370,6 @@ export const getPiutangSiswa = async (req, res) => {
       }
     }
 
-    // Sort: keterlambatan terlama di atas
     piutangList.sort((a, b) => {
       const aK = parseInt(a.keterlambatan, 10) || 0;
       const bK = parseInt(b.keterlambatan, 10) || 0;

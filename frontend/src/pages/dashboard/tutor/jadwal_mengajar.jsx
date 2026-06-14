@@ -25,7 +25,6 @@ const JadwalMengajar = () => {
         }
 
         const user = JSON.parse(storedUser);
-        // Dapatkan data tutor dari id_user
         const tutorRes = await api.get(`/guru/by-user/${user.id}`);
         const tutor = tutorRes.data?.data;
         if (!tutor) {
@@ -33,11 +32,9 @@ const JadwalMengajar = () => {
           return;
         }
 
-        // Dapatkan jadwal berdasarkan id_tutor
         const jadwalRes = await api.get(`/jadwal/tutor/${tutor.id_tutor}`);
         const jadwalList = jadwalRes.data?.data || [];
 
-        // Kelompokkan berdasarkan hari
         const grouped = {};
         DAYS.forEach((day) => {
           const items = jadwalList.filter((j) => j.hari === day);
@@ -59,7 +56,6 @@ const JadwalMengajar = () => {
 
   const formatJam = (jam) => {
     if (!jam) return '-';
-    // jam format from DB is HH:mm:ss
     const parts = jam.split(':');
     return `${parts[0]}:${parts[1]}`;
   };

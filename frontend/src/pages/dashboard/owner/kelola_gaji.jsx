@@ -37,17 +37,14 @@ const KelolaGaji = () => {
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
 
-  // Edit state: { [id_tutor]: { bonus, potongan } }
   const [editState, setEditState] = useState({});
 
-  // Modal state
   const [modal, setModal] = useState({ open: false, mode: 'preview' }); // 'preview' | 'edit'
   const [previewData, setPreviewData] = useState(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [editBonus, setEditBonus] = useState(0);
   const [editPotongan, setEditPotongan] = useState(0);
 
-  // ─── Fetch table data ──────────────────────────────────
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
@@ -70,7 +67,6 @@ const KelolaGaji = () => {
     fetchData();
   }, [fetchData]);
 
-  // ─── Preview modal ─────────────────────────────────────
   const handlePreview = async (idTutor) => {
     try {
       setPreviewLoading(true);
@@ -87,7 +83,6 @@ const KelolaGaji = () => {
     }
   };
 
-  // ─── Edit modal (opens with pre-filled values) ─────────
   const handleEdit = async (idTutor) => {
     try {
       setPreviewLoading(true);
@@ -106,7 +101,6 @@ const KelolaGaji = () => {
     }
   };
 
-  // ─── Kirim (save) gaji ─────────────────────────────────
   const handleKirim = async (idTutor, bonus, potongan, totalSpp, honor, totalNeto) => {
     try {
       setError(null);
@@ -133,7 +127,6 @@ const KelolaGaji = () => {
     }
   };
 
-  // ─── Save from edit modal ──────────────────────────────
   const handleSaveEdit = () => {
     if (!previewData) return;
     const idTutor = previewData.tutor.id_tutor;
@@ -148,7 +141,6 @@ const KelolaGaji = () => {
     setPreviewData(null);
   };
 
-  // ─── Toggle edit mode (inline) ─────────────────────────
   const toggleInlineEdit = (idTutor, currentBonus, currentPotongan) => {
     if (editState[idTutor]) {
       setEditState((prev) => ({ ...prev, [idTutor]: undefined }));
@@ -169,10 +161,10 @@ const KelolaGaji = () => {
 
   return (
     <div className={styles.container}>
-      {/* ─── Success Message ────────────────────────────── */}
+      {}
       {successMsg && <div className={styles.successAlert}>{successMsg}</div>}
 
-      {/* ─── Filter ──────────────────────────────────────── */}
+      {}
       <div className={styles.filterBar}>
         <div className={styles.filterGroup}>
           <label className={styles.filterLabel}>Bulan</label>
@@ -207,15 +199,15 @@ const KelolaGaji = () => {
         </div>
       </div>
 
-      {/* ─── Loading ─────────────────────────────────────── */}
+      {}
       {loading && <div className={styles.loadingState}>Memuat data gaji...</div>}
 
-      {/* ─── Error ───────────────────────────────────────── */}
+      {}
       {error && !loading && (
         <div className={styles.errorAlert}>{error}</div>
       )}
 
-      {/* ─── Table ───────────────────────────────────────── */}
+      {}
       {!loading && !error && (
         <div className={styles.tableSection}>
           <div className={styles.tableWrapper}>
@@ -359,7 +351,7 @@ const KelolaGaji = () => {
         </div>
       )}
 
-      {/* ─── Preview / Edit Modal ────────────────────────── */}
+      {}
       {modal.open && (
         <div className={styles.modalOverlay} onClick={closeModal}>
           <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
@@ -377,7 +369,7 @@ const KelolaGaji = () => {
                 <div className={styles.loadingState}>Memuat data...</div>
               ) : previewData ? (
                 <>
-                  {/* Title */}
+                  {}
                   <div className={styles.previewTitleSection}>
                     <div>
                       <h4 className={styles.previewTutorName}>
@@ -390,7 +382,7 @@ const KelolaGaji = () => {
                     </span>
                   </div>
 
-                  {/* Mini table: Student SPP list */}
+                  {}
                   <div>
                     <table className={styles.previewMiniTable}>
                       <thead>
@@ -438,7 +430,7 @@ const KelolaGaji = () => {
                     </table>
                   </div>
 
-                  {/* Cards */}
+                  {}
                   <div className={styles.previewCards}>
                     <div className={styles.previewCard}>
                       <h5 className={styles.previewCardTitle}>Komisi Dasar (B)</h5>
@@ -473,7 +465,7 @@ const KelolaGaji = () => {
                     </div>
                   </div>
 
-                  {/* Grand Total */}
+                  {}
                   <div className={styles.previewGrandTotal}>
                     <span className={styles.previewGrandLabel}>
                       GRAND TOTAL (B + C)
@@ -483,7 +475,7 @@ const KelolaGaji = () => {
                     </span>
                   </div>
 
-                  {/* Edit mode: bonus & potongan inputs */}
+                  {}
                   {modal.mode === 'edit' && (
                     <>
                       <div className={styles.previewEditRow}>

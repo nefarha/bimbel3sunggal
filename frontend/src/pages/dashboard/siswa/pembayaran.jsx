@@ -35,7 +35,6 @@ const Pembayaran = () => {
 
         const user = JSON.parse(storedUser);
 
-        // Dapatkan data siswa dari id_user
         const siswaRes = await api.get(`/siswa/by-user/${user.id}`);
         const siswaData = siswaRes.data?.data;
         if (!siswaData) {
@@ -44,12 +43,10 @@ const Pembayaran = () => {
         }
         setSiswa(siswaData);
 
-        // Dapatkan semua pembayaran siswa
         const pembayaranRes = await api.get(`/pembayaran?id_siswa=${siswaData.id_siswa}`);
         const allPembayaran = pembayaranRes.data?.data || [];
         setPembayaranList(allPembayaran);
 
-        // Dapatkan data tunggakan
         try {
           const tunggakanRes = await api.get(`/pembayaran/tunggakan/${siswaData.id_siswa}`);
           const tunggakanData = tunggakanRes.data?.data;
@@ -58,7 +55,6 @@ const Pembayaran = () => {
             months: tunggakanData?.tunggakan_months || [],
           });
         } catch {
-          // Tunggakan gagal di-load, abaikan
           setTunggakan({ count: 0, months: [] });
         }
       } catch (err) {
@@ -72,25 +68,20 @@ const Pembayaran = () => {
     fetchData();
   }, []);
 
-  // Total tagihan outstanding = SPP × jumlah bulan tunggakan (spt piutang)
   const totalTagihan = Number(siswa?.spp || 0) * tunggakan.count;
 
-  // Total dibayar = semua pembayaran terverifikasi
   const totalDibayar = pembayaranList
     .filter((p) => p.status === 'Verified')
     .reduce((sum, p) => sum + Number(p.jumlah || 0), 0);
 
-  // Tagihan aktif = jumlah bulan tunggakan
   const tagihanAktif = tunggakan.count;
 
-  // Filter pembayaran berdasarkan tahun dari tanggal_verifikasi
   const filteredPembayaran = pembayaranList.filter((p) => {
     if (!p.tanggal_verifikasi) return false;
     const year = new Date(p.tanggal_verifikasi).getFullYear();
     return year === tahun;
   }).sort((a, b) => new Date(b.tanggal_verifikasi) - new Date(a.tanggal_verifikasi));
 
-  // Dapatkan daftar tahun yang tersedia
   const availableYears = [...new Set(
     pembayaranList
       .filter((p) => p.tanggal_verifikasi)
@@ -142,7 +133,7 @@ const Pembayaran = () => {
 
   return (
     <div className={styles.container}>
-      {/* Header - Data Siswa */}
+      {}
       {siswa && (
         <div className={styles.headerCard}>
           <div className={styles.avatarWrapper}>
@@ -156,7 +147,7 @@ const Pembayaran = () => {
         </div>
       )}
 
-      {/* Stat Cards */}
+      {}
       <div className={styles.statsRow}>
         <div className={styles.statCard}>
           <span className={styles.statLabel}>Total Tagihan</span>
@@ -185,7 +176,7 @@ const Pembayaran = () => {
         </div>
       </div>
 
-      {/* Table with Year Filter */}
+      {}
       <div className={styles.tableSection}>
         <div className={styles.tableHeader}>
           <h2 className={styles.tableTitle}>Riwayat Pembayaran</h2>

@@ -40,7 +40,6 @@ const Jadwal = () => {
 
         const user = JSON.parse(storedUser);
 
-        // Dapatkan data siswa dari id_user
         const siswaRes = await api.get(`/siswa/by-user/${user.id}`);
         const siswa = siswaRes.data?.data;
         if (!siswa) {
@@ -48,11 +47,9 @@ const Jadwal = () => {
           return;
         }
 
-        // Dapatkan jadwal berdasarkan id_siswa
         const jadwalRes = await api.get(`/jadwal/siswa/${siswa.id_siswa}`);
         const allJadwal = jadwalRes.data?.data || [];
 
-        // Filter untuk hari ini
         const todayIdx = new Date().getDay();
         const todayStr = DAY_MAP[todayIdx];
         setTodayName(todayStr);
@@ -61,7 +58,6 @@ const Jadwal = () => {
           .filter((j) => j.hari === todayStr)
           .sort((a, b) => (a.jam > b.jam ? 1 : -1));
 
-        // Tambahkan sesi berdasarkan urutan
         const withSesi = todayJadwal.map((j, idx) => ({
           ...j,
           sesi: idx + 1,
@@ -116,7 +112,7 @@ const Jadwal = () => {
         <p className={styles.pageSubtitle}>Jadwal les hari ini</p>
       </div>
 
-      {/* Today Badge */}
+      {}
       <div className={styles.todayBadge}>
         <MdToday className={styles.todayBadgeIcon} />
         <span>Hari {todayName}</span>

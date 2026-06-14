@@ -18,20 +18,16 @@ const DaftarKelas = () => {
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
 
-  // Modal tambah
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ nama_kelas: '', id_mapel: '', id_tutor: '' });
   const [formError, setFormError] = useState(null);
   const [saving, setSaving] = useState(false);
 
-  // Options
   const [mapelOptions, setMapelOptions] = useState([]);
   const [tutorOptions, setTutorOptions] = useState([]);
 
-  // Toast
   const [toast, setToast] = useState(null);
 
-  // Auto-dismiss toast
   useEffect(() => {
     if (!toast) return undefined;
     const timer = setTimeout(() => setToast(null), 3500);
@@ -63,7 +59,7 @@ const DaftarKelas = () => {
       const mapelData = Array.isArray(mapelRes.data?.data) ? mapelRes.data.data : [];
       const tutorData = Array.isArray(tutorRes.data?.data) ? tutorRes.data.data : [];
       setMapelOptions(mapelData);
-      // Filter tutor yang aktif saja
+
       setTutorOptions(tutorData.filter((t) => t.status === 'Aktif'));
     } catch (err) {
       console.error('Fetch options error:', err);
@@ -75,7 +71,6 @@ const DaftarKelas = () => {
     fetchOptions();
   }, [fetchKelas, fetchOptions]);
 
-  // Filter
   const filteredKelas = kelasList.filter((k) => {
     if (!search.trim()) return true;
     const keyword = search.trim().toLowerCase();
@@ -86,11 +81,9 @@ const DaftarKelas = () => {
     );
   });
 
-  // Stats
   const totalKelas = kelasList.length;
   const totalSiswa = kelasList.reduce((sum, k) => sum + Number(k.jumlah_siswa || 0), 0);
 
-  // ─── Modal handlers ───────────────────────────────────────
   const openModal = () => {
     setFormData({ nama_kelas: '', id_mapel: '', id_tutor: '' });
     setFormError(null);
@@ -111,7 +104,6 @@ const DaftarKelas = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi
     if (!formData.nama_kelas.trim()) {
       setFormError('Nama kelas wajib diisi.');
       return;
@@ -155,7 +147,7 @@ const DaftarKelas = () => {
 
   return (
     <AdminLayout>
-      {/* Page header */}
+      {}
       <div className={styles.pageHeader}>
         <h2 className={styles.pageTitle}>DAFTAR KELAS</h2>
         <button
@@ -169,7 +161,7 @@ const DaftarKelas = () => {
         </button>
       </div>
 
-      {/* Error banner */}
+      {}
       {error && (
         <div className={styles.alertError} role="alert">
           <span>{error}</span>
@@ -184,7 +176,7 @@ const DaftarKelas = () => {
         </div>
       )}
 
-      {/* Toast */}
+      {}
       {toast && (
         <div
           className={styles.toastOverlay}
@@ -217,7 +209,7 @@ const DaftarKelas = () => {
         </div>
       )}
 
-      {/* Stats row */}
+      {}
       <section className={styles.statsGrid}>
         <article className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.statIconPrimary}`}>
@@ -239,7 +231,7 @@ const DaftarKelas = () => {
         </article>
       </section>
 
-      {/* Action bar */}
+      {}
       <section className={styles.actionBar}>
         <button type="button" className={styles.btnPrimary} onClick={openModal}>
           <MdAdd className={styles.btnIcon} />
@@ -258,7 +250,7 @@ const DaftarKelas = () => {
         </div>
       </section>
 
-      {/* Table */}
+      {}
       <section className={styles.tableCard}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
@@ -305,7 +297,7 @@ const DaftarKelas = () => {
         </div>
       </section>
 
-      {/* Modal tambah kelas */}
+      {}
       {showModal && (
         <div
           className={styles.modalOverlay}
@@ -343,7 +335,7 @@ const DaftarKelas = () => {
             )}
 
             <form className={styles.modalBody} onSubmit={handleSubmit}>
-              {/* Nama Kelas */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="nama_kelas">
                   Nama Kelas
@@ -360,7 +352,7 @@ const DaftarKelas = () => {
                 />
               </div>
 
-              {/* Mapel */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="id_mapel">
                   Mata Pelajaran
@@ -382,7 +374,7 @@ const DaftarKelas = () => {
                 </select>
               </div>
 
-              {/* Tutor */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="id_tutor">
                   Tutor

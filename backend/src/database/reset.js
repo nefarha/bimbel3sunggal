@@ -36,7 +36,6 @@ const TABLES_IN_DROP_ORDER = [
 async function main() {
   console.log(`[reset] target database: ${DB_NAME}`);
 
-  // 1) Drop existing tables (in correct order, ignore failures)
   const conn = await mysql.createConnection({
     ...baseConfig,
     database: DB_NAME,
@@ -57,7 +56,6 @@ async function main() {
     await conn.end();
   }
 
-  // 2) Re-apply schema
   console.log('[reset] re-applying schema...');
   const sql = fs.readFileSync(SCHEMA_PATH, 'utf8');
   const conn2 = await mysql.createConnection({ ...baseConfig });

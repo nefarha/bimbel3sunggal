@@ -15,7 +15,6 @@ const handleError = (res, error) => {
 
 const toNumber = (val) => (val !== undefined && val !== null ? Number(val) : 0);
 
-// GET /api/pembayaran
 export const getAllPembayaran = async (req, res) => {
   try {
     const { id_siswa, status, bulan } = req.query;
@@ -31,7 +30,6 @@ export const getAllPembayaran = async (req, res) => {
   }
 };
 
-// GET /api/pembayaran/:id
 export const getPembayaranById = async (req, res) => {
   try {
     const data = await pembayaranRepository.findById(parseInt(req.params.id, 10));
@@ -44,11 +42,10 @@ export const getPembayaranById = async (req, res) => {
   }
 };
 
-// GET /api/pembayaran/tunggakan/:id_siswa
-// Menghitung tunggakan SPP untuk satu siswa: list bulan dari
-// (tanggal_masuk + 1 bulan) sampai bulan sekarang yang belum
-// dibayar berstatus 'Verified'. Tiap bulan menyertakan
-// 'tanggal_bayar' yang sudah di-clamp ke hari valid.
+
+
+
+
 export const getTunggakanSiswa = async (req, res) => {
   try {
     const id_siswa = parseInt(req.params.id_siswa, 10);
@@ -85,7 +82,6 @@ export const getTunggakanSiswa = async (req, res) => {
       });
     }
 
-    // Parse tanggal_masuk (DATE bisa datang sebagai Date atau 'YYYY-MM-DD')
     const tglMasuk = s.tanggal_masuk instanceof Date
       ? new Date(
           s.tanggal_masuk.getFullYear(),
@@ -97,9 +93,8 @@ export const getTunggakanSiswa = async (req, res) => {
           return new Date(y, m - 1, d);
         })();
 
-    // Periode yang sudah dibayar ditentukan dari `tanggal_verifikasi`
-    // (bukan `bulan` lagi) — `tanggal_verifikasi` merepresentasikan
-    // due-date periode yang dilunasi setelah perubahan semantic field.
+
+
     const pembayaranList = await query(
       `SELECT tanggal_verifikasi FROM pembayaran
        WHERE id_siswa = ? AND status = 'Verified'
@@ -125,7 +120,7 @@ export const getTunggakanSiswa = async (req, res) => {
     while (cursor.getTime() <= endMonth.getTime()) {
       const bulanStr = `${MONTHS_ID[cursor.getMonth()]} ${cursor.getFullYear()}`;
       if (!paidSet.has(bulanStr)) {
-        // tanggal_bayar: hari yg sama dengan tanggal_masuk, di-clamp ke akhir bulan
+
         const daysInMonth = new Date(cursor.getFullYear(), cursor.getMonth() + 1, 0).getDate();
         const clampedDay = Math.min(Math.max(dayOfMonth, 1), daysInMonth);
         const periodDate = new Date(cursor.getFullYear(), cursor.getMonth(), clampedDay);
@@ -157,7 +152,6 @@ export const getTunggakanSiswa = async (req, res) => {
   }
 };
 
-// POST /api/pembayaran
 export const createPembayaran = async (req, res) => {
   try {
     const { id_siswa, tanggal_bayar } = req.body;
@@ -180,7 +174,6 @@ export const createPembayaran = async (req, res) => {
   }
 };
 
-// PUT /api/pembayaran/:id
 export const updatePembayaran = async (req, res) => {
   try {
     const payload = { ...req.body };
@@ -196,7 +189,6 @@ export const updatePembayaran = async (req, res) => {
   }
 };
 
-// PATCH /api/pembayaran/:id/verify
 export const verifyPembayaran = async (req, res) => {
   try {
     const { status = 'Verified', catatan = null } = req.body;
@@ -211,9 +203,8 @@ export const verifyPembayaran = async (req, res) => {
   }
 };
 
-// PATCH /api/pembayaran/bulk-verify
-// Body: { ids?: number[], status: 'Verified' | 'Rejected', catatan?: string }
-// Jika ids kosong → verifikasi semua yang berstatus 'Pending'
+
+
 export const bulkVerify = async (req, res) => {
   try {
     const { ids = [], status = 'Verified', catatan = null } = req.body;
@@ -250,7 +241,6 @@ export const bulkVerify = async (req, res) => {
   }
 };
 
-// DELETE /api/pembayaran/:id
 export const deletePembayaran = async (req, res) => {
   try {
     await pembayaranRepository.delete(parseInt(req.params.id, 10));

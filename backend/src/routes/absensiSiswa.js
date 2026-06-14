@@ -13,12 +13,10 @@ import {
 
 const router = Router();
 
-// ─── Static routes (lebih spesifik) HARUS didaftarkan sebelum dynamic ───
 router.post('/bulk', bulkUpsertAbsensiSiswa);
 router.patch('/confirm-all-today', confirmAllToday);
 router.patch('/confirm-class/:id_kelas', confirmByKelas);
 
-// ─── Resource routes ──────────────────────────────────────────
 router.get('/', getAllAbsensiSiswa);
 router.get('/:id', getAbsensiSiswaById);
 router.post('/', createAbsensiSiswa);

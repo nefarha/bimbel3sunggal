@@ -12,7 +12,6 @@ import {
 
 const router = Router();
 
-// Static route harus lebih dulu
 router.patch('/bulk-verify', bulkVerify);
 router.get('/tunggakan/:id_siswa', getTunggakanSiswa);
 

@@ -7,7 +7,6 @@ const handleError = (res, error) => {
   res.status(500).json({ success: false, message: error.message });
 };
 
-// GET /api/jadwal
 export const getAllJadwal = async (req, res) => {
   try {
     const { hari, id_kelas, id_tutor, id_mapel } = req.query;
@@ -24,7 +23,6 @@ export const getAllJadwal = async (req, res) => {
   }
 };
 
-// GET /api/jadwal/siswa/:id_siswa
 export const getJadwalBySiswa = async (req, res) => {
   try {
     const jadwal = await jadwalRepository.findBySiswa(parseInt(req.params.id_siswa, 10));
@@ -34,7 +32,6 @@ export const getJadwalBySiswa = async (req, res) => {
   }
 };
 
-// GET /api/jadwal/tutor/:id_tutor
 export const getJadwalByTutor = async (req, res) => {
   try {
     const jadwal = await jadwalRepository.findByTutor(parseInt(req.params.id_tutor, 10));
@@ -44,7 +41,6 @@ export const getJadwalByTutor = async (req, res) => {
   }
 };
 
-// GET /api/jadwal/:id
 export const getJadwalById = async (req, res) => {
   try {
     const jadwal = await jadwalRepository.findById(parseInt(req.params.id, 10));
@@ -57,7 +53,6 @@ export const getJadwalById = async (req, res) => {
   }
 };
 
-// POST /api/jadwal
 export const createJadwal = async (req, res) => {
   try {
     const { id_kelas, id_tutor, id_mapel, hari, jam } = req.body;
@@ -77,7 +72,6 @@ export const createJadwal = async (req, res) => {
   }
 };
 
-// PUT /api/jadwal/:id
 export const updateJadwal = async (req, res) => {
   try {
     const payload = { ...req.body };
@@ -95,7 +89,6 @@ export const updateJadwal = async (req, res) => {
   }
 };
 
-// DELETE /api/jadwal/:id
 export const deleteJadwal = async (req, res) => {
   try {
     await jadwalRepository.delete(parseInt(req.params.id, 10));

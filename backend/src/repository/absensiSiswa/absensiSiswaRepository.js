@@ -7,10 +7,7 @@ const COLUMNS = [
   'status', 'id_mapel', 'is_confirmed', 'confirmed_at', 'confirmed_by',
 ];
 
-/**
- * Bangun WHERE clause + params untuk filter absensi.
- * Mendukung filter tanggal sebagai { gte, lte } (Date object) atau exact string/Date.
- */
+
 const buildAbsensiWhere = (filters = {}) => {
   const conditions = [];
   const params = [];

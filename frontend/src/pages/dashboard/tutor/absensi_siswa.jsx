@@ -27,7 +27,6 @@ const AbsensiSiswa = () => {
   const [success, setSuccess] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
 
-  // Dapatkan info jadwal dari state atau fetch
   const fetchJadwal = useCallback(async () => {
     if (location.state) {
       setJadwal({
@@ -58,19 +57,16 @@ const AbsensiSiswa = () => {
           return;
         }
 
-        // Ambil siswa dalam kelas
         const siswaRes = await api.get(`/siswa/kelas/${jadwalData.id_kelas}`);
         const siswa = siswaRes.data?.data || [];
         setSiswaList(siswa);
 
-        // Ambil absensi hari ini untuk jadwal ini
         const today = new Date().toISOString().split('T')[0];
         const absensiRes = await api.get(
           `/absensi-siswa?id_jadwal=${id_jadwal}&tanggal=${today}`
         );
         const absensiData = absensiRes.data?.data || [];
 
-        // Map status by id_siswa dari DB
         const fromDb = {};
         absensiData.forEach((a) => {
           fromDb[a.id_siswa] = a.status;
@@ -89,7 +85,6 @@ const AbsensiSiswa = () => {
     loadData();
   }, [id_jadwal, fetchJadwal]);
 
-  // Detek perubahan
   useEffect(() => {
     const keys = new Set([...Object.keys(statusMap), ...Object.keys(savedMap)]);
     let changed = false;
@@ -112,7 +107,6 @@ const AbsensiSiswa = () => {
 
   const handleStatusChange = (idSiswa, statusBaru) => {
     setStatusMap((prev) => {
-      // Jika klik status yang sama, reset (hapus)
       if (prev[idSiswa] === statusBaru) {
         const next = { ...prev };
         delete next[idSiswa];
@@ -133,7 +127,6 @@ const AbsensiSiswa = () => {
   const handleSave = async () => {
     const today = new Date().toISOString().split('T')[0];
 
-    // Kumpulkan semua siswa yang punya status
     const items = Object.entries(statusMap)
       .filter(([, status]) => status)
       .map(([idSiswa, status]) => ({
@@ -183,7 +176,7 @@ const AbsensiSiswa = () => {
 
   return (
     <div className={styles.container}>
-      {/* Header */}
+      {}
       <div className={styles.header}>
         <button
           className={styles.backBtn}
@@ -203,11 +196,11 @@ const AbsensiSiswa = () => {
         </div>
       </div>
 
-      {/* Notifications */}
+      {}
       {error && <div className={styles.errorAlert}>{error}</div>}
       {success && <div className={styles.successAlert}>{success}</div>}
 
-      {/* Table */}
+      {}
       {siswaList.length === 0 ? (
         <div className={styles.emptyState}>
           <p>Tidak ada siswa terdaftar di kelas ini</p>
@@ -272,7 +265,7 @@ const AbsensiSiswa = () => {
             </table>
           </div>
 
-          {/* Footer Save */}
+          {}
           <div className={styles.footer}>
             <button
               className={styles.saveBtn}

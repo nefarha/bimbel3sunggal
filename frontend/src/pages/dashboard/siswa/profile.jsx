@@ -21,7 +21,6 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Sheet state
   const [sheetOpen, setSheetOpen] = useState(false);
   const [passwordBaru, setPasswordBaru] = useState('');
   const [konfirmasiPassword, setKonfirmasiPassword] = useState('');
@@ -143,7 +142,7 @@ const Profile = () => {
 
   return (
     <div className={styles.container}>
-      {/* Header */}
+      {}
       <div className={styles.header}>
         <div className={styles.avatarWrapper}>
           <MdPerson className={styles.avatarIcon} />
@@ -155,7 +154,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Info Card */}
+      {}
       <div className={styles.card}>
         <h2 className={styles.cardTitle}>Informasi Pribadi</h2>
         <div className={styles.infoGrid}>
@@ -216,7 +215,7 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Change Password Button */}
+      {}
       <div className={styles.actions}>
         <button type="button" className={styles.btnChangePassword} onClick={openSheet}>
           <MdLock className={styles.btnIcon} />
@@ -224,7 +223,7 @@ const Profile = () => {
         </button>
       </div>
 
-      {/* Sheet Overlay */}
+      {}
       {sheetOpen && (
         <div className={styles.overlay} onClick={closeSheet}>
           <div className={styles.sheet} onClick={(e) => e.stopPropagation()}>

@@ -72,7 +72,6 @@ const Kehadiran = () => {
     }
   };
 
-  // Split days into 3 rows: 1-13, 14-26, 27-end
   const dayRows = data?.days
     ? [
         data.days.slice(0, 13),
@@ -83,7 +82,7 @@ const Kehadiran = () => {
 
   return (
     <div className={styles.container}>
-        {/* Header & Filter */}
+        {}
         <div className={styles.header}>
           <div className={styles.titleSection}>
             <h1 className={styles.pageTitle}>Kehadiran Saya</h1>
@@ -123,7 +122,7 @@ const Kehadiran = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {}
         {loading ? (
           <div className={styles.loadingState}>
             <div className={styles.spinner} />
@@ -139,7 +138,7 @@ const Kehadiran = () => {
           </div>
         ) : (
           <>
-            {/* Info Cards */}
+            {}
             <div className={styles.cardsRow}>
               <div className={`${styles.infoCard} ${styles.cardHadir}`}>
                 <span className={styles.cardValue}>{data.hadir}</span>
@@ -155,7 +154,7 @@ const Kehadiran = () => {
               </div>
             </div>
 
-            {/* Legend Card */}
+            {}
             <div className={styles.legendCard}>
               <span className={styles.legendLabel}>Keterangan:</span>
               <div className={styles.legendItems}>
@@ -178,7 +177,7 @@ const Kehadiran = () => {
               </div>
             </div>
 
-            {/* Calendar Grid */}
+            {}
             <div className={styles.calendarCard}>
               <div className={styles.monthLabel}>
                 {selectedMonthLabel} {tahun}
@@ -201,7 +200,7 @@ const Kehadiran = () => {
               </div>
             </div>
 
-            {/* Category Table */}
+            {}
             <div className={styles.tableCard}>
               <h3 className={styles.tableTitle}>Rekap Kehadiran</h3>
               <div className={styles.tableWrapper}>

@@ -1,8 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import styles from './ChatButton.module.css';
 
-// ─── Knowledge Base ──────────────────────────────────────────────────────────
-
 const knowledgeBase = [
   {
     id: 'spp',
@@ -136,9 +134,8 @@ const fallbackMessages = [
   'Mohon maaf, kurang paham nih. Ketik kata kunci seperti *spp*, *jenjang*, *kelas*, *daftar*, atau *lokasi* ya.',
 ];
 
-// ─── Fuzzy matching helpers ──────────────────────────────────────────────────
 
-/** Levenshtein distance */
+
 function levenshtein(a, b) {
   const m = a.length;
   const n = b.length;
@@ -156,7 +153,7 @@ function levenshtein(a, b) {
   return dp[m][n];
 }
 
-/** Normalise input: lowercase, remove punctuation, collapse spaces */
+
 function normalise(text) {
   return text
     .toLowerCase()
@@ -165,22 +162,20 @@ function normalise(text) {
     .trim();
 }
 
-/** Check if a word matches a keyword (with typo tolerance) */
+
 function wordMatches(word, keyword) {
   if (keyword.includes(word)) return true; // exact substring
   if (word.length < 3) return word === keyword; // short words must match exactly
   const dist = levenshtein(word, keyword);
-  // Allow 1 edit for words ≤ 5 chars, 2 edits for longer words
+
   const maxDist = word.length <= 5 ? 1 : 2;
   return dist <= maxDist;
 }
 
-/** Find the best matching knowledge entry for user input */
 function findAnswer(input) {
   const normalised = normalise(input);
   if (!normalised) return null;
 
-  // tokenise input
   const words = normalised.split(/\s+/);
 
   let best = null;
@@ -190,12 +185,11 @@ function findAnswer(input) {
     let score = 0;
     for (const keyword of entry.keywords) {
       const kw = normalise(keyword);
-      // direct substring match → high score
       if (normalised.includes(kw)) {
         score += 10;
         continue;
       }
-      // word-level fuzzy match
+
       for (const word of words) {
         if (wordMatches(word, kw)) {
           score += 5;
@@ -211,8 +205,6 @@ function findAnswer(input) {
 
   return best;
 }
-
-// ─── Component ───────────────────────────────────────────────────────────────
 
 function ChatButton() {
   const [open, setOpen] = useState(false);
@@ -230,14 +222,12 @@ function ChatButton() {
   const inputRef = useRef(null);
   const msgIdRef = useRef(1);
 
-  // auto-scroll when new message arrives
   useEffect(() => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
   }, [messages]);
 
-  // auto-focus input when panel opens
   useEffect(() => {
     if (open && inputRef.current) {
       inputRef.current.focus();
@@ -255,12 +245,10 @@ function ChatButton() {
     const trimmed = text.trim();
     if (!trimmed) return;
 
-    // add user message
     const userMsg = { id: `u${msgIdRef.current++}`, sender: 'user', text: trimmed };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
 
-    // simulate bot thinking
     setTimeout(() => {
       const match = findAnswer(trimmed);
       const botText = match
@@ -280,9 +268,9 @@ function ChatButton() {
 
   return (
     <div className={styles.wrapper}>
-      {/* ── Chat Panel ── */}
+      {}
       <div className={`${styles.panel} ${open ? styles.panelOpen : ''}`}>
-        {/* Header */}
+        {}
         <div className={styles.panelHeader}>
           <div className={styles.headerLeft}>
             <div className={styles.avatar}>🤖</div>
@@ -296,7 +284,7 @@ function ChatButton() {
           </button>
         </div>
 
-        {/* Messages */}
+        {}
         <div className={styles.messages} ref={chatRef}>
           {messages.map((msg) => (
             <div
@@ -310,7 +298,7 @@ function ChatButton() {
           ))}
         </div>
 
-        {/* Input */}
+        {}
         <div className={styles.inputArea}>
           <textarea
             ref={inputRef}
@@ -331,7 +319,7 @@ function ChatButton() {
         </div>
       </div>
 
-      {/* ── Toggle Button ── */}
+      {}
       <button className={styles.chatBtn} onClick={handleToggle}>
         <span className={styles.chatIcon}>{open ? '✕' : '💬'}</span>
         {!open && 'Chat Bimbel'}

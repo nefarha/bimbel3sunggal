@@ -8,8 +8,6 @@ const handleError = (res, error) => {
 const BONUS_PER_HADIR = 15000;
 const PERSEN_POTONGAN_PER_ABSEN = 0.05;
 
-// GET /api/gaji/perhitungan
-// Query: bulan (1-12), tahun
 export const getPerhitunganGaji = async (req, res) => {
   try {
     const userId = req.userId;
@@ -18,7 +16,6 @@ export const getPerhitunganGaji = async (req, res) => {
     const targetMonth = bulan ? parseInt(bulan, 10) : new Date().getMonth() + 1;
     const targetYear = tahun ? parseInt(tahun, 10) : new Date().getFullYear();
 
-    // Get tutor info by authenticated user
     const tutor = await queryOne(
       `SELECT id_tutor, nama_tutor FROM tutor WHERE id_user = ? LIMIT 1`,
       [userId]
@@ -30,7 +27,6 @@ export const getPerhitunganGaji = async (req, res) => {
 
     const idTutor = tutor.id_tutor;
 
-    // Get all classes for this tutor
     const kelasList = await query(
       `SELECT id_kelas, nama_kelas FROM kelas WHERE id_tutor = ?`,
       [idTutor]
@@ -38,7 +34,6 @@ export const getPerhitunganGaji = async (req, res) => {
 
     const kelasIds = kelasList.map((k) => k.id_kelas);
 
-    // Get students in these classes with SPP and tanggal_masuk
     let siswaList = [];
     let totalSPP = 0;
 
@@ -58,10 +53,8 @@ export const getPerhitunganGaji = async (req, res) => {
       totalSPP = siswaList.reduce((sum, s) => sum + Number(s.spp || 0), 0);
     }
 
-    // Komisi dasar (B) = 40% dari total SPP
     const komisiDasar = Math.round(totalSPP * 0.4);
 
-    // Get tutor attendance for selected month/year
     const attendanceRecords = await query(
       `SELECT DAY(tanggal) AS hari, status
        FROM absensi_tutor
@@ -81,12 +74,9 @@ export const getPerhitunganGaji = async (req, res) => {
       else if (rec.status === 'Izin') izinCount++;
     });
 
-    // Bonus/kerajinan: Rp 15.000 per hadir
     let bonus = hadirCount * BONUS_PER_HADIR;
-    // Potongan: 5% dari komisi dasar per absen
     let potongan = Math.round(komisiDasar * PERSEN_POTONGAN_PER_ABSEN * absenCount);
 
-    // Check if there's a record in gaji_tutor for this tutor/month
     const periodeStart = `${targetYear}-${String(targetMonth).padStart(2, '0')}-01 00:00:00`;
     const gajiRecord = await queryOne(
       `SELECT * FROM gaji_tutor WHERE id_tutor = ? AND periode = ? LIMIT 1`,
@@ -98,13 +88,10 @@ export const getPerhitunganGaji = async (req, res) => {
       potongan = Number(gajiRecord.potongan);
     }
 
-    // Penyesuaian (C) = bonus - potongan
     const penyesuaian = bonus - potongan;
 
-    // Grand total = B + C
     const grandTotal = komisiDasar + penyesuaian;
 
-    // Count jumlah hari dalam bulan target
     const numDays = new Date(targetYear, targetMonth, 0).getDate();
 
     res.json({
@@ -144,9 +131,7 @@ export const getPerhitunganGaji = async (req, res) => {
   }
 };
 
-// ──────── Owner: Preview specific tutor salary ────────
 
-// GET /api/gaji/perhitungan/:id_tutor?bulan=&tahun=
 export const getPerhitunganGajiByIdTutor = async (req, res) => {
   try {
     const { id_tutor } = req.params;
@@ -155,7 +140,6 @@ export const getPerhitunganGajiByIdTutor = async (req, res) => {
     const targetMonth = bulan ? parseInt(bulan, 10) : new Date().getMonth() + 1;
     const targetYear = tahun ? parseInt(tahun, 10) : new Date().getFullYear();
 
-    // Get tutor info
     const tutor = await queryOne(
       `SELECT id_tutor, nama_tutor FROM tutor WHERE id_tutor = ? LIMIT 1`,
       [id_tutor]
@@ -165,7 +149,6 @@ export const getPerhitunganGajiByIdTutor = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Data tutor tidak ditemukan' });
     }
 
-    // Get all classes for this tutor
     const kelasList = await query(
       `SELECT id_kelas, nama_kelas FROM kelas WHERE id_tutor = ?`,
       [id_tutor]
@@ -173,7 +156,6 @@ export const getPerhitunganGajiByIdTutor = async (req, res) => {
 
     const kelasIds = kelasList.map((k) => k.id_kelas);
 
-    // Get students in these classes with SPP and tanggal_masuk
     let siswaList = [];
     let totalSPP = 0;
 
@@ -193,10 +175,8 @@ export const getPerhitunganGajiByIdTutor = async (req, res) => {
       totalSPP = siswaList.reduce((sum, s) => sum + Number(s.spp || 0), 0);
     }
 
-    // Komisi dasar (B) = 40% dari total SPP
     const komisiDasar = Math.round(totalSPP * 0.4);
 
-    // Get tutor attendance
     const attendanceRecords = await query(
       `SELECT DAY(tanggal) AS hari, status
        FROM absensi_tutor
@@ -216,7 +196,6 @@ export const getPerhitunganGajiByIdTutor = async (req, res) => {
       else if (rec.status === 'Izin') izinCount++;
     });
 
-    // Get existing gaji_tutor record
     const periodeStart = `${targetYear}-${String(targetMonth).padStart(2, '0')}-01 00:00:00`;
     const gajiRecord = await queryOne(
       `SELECT * FROM gaji_tutor WHERE id_tutor = ? AND periode = ? LIMIT 1`,
@@ -255,21 +234,17 @@ export const getPerhitunganGajiByIdTutor = async (req, res) => {
   }
 };
 
-// ──────── Owner: Get all tutors salary data ────────
 
-// GET /api/gaji/all?bulan=&tahun=
 export const getAllGaji = async (req, res) => {
   try {
     const { bulan, tahun } = req.query;
     const targetMonth = bulan ? parseInt(bulan, 10) : new Date().getMonth() + 1;
     const targetYear = tahun ? parseInt(tahun, 10) : new Date().getFullYear();
 
-    // Get all active tutors
     const tutors = await query(
       `SELECT id_tutor, nama_tutor FROM tutor WHERE status = 'Aktif' ORDER BY nama_tutor ASC`
     );
 
-    // Get all gaji_tutor records for this month
     const periodeStart = `${targetYear}-${String(targetMonth).padStart(2, '0')}-01 00:00:00`;
     const gajiRecords = await query(
       `SELECT * FROM gaji_tutor WHERE periode = ?`,
@@ -281,14 +256,12 @@ export const getAllGaji = async (req, res) => {
     const result = await Promise.all(tutors.map(async (tutor) => {
       const idTutor = tutor.id_tutor;
 
-      // Get classes for this tutor
       const kelasList = await query(
         `SELECT id_kelas FROM kelas WHERE id_tutor = ?`,
         [idTutor]
       );
       const kelasIds = kelasList.map((k) => k.id_kelas);
 
-      // Calculate total SPP from students
       let totalSPP = 0;
       if (kelasIds.length > 0) {
         const placeholders = kelasIds.map(() => '?').join(',');
@@ -305,7 +278,6 @@ export const getAllGaji = async (req, res) => {
 
       const honor = Math.round(totalSPP * 0.4);
 
-      // Attendance count
       const attResult = await queryOne(
         `SELECT COUNT(*) AS total FROM absensi_tutor
          WHERE id_tutor = ? AND MONTH(tanggal) = ? AND YEAR(tanggal) = ? AND status = 'Hadir'`,
@@ -313,7 +285,6 @@ export const getAllGaji = async (req, res) => {
       );
       const hadir = Number(attResult?.total || 0);
 
-      // Existing gaji record
       const existing = gajiMap.get(idTutor);
 
       return {
@@ -335,8 +306,7 @@ export const getAllGaji = async (req, res) => {
   }
 };
 
-// POST /api/gaji/send
-// Body: { id_tutor, bulan, tahun, bonus, potongan, total_pemasukan, total_gaji }
+
 export const sendGaji = async (req, res) => {
   try {
     const { id_tutor, bulan, tahun, bonus, potongan, total_pemasukan, total_gaji } = req.body;
@@ -354,7 +324,6 @@ export const sendGaji = async (req, res) => {
     const pemasukanVal = Math.round(Number(total_pemasukan || 0));
     const gajiVal = Math.round(Number(total_gaji || 0));
 
-    // Check if record exists
     const existing = await queryOne(
       `SELECT id_gaji FROM gaji_tutor WHERE id_tutor = ? AND periode = ? LIMIT 1`,
       [id_tutor, periodeStr]

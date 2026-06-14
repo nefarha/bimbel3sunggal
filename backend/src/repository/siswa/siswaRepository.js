@@ -33,7 +33,7 @@ export class SiswaRepository {
 
   async create(data) {
     const payload = { ...data };
-    // Auto-generate id_siswa if not provided
+
     if (!payload.id_siswa) {
       const maxRow = await queryOne(
         `SELECT COALESCE(MAX(id_siswa), 0) + 1 AS next_id FROM \`${TABLE}\``

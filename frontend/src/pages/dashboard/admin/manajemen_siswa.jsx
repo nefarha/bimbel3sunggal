@@ -47,9 +47,8 @@ const formatTanggalID = (value) => {
 
 const parseMapelIds = (value) => {
   if (!value) return [];
-  // If it's already an array, return it
+
   if (Array.isArray(value)) return value;
-  // Try to parse JSON array like "[1,2,3]"
   try {
     const parsed = JSON.parse(value);
     if (Array.isArray(parsed)) return parsed;
@@ -83,7 +82,6 @@ const ManajemenSiswa = () => {
   const [mapelFilter, setMapelFilter] = useState('all');
   const [mapelOptions, setMapelOptions] = useState([]);
 
-  // Modal edit state
   const [editingSiswa, setEditingSiswa] = useState(null);
   const [editForm, setEditForm] = useState(initialEditForm);
   const [editSelectedKelas, setEditSelectedKelas] = useState([]);
@@ -92,7 +90,6 @@ const ManajemenSiswa = () => {
   const [toast, setToast] = useState(null);
   const [kelasOptions, setKelasOptions] = useState([]);
 
-  // Auto-dismiss toast
   useEffect(() => {
     if (!toast) return undefined;
     const timer = setTimeout(() => setToast(null), 3500);
@@ -148,7 +145,6 @@ const ManajemenSiswa = () => {
     fetchKelasOptions();
   }, [fetchSiswa, fetchMapelOptions, fetchKelasOptions]);
 
-  // Daftar mapel unik yang muncul di data (untuk opsi filter dinamis)
   const availableMapel = useMemo(() => {
     const set = new Set();
     siswaList.forEach((s) => {
@@ -164,21 +160,17 @@ const ManajemenSiswa = () => {
     return Array.from(set);
   }, [siswaList, mapelOptions]);
 
-  // Hasil filter + search
   const filteredSiswa = useMemo(() => {
     const keyword = search.trim().toLowerCase();
     return siswaList.filter((s) => {
-      // Filter status
       if (statusFilter !== 'all' && s.status !== statusFilter) return false;
 
-      // Filter mapel (filter by nama_mapel for backward compat)
       if (mapelFilter !== 'all') {
         const ids = parseMapelIds(s.mapel);
         const names = ids.map((id) => getMapelName(id, mapelOptions)).filter(Boolean);
         if (!names.includes(mapelFilter)) return false;
       }
 
-      // Search nama
       if (keyword && !String(s.nama || '').toLowerCase().includes(keyword)) {
         return false;
       }
@@ -186,7 +178,6 @@ const ManajemenSiswa = () => {
     });
   }, [siswaList, search, statusFilter, mapelFilter, mapelOptions]);
 
-  // Statistik ringkas
   const stats = useMemo(() => {
     const total = filteredSiswa.length;
     const aktif = filteredSiswa.filter((s) => s.status === 'Aktif').length;
@@ -194,13 +185,11 @@ const ManajemenSiswa = () => {
     return { total, aktif, nonaktif };
   }, [filteredSiswa]);
 
-  // Filter kelas untuk edit modal — hanya tampilkan kelas yang sesuai mapel terpilih
   const filteredKelasForEdit = useMemo(() => {
     if (editForm.mapel.length === 0) return [];
     return kelasOptions.filter((k) => editForm.mapel.includes(k.id_mapel));
   }, [kelasOptions, editForm.mapel]);
 
-  // ─── Edit handlers ──────────────────────────────────────────
   const openEditModal = (siswa) => {
     setEditingSiswa(siswa);
     setEditForm({
@@ -214,7 +203,6 @@ const ManajemenSiswa = () => {
     setEditSelectedKelas([]);
     setEditError(null);
 
-    // Fetch existing kelas_siswa enrollments for this siswa
     api
       .get(`/siswa/${siswa.id_siswa}/kelas`)
       .then((res) => {
@@ -253,7 +241,7 @@ const ManajemenSiswa = () => {
           : [...prev.mapel, value],
       };
     });
-    // Reset pilihan kelas saat mapel berubah
+
     setEditSelectedKelas([]);
   };
 
@@ -287,7 +275,6 @@ const ManajemenSiswa = () => {
       const response = await api.put(`/siswa/${editingSiswa.id_siswa}`, payload);
       const updated = response.data?.data;
 
-      // Update state list secara lokal
       setSiswaList((prev) =>
         prev.map((s) => (s.id_siswa === editingSiswa.id_siswa ? { ...s, ...(updated || payload) } : s))
       );
@@ -318,7 +305,7 @@ const ManajemenSiswa = () => {
 
   return (
     <AdminLayout>
-      {/* Page header */}
+      {}
       <div className={styles.pageHeader}>
         <h2 className={styles.pageTitle}>MANAJEMEN SISWA</h2>
         <button
@@ -332,7 +319,7 @@ const ManajemenSiswa = () => {
         </button>
       </div>
 
-      {/* Error banner */}
+      {}
       {error && (
         <div className={styles.alertError} role="alert">
           <span>{error}</span>
@@ -347,7 +334,7 @@ const ManajemenSiswa = () => {
         </div>
       )}
 
-      {/* Toast */}
+      {}
       {toast && (
         <div
           className={styles.toastOverlay}
@@ -380,7 +367,7 @@ const ManajemenSiswa = () => {
         </div>
       )}
 
-      {/* Stats row */}
+      {}
       <section className={styles.statsGrid}>
         <article className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.statIconPrimary}`}>
@@ -411,7 +398,7 @@ const ManajemenSiswa = () => {
         </article>
       </section>
 
-      {/* Filter / search bar */}
+      {}
       <section className={styles.filterBar}>
         <div className={styles.filterField}>
           <MdSearch className={styles.filterIcon} />
@@ -474,7 +461,7 @@ const ManajemenSiswa = () => {
         )}
       </section>
 
-      {/* Tabel siswa */}
+      {}
       <section className={styles.tableCard}>
         <header className={styles.tableHeader}>
           <h3 className={styles.tableTitle}>
@@ -585,7 +572,7 @@ const ManajemenSiswa = () => {
         </div>
       </section>
 
-      {/* Modal edit */}
+      {}
       {editingSiswa && (
         <div
           className={styles.modalOverlay}
@@ -627,7 +614,7 @@ const ManajemenSiswa = () => {
             )}
 
             <form className={styles.modalBody} onSubmit={handleSaveEdit}>
-              {/* Status */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="edit-status">
                   Status Siswa
@@ -648,7 +635,7 @@ const ManajemenSiswa = () => {
                 </select>
               </div>
 
-              {/* SPP */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label} htmlFor="edit-spp">
                   Nominal SPP (Rp)
@@ -670,7 +657,7 @@ const ManajemenSiswa = () => {
                 </p>
               </div>
 
-              {/* Mata Pelajaran (multi-select chip by ID) */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label}>Mata Pelajaran</label>
                 <div className={styles.chipSelectGroup}>
@@ -696,7 +683,7 @@ const ManajemenSiswa = () => {
                 </p>
               </div>
 
-              {/* Pilih Kelas (berdasarkan mapel yang dipilih) */}
+              {}
               <div className={styles.field}>
                 <label className={styles.label}>Pilih Kelas</label>
                 {editForm.mapel.length === 0 ? (

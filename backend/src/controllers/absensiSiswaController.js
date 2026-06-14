@@ -14,7 +14,6 @@ const handleError = (res, error) => {
   res.status(500).json({ success: false, message: error.message });
 };
 
-// GET /api/absensi-siswa
 export const getAllAbsensiSiswa = async (req, res) => {
   try {
     const { tanggal, id_siswa, id_jadwal, is_confirmed, status } = req.query;
@@ -32,7 +31,6 @@ export const getAllAbsensiSiswa = async (req, res) => {
   }
 };
 
-// GET /api/absensi-siswa/:id
 export const getAbsensiSiswaById = async (req, res) => {
   try {
     const data = await absensiSiswaRepository.findById(parseInt(req.params.id, 10));
@@ -45,7 +43,6 @@ export const getAbsensiSiswaById = async (req, res) => {
   }
 };
 
-// POST /api/absensi-siswa
 export const createAbsensiSiswa = async (req, res) => {
   try {
     const { id_siswa, id_jadwal, tanggal, status, id_mapel } = req.body;
@@ -54,8 +51,7 @@ export const createAbsensiSiswa = async (req, res) => {
     }
 
     let finalMapelId = id_mapel ? parseInt(id_mapel, 10) : null;
-    
-    // Jika id_mapel tidak dikirim, ambil otomatis dari jadwal terkait
+
     if (!finalMapelId) {
       const [jadwalRow] = await query(
         'SELECT id_mapel FROM jadwal WHERE id_jadwal = ? LIMIT 1',
@@ -77,7 +73,6 @@ export const createAbsensiSiswa = async (req, res) => {
   }
 };
 
-// PUT /api/absensi-siswa/:id
 export const updateAbsensiSiswa = async (req, res) => {
   try {
     const data = { ...req.body };
@@ -91,7 +86,6 @@ export const updateAbsensiSiswa = async (req, res) => {
   }
 };
 
-// PATCH /api/absensi-siswa/:id/confirm
 export const confirmAbsensiSiswa = async (req, res) => {
   try {
     const updated = await absensiSiswaRepository.update(parseInt(req.params.id, 10), {
@@ -105,8 +99,7 @@ export const confirmAbsensiSiswa = async (req, res) => {
   }
 };
 
-// PATCH /api/absensi-siswa/confirm-class/:id_kelas
-// Konfirmasi semua absensi yang BELUM dikonfirmasi untuk satu kelas pada hari ini
+
 export const confirmByKelas = async (req, res) => {
   try {
     const idKelas = parseInt(req.params.id_kelas, 10);
@@ -138,8 +131,7 @@ export const confirmByKelas = async (req, res) => {
   }
 };
 
-// PATCH /api/absensi-siswa/confirm-all-today
-// Konfirmasi semua absensi yang BELUM dikonfirmasi hari ini
+
 export const confirmAllToday = async (req, res) => {
   try {
     const now = new Date();
@@ -165,7 +157,6 @@ export const confirmAllToday = async (req, res) => {
   }
 };
 
-// POST /api/absensi-siswa/bulk
 export const bulkUpsertAbsensiSiswa = async (req, res) => {
   try {
     const { id_jadwal, tanggal, items } = req.body;
@@ -173,7 +164,6 @@ export const bulkUpsertAbsensiSiswa = async (req, res) => {
       return res.status(400).json({ success: false, message: 'id_jadwal, tanggal, dan items (array) wajib diisi' });
     }
 
-    // Ambil id_mapel dari jadwal
     const jadwalRow = await queryOne('SELECT id_mapel FROM jadwal WHERE id_jadwal = ? LIMIT 1', [parseInt(id_jadwal, 10)]);
     const id_mapel = jadwalRow ? jadwalRow.id_mapel : null;
 
@@ -192,7 +182,6 @@ export const bulkUpsertAbsensiSiswa = async (req, res) => {
   }
 };
 
-// DELETE /api/absensi-siswa/:id
 export const deleteAbsensiSiswa = async (req, res) => {
   try {
     await absensiSiswaRepository.delete(parseInt(req.params.id, 10));

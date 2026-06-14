@@ -57,11 +57,9 @@ const ManajemenJadwal = () => {
   const [subjectOptions, setSubjectOptions] = useState([]);
   const [tutorOptions, setTutorOptions] = useState([]);
 
-  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
 
-  // Modal edit (for adding/editing schedules)
   const [viewingSchedule, setViewingSchedule] = useState(null);
   const [editingSchedule, setEditingSchedule] = useState(null);
   const [editForm, setEditForm] = useState(createInitialForm());
@@ -71,7 +69,6 @@ const ManajemenJadwal = () => {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState(null);
 
-  // Auto-dismiss toast
   useEffect(() => {
     if (!toast) return undefined;
     const timer = setTimeout(() => setToast(null), 3500);
@@ -134,7 +131,6 @@ const ManajemenJadwal = () => {
     return filtered;
   }, [scheduleList, dayFilter, search]);
 
-  // Pagination logic
   const totalPages = Math.ceil(filteredSchedules.length / pageSize);
   const currentSchedules = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;

@@ -4,7 +4,6 @@ import { query, queryOne } from '../config/query.js';
 
 const userRepository = new UserRepository();
 
-// POST /api/auth/register
 export const register = async (req, res) => {
   try {
     const { username, password, role } = req.body;
@@ -38,7 +37,6 @@ export const register = async (req, res) => {
   }
 };
 
-// POST /api/auth/login
 export const login = async (req, res) => {
   try {
     const { username, password, rememberMe } = req.body;
@@ -55,7 +53,6 @@ export const login = async (req, res) => {
 
     const user = await userRepository.findByUsername(username);
 
-    // Ambil nama profil berdasarkan role
     let nama = user.username;
     if (user.role === 'tutor') {
       const tutor = await queryOne('SELECT nama_tutor FROM tutor WHERE id_user = ? LIMIT 1', [user.id_user]);
@@ -76,7 +73,6 @@ export const login = async (req, res) => {
   }
 };
 
-// PUT /api/auth/update-username
 export const updateUsername = async (req, res) => {
   try {
     const { id_user, username } = req.body;
@@ -101,7 +97,6 @@ export const updateUsername = async (req, res) => {
   }
 };
 
-// GET /api/auth/me
 export const getMe = async (req, res) => {
   try {
     const user = await userRepository.findById(req.userId);
@@ -116,7 +111,6 @@ export const getMe = async (req, res) => {
   }
 };
 
-// PUT /api/auth/change-password
 export const changePassword = async (req, res) => {
   try {
     const { passwordBaru, konfirmasiPassword } = req.body;

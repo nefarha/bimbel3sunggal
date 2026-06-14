@@ -22,7 +22,6 @@ function Tutor() {
   const [mapelOptions, setMapelOptions] = useState([]);
   const [jenjangOptions, setJenjangOptions] = useState([]);
 
-  // Filter state
   const [search, setSearch] = useState('');
   const [selectedMapel, setSelectedMapel] = useState('');
   const [selectedJenjang, setSelectedJenjang] = useState('');
@@ -50,7 +49,6 @@ function Tutor() {
     fetchTutors();
   }, [fetchTutors]);
 
-  // Fetch mapel options
   useEffect(() => {
     const fetchMapel = async () => {
       try {
@@ -65,7 +63,6 @@ function Tutor() {
     fetchMapel();
   }, []);
 
-  // Fetch jenjang options
   useEffect(() => {
     const fetchJenjang = async () => {
       try {

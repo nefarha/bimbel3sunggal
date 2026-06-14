@@ -1,9 +1,6 @@
 import pool from './database.js';
 
-/**
- * Convert BigInt → Number when safe, otherwise keep as string.
- * Strips Buffer/Date wrappers that mysql2 may return.
- */
+
 const normalizeValue = (value) => {
   if (value === null || value === undefined) return value;
   if (typeof value === 'bigint') {
@@ -27,25 +24,19 @@ const normalizeRow = (row) => {
   return out;
 };
 
-/**
- * Execute a parameterized query and return normalized rows.
- */
+
 export const query = async (sql, params = []) => {
   const [rows] = await pool.execute(sql, params);
   return Array.isArray(rows) ? rows.map(normalizeRow) : rows;
 };
 
-/**
- * Execute a query and return the first row (or null).
- */
+
 export const queryOne = async (sql, params = []) => {
   const rows = await query(sql, params);
   return rows[0] || null;
 };
 
-/**
- * Execute a query and return a single scalar value (first column of first row).
- */
+
 export const queryScalar = async (sql, params = []) => {
   const row = await queryOne(sql, params);
   if (!row) return null;
@@ -53,11 +44,7 @@ export const queryScalar = async (sql, params = []) => {
   return keys.length > 0 ? row[keys[0]] : null;
 };
 
-/**
- * Build WHERE clause fragments from a plain object of column → value pairs.
- * Returns { sql, params } where sql is a string like "col1 = ? AND col2 = ?"
- * Empty input returns { sql: '', params: [] }.
- */
+
 export const buildWhere = (filters = {}) => {
   const keys = Object.keys(filters).filter((k) => filters[k] !== undefined && filters[k] !== null);
   if (keys.length === 0) return { sql: '', params: [] };

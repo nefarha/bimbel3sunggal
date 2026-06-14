@@ -25,7 +25,7 @@ const NAV_ITEMS = [
   { label: 'Presensi Tutor', icon: MdAccessTime, to: '/admin/presensi_guru' },
   { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
   { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
-  // { label: 'Laporan', icon: MdAssessment, to: '/admin/laporan' },
+
 ];
 
 function AdminLayout({ children }) {
@@ -51,7 +51,7 @@ function AdminLayout({ children }) {
 
   return (
     <div className={styles.appShell}>
-      {/* Sidebar */}
+      {}
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <div className={styles.brandLogo}>
@@ -93,9 +93,9 @@ function AdminLayout({ children }) {
         </div>
       </aside>
 
-      {/* Main wrapper */}
+      {}
       <main className={styles.main}>
-        {/* Header */}
+        {}
         <header className={styles.topBar}>
           <h1 className={styles.pageTitle}>Administrator</h1>
           <div className={styles.userBlock}>
@@ -103,11 +103,11 @@ function AdminLayout({ children }) {
               <p className={styles.userName}>{user?.username || 'Admin Utama'}</p>
               <p className={styles.userRole}>Super User</p>
             </div>
-            {/* <div className={styles.avatar} aria-label="User profile" /> */}
+            {}
           </div>
         </header>
 
-        {/* Content */}
+        {}
         <section className={styles.content}>{children}</section>
       </main>
     </div>

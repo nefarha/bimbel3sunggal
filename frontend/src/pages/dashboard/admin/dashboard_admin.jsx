@@ -63,7 +63,6 @@ const DashboardAdmin = () => {
   const [error, setError] = useState(null);
   const [actionLoading, setActionLoading] = useState({});
 
-  // ─── Data fetchers ──────────────────────────────────────────
   const fetchStats = useCallback(async () => {
     setLoading((prev) => ({ ...prev, stats: true }));
     try {
@@ -76,8 +75,8 @@ const DashboardAdmin = () => {
       console.error('Fetch stats error:', err);
       setError('Gagal memuat statistik dashboard');
     } finally {
-      // /stats mengembalikan absensiHariIni,
-      // jadi flag loading absensi juga harus di-reset di sini
+
+
       setLoading((prev) => ({
         ...prev,
         stats: false,
@@ -124,7 +123,6 @@ const DashboardAdmin = () => {
     loadAll();
   }, [loadAll]);
 
-  // ─── CRUD Actions ───────────────────────────────────────────
   const handleConfirmAbsensi = async (idKelas) => {
     setActionLoading((prev) => ({ ...prev, [`absensi-${idKelas}`]: true }));
     try {
@@ -168,7 +166,6 @@ const DashboardAdmin = () => {
     }
   };
 
-  // ─── Handlers ───────────────────────────────────────────────
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > piutangMeta.totalPages) return;
     fetchPiutang(newPage);
@@ -176,7 +173,7 @@ const DashboardAdmin = () => {
 
   return (
     <AdminLayout>
-      {/* Content (sidebar + topbar di-handle oleh AdminLayout) */}
+      {}
           {error && (
             <div className={styles.alertError} role="alert">
               {error}
@@ -191,7 +188,7 @@ const DashboardAdmin = () => {
             </div>
           )}
 
-          {/* Top action bar */}
+          {}
           <div className={styles.actionBar}>
             <button
               type="button"
@@ -204,7 +201,7 @@ const DashboardAdmin = () => {
             </button>
           </div>
 
-          {/* Stats row */}
+          {}
           <div className={styles.statsGrid}>
             {STAT_META.map((stat) => {
               const Icon = stat.icon;
@@ -232,7 +229,7 @@ const DashboardAdmin = () => {
             })}
           </div>
 
-          {/* Attendance today */}
+          {}
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h2 className={styles.cardTitle}>Absensi Hari ini</h2>
@@ -305,7 +302,7 @@ const DashboardAdmin = () => {
             </div>
           </div>
 
-          {/* Receivables */}
+          {}
           <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h2 className={styles.cardTitle}>
@@ -321,7 +318,7 @@ const DashboardAdmin = () => {
                     <th>Bulan Terlama</th>
                     <th>Tunggakan</th>
                     <th>Nominal</th>
-                    {/* <th>Keterlambatan</th> */}
+                    {}
                     <th>No Whatsapp</th>
                     <th>Aksi</th>
                   </tr>
@@ -349,7 +346,7 @@ const DashboardAdmin = () => {
                           </span>
                         </td>
                         <td>{row.nominal}</td>
-                        {/* <td className={styles.tdDangerUnderline}>{row.keterlambatan}</td> */}
+                        {}
                         <td>
                           <input
                             type="text"
@@ -403,7 +400,7 @@ const DashboardAdmin = () => {
               </div>
             </div>
           </div>
-        {/* Footer */}
+        {}
         <footer className={styles.footer}>
           <div className={styles.footerLeft}>
             <p className={styles.footerTitle}>Grand Tiga Sunggal</p>

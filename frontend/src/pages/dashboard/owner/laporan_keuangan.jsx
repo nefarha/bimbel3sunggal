@@ -68,7 +68,6 @@ const LaporanKeuangan = () => {
     fetchData();
   }, [fetchData]);
 
-  // Calculate max value for chart scaling
   const maxChartValue = Math.max(
     ...tahunanData.map((d) => Math.max(d.pendapatan, d.pengeluaran)),
     1
@@ -78,7 +77,7 @@ const LaporanKeuangan = () => {
 
   return (
     <div className={styles.container}>
-      {/* ─── Filter ──────────────────────────────────────── */}
+      {}
       <div className={styles.filterBar}>
         <div className={styles.filterGroup}>
           <label className={styles.filterLabel}>Bulan</label>
@@ -113,18 +112,18 @@ const LaporanKeuangan = () => {
         </div>
       </div>
 
-      {/* ─── Loading ─────────────────────────────────────── */}
+      {}
       {loading && <div className={styles.loadingState}>Memuat data keuangan...</div>}
 
-      {/* ─── Error ───────────────────────────────────────── */}
+      {}
       {error && !loading && (
         <div className={styles.errorAlert}>{error}</div>
       )}
 
-      {/* ─── Content ─────────────────────────────────────── */}
+      {}
       {!loading && !error && rekapData && (
         <>
-          {/* Summary Cards */}
+          {}
           <div className={styles.cardsRow}>
             <div className={styles.summaryCard}>
               <span className={styles.cardLabel}>Total Pendapatan</span>
@@ -157,7 +156,7 @@ const LaporanKeuangan = () => {
             </div>
           </div>
 
-          {/* Annual Chart */}
+          {}
           <div className={styles.chartSection}>
             <h3 className={styles.chartTitle}>
               Grafik Tahunan {tahun}
