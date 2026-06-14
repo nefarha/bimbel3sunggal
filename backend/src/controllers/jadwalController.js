@@ -24,6 +24,16 @@ export const getAllJadwal = async (req, res) => {
   }
 };
 
+// GET /api/jadwal/tutor/:id_tutor
+export const getJadwalByTutor = async (req, res) => {
+  try {
+    const jadwal = await jadwalRepository.findByTutor(parseInt(req.params.id_tutor, 10));
+    res.json({ success: true, data: jadwal });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 // GET /api/jadwal/:id
 export const getJadwalById = async (req, res) => {
   try {

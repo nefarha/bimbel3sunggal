@@ -18,32 +18,32 @@ const buildAbsensiWhere = (filters = {}) => {
   if (filters.tanggal !== undefined) {
     if (filters.tanggal && typeof filters.tanggal === 'object' && ('gte' in filters.tanggal || 'lte' in filters.tanggal)) {
       if (filters.tanggal.gte !== undefined) {
-        conditions.push('`tanggal` >= ?');
+        conditions.push('a.`tanggal` >= ?');
         params.push(filters.tanggal.gte);
       }
       if (filters.tanggal.lte !== undefined) {
-        conditions.push('`tanggal` <= ?');
+        conditions.push('a.`tanggal` <= ?');
         params.push(filters.tanggal.lte);
       }
     } else {
-      conditions.push('`tanggal` = ?');
+      conditions.push('a.`tanggal` = ?');
       params.push(filters.tanggal);
     }
   }
   if (filters.id_siswa !== undefined) {
-    conditions.push('`id_siswa` = ?');
+    conditions.push('a.`id_siswa` = ?');
     params.push(filters.id_siswa);
   }
   if (filters.id_jadwal !== undefined) {
-    conditions.push('`id_jadwal` = ?');
+    conditions.push('a.`id_jadwal` = ?');
     params.push(filters.id_jadwal);
   }
   if (filters.is_confirmed !== undefined) {
-    conditions.push('`is_confirmed` = ?');
+    conditions.push('a.`is_confirmed` = ?');
     params.push(filters.is_confirmed ? 1 : 0);
   }
   if (filters.status !== undefined) {
-    conditions.push('`status` = ?');
+    conditions.push('a.`status` = ?');
     params.push(filters.status);
   }
 
@@ -152,5 +152,23 @@ export class AbsensiSiswaRepository {
   async delete(id) {
     await query(`DELETE FROM \`${TABLE}\` WHERE id_absensi = ?`, [id]);
     return { id_absensi: id };
+  }
+
+  async bulkUpsert(items) {
+    const results = [];
+    for (const item of items) {
+      const existing = await queryOne(
+        `SELECT id_absensi FROM \`${TABLE}\` WHERE id_siswa = ? AND id_jadwal = ? AND tanggal = ? LIMIT 1`,
+        [item.id_siswa, item.id_jadwal, item.tanggal]
+      );
+      if (existing) {
+        const updated = await this.update(existing.id_absensi, { status: item.status, id_mapel: item.id_mapel });
+        results.push(updated);
+      } else {
+        const created = await this.create(item);
+        results.push(created);
+      }
+    }
+    return results;
   }
 }

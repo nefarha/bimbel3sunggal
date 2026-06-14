@@ -1,5 +1,5 @@
 import { AbsensiSiswaRepository } from '../repository/absensiSiswa/absensiSiswaRepository.js';
-import { query } from '../config/query.js';
+import { query, queryOne } from '../config/query.js';
 
 const toMySQLDateTime = (date) => {
   const d = new Date(date);
@@ -160,6 +160,33 @@ export const confirmAllToday = async (req, res) => {
       message: `Berhasil mengonfirmasi ${result.affectedRows || 0} absensi`,
       data: { affectedRows: result.affectedRows || 0 },
     });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+// POST /api/absensi-siswa/bulk
+export const bulkUpsertAbsensiSiswa = async (req, res) => {
+  try {
+    const { id_jadwal, tanggal, items } = req.body;
+    if (!id_jadwal || !tanggal || !items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ success: false, message: 'id_jadwal, tanggal, dan items (array) wajib diisi' });
+    }
+
+    // Ambil id_mapel dari jadwal
+    const jadwalRow = await queryOne('SELECT id_mapel FROM jadwal WHERE id_jadwal = ? LIMIT 1', [parseInt(id_jadwal, 10)]);
+    const id_mapel = jadwalRow ? jadwalRow.id_mapel : null;
+
+    const data = await absensiSiswaRepository.bulkUpsert(
+      items.map((item) => ({
+        id_siswa: parseInt(item.id_siswa, 10),
+        id_jadwal: parseInt(id_jadwal, 10),
+        tanggal: new Date(tanggal),
+        status: item.status,
+        id_mapel,
+      }))
+    );
+    res.json({ success: true, message: 'Absensi berhasil disimpan', data });
   } catch (error) {
     handleError(res, error);
   }

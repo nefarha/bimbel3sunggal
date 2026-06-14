@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {
   getAllSiswa,
+  getSiswaByKelas,
   getSiswaById,
   createSiswa,
   updateSiswa,
@@ -10,6 +11,7 @@ import {
 const router = Router();
 
 router.get('/', getAllSiswa);
+router.get('/kelas/:id_kelas', getSiswaByKelas);
 router.get('/:id', getSiswaById);
 router.post('/', createSiswa);
 router.put('/:id', updateSiswa);

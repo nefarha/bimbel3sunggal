@@ -1,0 +1,300 @@
+/* =========================================================
+   Absensi Siswa Page (Tutor)
+   ========================================================= */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ─── Loading ───────────────────────────────────────────── */
+.loadingState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  color: #64748b;
+  font-size: 0.938rem;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.backBtn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.backBtn svg {
+  font-size: 1.25rem;
+}
+
+.headerInfo {
+  flex: 1;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 4px 0 0 0;
+}
+
+/* ─── Notifications ─────────────────────────────────────── */
+.errorAlert,
+.successAlert {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.errorAlert {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.successAlert {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+/* ─── Empty State ───────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  color: #64748b;
+  font-size: 0.938rem;
+}
+
+/* ─── Toolbar ───────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.semuaHadirBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 0.813rem;
+  font-weight: 500;
+  color: #16a34a;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.semuaHadirBtn:hover {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.semuaHadirBtn:active {
+  background: #bbf7d0;
+}
+
+.semuaHadirBtn svg {
+  font-size: 1.1rem;
+}
+
+/* ─── Table ─────────────────────────────────────────────── */
+.tableWrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead th {
+  padding: 14px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  font-size: 0.875rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* ─── Columns ───────────────────────────────────────────── */
+.colNo {
+  width: 48px;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.colStatus {
+  width: 100px;
+  text-align: center;
+}
+
+/* ─── Status Button ─────────────────────────────────────── */
+.statusBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.statusBtn:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.statusBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.statusBtn svg {
+  font-size: 1.25rem;
+}
+
+/* Active states per status */
+.statusActive.statusHadir {
+  background: #dcfce7;
+  border-color: #86efac;
+  color: #16a34a;
+}
+
+.statusActive.statusTidakHadir {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.statusActive.statusSakit {
+  background: #fefce8;
+  border-color: #fde68a;
+  color: #ca8a04;
+}
+
+.statusActive.statusIzin {
+  background: #eff6ff;
+  border-color: #93c5fd;
+  color: #2563eb;
+}
+
+/* ─── Footer & Save Button ───────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  font-size: 0.938rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: #1e40af;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: #1e3a8a;
+}
+
+.saveBtn:active:not(:disabled) {
+  background: #172554;
+}
+
+.saveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.saveBtn svg {
+  font-size: 1.25rem;
+}
+
+.dirtyHint {
+  font-size: 0.813rem;
+  color: #f97316;
+  font-weight: 500;
+}

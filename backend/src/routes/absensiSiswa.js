@@ -4,6 +4,7 @@ import {
   getAbsensiSiswaById,
   createAbsensiSiswa,
   updateAbsensiSiswa,
+  bulkUpsertAbsensiSiswa,
   confirmAbsensiSiswa,
   confirmByKelas,
   confirmAllToday,
@@ -13,6 +14,7 @@ import {
 const router = Router();
 
 // ─── Static routes (lebih spesifik) HARUS didaftarkan sebelum dynamic ───
+router.post('/bulk', bulkUpsertAbsensiSiswa);
 router.patch('/confirm-all-today', confirmAllToday);
 router.patch('/confirm-class/:id_kelas', confirmByKelas);
 

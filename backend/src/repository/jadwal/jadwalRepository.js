@@ -83,6 +83,20 @@ export class JadwalRepository {
     return await this.findById(id);
   }
 
+  async findByTutor(id_tutor) {
+    return await query(
+      `SELECT ${SELECT_COLUMNS.join(', ')}
+       FROM \`${TABLE}\` j
+       INNER JOIN \`kelas\` k ON k.id_kelas = j.id_kelas
+       LEFT JOIN \`mapel\` m ON m.id_mapel = j.id_mapel
+       INNER JOIN \`tutor\` t ON t.id_tutor = j.id_tutor
+       WHERE j.id_tutor = ?
+       ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'),
+                j.jam ASC`,
+      [id_tutor]
+    );
+  }
+
   async delete(id) {
     await query(`DELETE FROM \`${TABLE}\` WHERE id_jadwal = ?`, [id]);
     return { id_jadwal: id };

@@ -59,6 +59,17 @@ export class SiswaRepository {
     return await this.findById(id);
   }
 
+  async findByKelas(id_kelas) {
+    return await query(
+      `SELECT s.id_siswa, s.nama, s.nama_ortu, s.no_hp_ortu, s.status
+       FROM \`${TABLE}\` s
+       INNER JOIN \`kelas_siswa\` ks ON ks.id_siswa = s.id_siswa
+       WHERE ks.id_kelas = ?
+       ORDER BY s.nama ASC`,
+      [id_kelas]
+    );
+  }
+
   async delete(id) {
     await query(`DELETE FROM \`${TABLE}\` WHERE id_siswa = ?`, [id]);
     return { id_siswa: id };

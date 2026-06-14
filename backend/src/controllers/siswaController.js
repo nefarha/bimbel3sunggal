@@ -69,6 +69,16 @@ export const updateSiswa = async (req, res) => {
   }
 };
 
+// GET /api/siswa/kelas/:id_kelas
+export const getSiswaByKelas = async (req, res) => {
+  try {
+    const siswa = await siswaRepository.findByKelas(parseInt(req.params.id_kelas, 10));
+    res.json({ success: true, data: siswa });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 // DELETE /api/siswa/:id
 export const deleteSiswa = async (req, res) => {
   try {

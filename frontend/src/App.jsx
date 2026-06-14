@@ -20,6 +20,7 @@ import JadwalMengajar from './pages/dashboard/tutor/jadwal_mengajar'
 import Kehadiran from './pages/dashboard/tutor/kehadiran'
 import Gaji from './pages/dashboard/tutor/gaji'
 import ProfileTutor from './pages/dashboard/tutor/profile'
+import AbsensiSiswaTutor from './pages/dashboard/tutor/absensi_siswa'
 import './App.css'
 
 function App() {
@@ -151,6 +152,16 @@ function App() {
             <ProtectedRoute allowedRoles={['tutor']}>
               <TutorLayout>
                 <Gaji />
+              </TutorLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tutor/absensi-siswa/:id_jadwal"
+          element={
+            <ProtectedRoute allowedRoles={['tutor']}>
+              <TutorLayout>
+                <AbsensiSiswaTutor />
               </TutorLayout>
             </ProtectedRoute>
           }
