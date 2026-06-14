@@ -23,7 +23,7 @@ const NAV_ITEMS = [
   { label: 'Presensi Tutor', icon: MdAccessTime, to: '/admin/presensi_guru' },
   { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
   { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
-  { label: 'Laporan', icon: MdAssessment, to: '/admin/laporan' },
+  // { label: 'Laporan', icon: MdAssessment, to: '/admin/laporan' },
 ];
 
 function AdminLayout({ children }) {
@@ -101,7 +101,7 @@ function AdminLayout({ children }) {
               <p className={styles.userName}>{user?.username || 'Admin Utama'}</p>
               <p className={styles.userRole}>Super User</p>
             </div>
-            <div className={styles.avatar} aria-label="User profile" />
+            {/* <div className={styles.avatar} aria-label="User profile" /> */}
           </div>
         </header>
 

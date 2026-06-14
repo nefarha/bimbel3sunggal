@@ -292,6 +292,37 @@
   font-weight: 500;
 }
 
+.alertInfo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background-color: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.alertInfo svg {
+  font-size: 1.35rem;
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.disabledOption {
+  opacity: 0.6;
+  cursor: not-allowed !important;
+  color: #94a3b8 !important;
+}
+
+.disabledOption .radioDot {
+  border-color: #cbd5e1 !important;
+  background-color: #f1f5f9 !important;
+}
+
 .alertClose,
 .successClose {
   border: none;

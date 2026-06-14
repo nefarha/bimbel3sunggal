@@ -35,64 +35,22 @@ export const getTutorAttendanceToday = async (req, res) => {
       `SELECT
          t.id_tutor,
          t.nama_tutor,
-         k.id_kelas,
-         k.nama_kelas,
-         k.id_mapel,
-         m.nama_mapel,
-         j.jam,
+         t.mapel,
          att.status AS status_kehadiran
-       FROM jadwal j
-       INNER JOIN tutor t ON t.id_tutor = j.id_tutor
-       INNER JOIN kelas k ON k.id_kelas = j.id_kelas
-       LEFT JOIN mapel m ON m.id_mapel = k.id_mapel
+       FROM tutor t
        LEFT JOIN absensi_tutor att
          ON att.id_tutor = t.id_tutor
         AND att.tanggal = ?
-       WHERE j.hari = ?
-         AND t.status = 'Aktif'
-       ORDER BY j.jam ASC, t.nama_tutor ASC, m.nama_mapel ASC, k.nama_kelas ASC`,
-      [todayDate, todayName]
+       WHERE t.status = 'Aktif'
+       ORDER BY t.nama_tutor ASC`,
+      [todayDate]
     );
 
-    const tutorMap = new Map();
-
-    rows.forEach((row) => {
-      if (!tutorMap.has(row.id_tutor)) {
-        tutorMap.set(row.id_tutor, {
-          id_tutor: row.id_tutor,
-          nama_tutor: row.nama_tutor,
-          status: row.status_kehadiran || null,
-          penempatan: [],
-          sesi: [],
-        });
-      }
-
-      const entry = tutorMap.get(row.id_tutor);
-
-      if (!entry.penempatan.some((item) => item.id_kelas === row.id_kelas)) {
-        entry.penempatan.push({
-          id_kelas: row.id_kelas,
-          id_mapel: row.id_mapel,
-          nama_kelas: row.nama_kelas,
-          nama_mapel: row.nama_mapel,
-        });
-      }
-
-      const jamLabel = formatJam(row.jam);
-      if (!entry.sesi.some((item) => item.jam === jamLabel)) {
-        entry.sesi.push({
-          label: `Sesi ${entry.sesi.length + 1}`,
-          jam: jamLabel,
-        });
-      }
-    });
-
-    const data = Array.from(tutorMap.values()).map((item) => ({
-      ...item,
-      displayPenempatan: item.penempatan
-        .map((kelas) => formatPenempatanLabel(kelas.nama_kelas, kelas.nama_mapel))
-        .join(', '),
-      displaySesi: item.sesi.map((sesi) => `${sesi.label} (${sesi.jam})`).join(', '),
+    const data = rows.map((row) => ({
+      id_tutor: row.id_tutor,
+      nama_tutor: row.nama_tutor,
+      mapel: row.mapel || '-',
+      status: row.status_kehadiran || null,
     }));
 
     res.json({

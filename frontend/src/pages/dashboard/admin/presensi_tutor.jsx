@@ -4,6 +4,7 @@ import {
   MdCheckCircle,
   MdRefresh,
   MdSave,
+  MdInfo,
 } from 'react-icons/md';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
@@ -18,13 +19,6 @@ const formatTanggalPanjang = (value) => {
     month: 'long',
     year: 'numeric',
   }).format(date);
-};
-
-const formatPenempatanLabel = (item) => {
-  if (item?.nama_mapel && item?.nama_kelas && item.nama_mapel !== item.nama_kelas) {
-    return `${item.nama_mapel} - ${item.nama_kelas}`;
-  }
-  return item?.nama_kelas || item?.nama_mapel || '-';
 };
 
 const PresensiTutor = () => {
@@ -68,7 +62,12 @@ const PresensiTutor = () => {
 
   const tanggalLabel = useMemo(() => formatTanggalPanjang(meta.tanggal), [meta.tanggal]);
 
+  const isWeekend = useMemo(() => {
+    return meta.hari === 'Sabtu' || meta.hari === 'Minggu';
+  }, [meta.hari]);
+
   const handleStatusChange = (idTutor, status) => {
+    if (isWeekend) return;
     setRows((prev) =>
       prev.map((item) => (
         item.id_tutor === idTutor
@@ -79,11 +78,12 @@ const PresensiTutor = () => {
   };
 
   const handleSubmit = async () => {
+    if (isWeekend) return;
     setError(null);
     setSuccess(null);
 
     if (rows.length === 0) {
-      setError('Belum ada tutor terjadwal untuk hari ini.');
+      setError('Belum ada tutor untuk hari ini.');
       return;
     }
 
@@ -152,11 +152,18 @@ const PresensiTutor = () => {
         </div>
       )}
 
+      {isWeekend && (
+        <div className={styles.alertInfo} role="status">
+          <MdInfo />
+          <span>Hari ini adalah hari {meta.hari} (Libur). Tidak ada presensi tutor untuk hari libur.</span>
+        </div>
+      )}
+
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <h2 className={styles.pageTitle}>Presensi Tutor</h2>
           <p className={styles.pageSubtitle}>
-            Verifikasi kehadiran pengajar berdasarkan jadwal kelas hari ini.
+            Verifikasi kehadiran pengajar hari ini.
           </p>
         </div>
 
@@ -185,8 +192,7 @@ const PresensiTutor = () => {
               <tr>
                 <th className={styles.columnNo}>No</th>
                 <th>Nama Tutor</th>
-                <th>Penempatan Kelas</th>
-                <th>Sesi / Jam</th>
+                <th>Mata Pelajaran</th>
                 <th>Status Kehadiran</th>
               </tr>
             </thead>
@@ -194,14 +200,14 @@ const PresensiTutor = () => {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className={styles.emptyCell}>
+                  <td colSpan={4} className={styles.emptyCell}>
                     Memuat data presensi tutor...
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className={styles.emptyCell}>
-                    Belum ada tutor yang memiliki jadwal pada hari ini.
+                  <td colSpan={4} className={styles.emptyCell}>
+                    Belum ada data tutor.
                   </td>
                 </tr>
               ) : (
@@ -212,45 +218,33 @@ const PresensiTutor = () => {
                       <p className={styles.tutorName}>{item.nama_tutor}</p>
                     </td>
                     <td>
-                      <div className={styles.classList}>
-                        {item.penempatan.map((kelas) => (
-                          <span key={`${item.id_tutor}-${kelas.id_kelas}`} className={styles.classBadge}>
-                            {formatPenempatanLabel(kelas)}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td>
-                      <div className={styles.sessionList}>
-                        {item.sesi.map((sesi) => (
-                          <div key={`${item.id_tutor}-${sesi.label}-${sesi.jam}`} className={styles.sessionItem}>
-                            <span className={styles.sessionLabel}>{sesi.label}</span>
-                            <span className={styles.sessionTime}>{sesi.jam}</span>
-                          </div>
-                        ))}
-                      </div>
+                      <span className={styles.classBadge}>
+                        {item.mapel}
+                      </span>
                     </td>
                     <td>
                       <div className={styles.radioGroup} role="radiogroup" aria-label={`Status ${item.nama_tutor}`}>
-                        <label className={styles.radioOption}>
+                        <label className={`${styles.radioOption} ${isWeekend ? styles.disabledOption : ''}`}>
                           <input
                             type="radio"
                             name={`status-${item.id_tutor}`}
                             value="Hadir"
-                            checked={item.status === 'Hadir'}
+                            checked={!isWeekend && item.status === 'Hadir'}
                             onChange={() => handleStatusChange(item.id_tutor, 'Hadir')}
+                            disabled={isWeekend}
                           />
                           <span className={styles.radioDot} />
                           <span className={styles.radioText}>Hadir</span>
                         </label>
 
-                        <label className={styles.radioOption}>
+                        <label className={`${styles.radioOption} ${isWeekend ? styles.disabledOption : ''}`}>
                           <input
                             type="radio"
                             name={`status-${item.id_tutor}`}
                             value="Absen"
-                            checked={item.status === 'Absen'}
+                            checked={!isWeekend && item.status === 'Absen'}
                             onChange={() => handleStatusChange(item.id_tutor, 'Absen')}
+                            disabled={isWeekend}
                           />
                           <span className={styles.radioDot} />
                           <span className={styles.radioText}>Absen</span>
@@ -269,7 +263,7 @@ const PresensiTutor = () => {
             type="button"
             className={styles.btnPrimary}
             onClick={handleSubmit}
-            disabled={saving || loading || rows.length === 0}
+            disabled={saving || loading || rows.length === 0 || isWeekend}
           >
             <MdSave />
             <span>{saving ? 'Menyimpan...' : 'Simpan Presensi Hari Ini'}</span>
