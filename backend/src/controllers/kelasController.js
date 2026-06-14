@@ -1,4 +1,5 @@
 import { KelasRepository } from '../repository/kelas/kelasRepository.js';
+import { query } from '../config/query.js';
 
 const kelasRepository = new KelasRepository();
 
@@ -12,6 +13,18 @@ export const getAllKelas = async (req, res) => {
   try {
     const kelas = await kelasRepository.findAll();
     res.json({ success: true, data: kelas });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+// GET /api/kelas/jenjang
+export const getJenjangOptions = async (req, res) => {
+  try {
+    const rows = await query(
+      `SELECT DISTINCT nama_kelas FROM kelas ORDER BY nama_kelas ASC`
+    );
+    res.json({ success: true, data: rows.map((r) => r.nama_kelas) });
   } catch (error) {
     handleError(res, error);
   }

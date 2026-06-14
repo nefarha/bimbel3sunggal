@@ -321,7 +321,7 @@ const DashboardAdmin = () => {
                     <th>Bulan Terlama</th>
                     <th>Tunggakan</th>
                     <th>Nominal</th>
-                    <th>Keterlambatan</th>
+                    {/* <th>Keterlambatan</th> */}
                     <th>No Whatsapp</th>
                     <th>Aksi</th>
                   </tr>
@@ -349,7 +349,7 @@ const DashboardAdmin = () => {
                           </span>
                         </td>
                         <td>{row.nominal}</td>
-                        <td className={styles.tdDangerUnderline}>{row.keterlambatan}</td>
+                        {/* <td className={styles.tdDangerUnderline}>{row.keterlambatan}</td> */}
                         <td>
                           <input
                             type="text"

@@ -720,3 +720,10 @@
   opacity: 0.7;
   cursor: not-allowed;
 }
+
+.muted {
+  color: #94a3b8;
+  font-style: italic;
+  font-size: 0.85rem;
+  padding: 4px 0;
+}

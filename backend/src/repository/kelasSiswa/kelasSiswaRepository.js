@@ -18,6 +18,18 @@ export class KelasSiswaRepository {
     );
   }
 
+  async findBySiswaId(idSiswa) {
+    return await query(
+      `SELECT ${COLUMNS.map((c) => `\`${c}\``).join(', ')} FROM \`${TABLE}\` WHERE id_siswa = ?`,
+      [idSiswa]
+    );
+  }
+
+  async deleteBySiswaId(idSiswa) {
+    await query(`DELETE FROM \`${TABLE}\` WHERE id_siswa = ?`, [idSiswa]);
+    return { id_siswa: idSiswa };
+  }
+
   async create(data) {
     const payload = { ...data };
     if (!payload.id_kelas_siswa) {

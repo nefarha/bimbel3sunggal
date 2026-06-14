@@ -1,0 +1,208 @@
+/* =========================================================
+   Jadwal Les Page
+   ========================================================= */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ─── Loading & Error & Empty ───────────────────────────── */
+.loadingState,
+.errorState,
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 64px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  color: #64748b;
+  font-size: 0.938rem;
+  text-align: center;
+}
+
+.errorState {
+  color: #dc2626;
+}
+
+.emptyIcon {
+  font-size: 3rem;
+  color: #cbd5e1;
+}
+
+/* ─── Today Badge ───────────────────────────────────────── */
+.todayBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  color: #1e40af;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.todayBadgeIcon {
+  font-size: 1.25rem;
+}
+
+/* ─── Card Grid ─────────────────────────────────────────── */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* ─── Schedule Card ─────────────────────────────────────── */
+.scheduleCard {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+.scheduleCard:hover {
+  box-shadow: 0px 8px 12px -2px rgba(0, 0, 0, 0.08);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  color: #ffffff;
+}
+
+.cardTime {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 60px;
+}
+
+.cardTimeValue {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.cardTimeLabel {
+  font-size: 0.65rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardMapel {
+  flex: 1;
+}
+
+.cardMapelName {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.cardSesi {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  opacity: 0.85;
+  margin-top: 2px;
+}
+
+.cardBody {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardInfoRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.875rem;
+  color: #475569;
+}
+
+.cardInfoIcon {
+  font-size: 1.125rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.cardInfoLabel {
+  font-weight: 500;
+  min-width: 70px;
+  color: #94a3b8;
+}
+
+.cardInfoValue {
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* ─── No Schedule ───────────────────────────────────────── */
+.noSchedule {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 64px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  color: #64748b;
+  text-align: center;
+}
+
+.noScheduleIcon {
+  font-size: 3rem;
+  color: #cbd5e1;
+}
+
+.noScheduleText {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.noScheduleSubtext {
+  font-size: 0.875rem;
+  color: #94a3b8;
+}

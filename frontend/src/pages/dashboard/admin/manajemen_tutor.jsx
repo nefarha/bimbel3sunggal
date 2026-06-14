@@ -24,12 +24,21 @@ const STATUS_OPTIONS = [
   { value: 'Nonaktif', label: 'Nonaktif' },
 ];
 
-const splitList = (value) => {
+const parseMapelIds = (value) => {
   if (!value) return [];
-  return String(value)
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean);
+  if (Array.isArray(value)) return value;
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return parsed;
+    return [];
+  } catch {
+    return [];
+  }
+};
+
+const getMapelName = (id, options) => {
+  const found = options.find((m) => m.id_mapel === id);
+  return found ? found.nama_mapel : null;
 };
 
 const formatTanggalID = (value) => {
@@ -129,7 +138,11 @@ const ManajemenTutor = () => {
   const availableMapel = useMemo(() => {
     const set = new Set();
     tutorList.forEach((t) => {
-      splitList(t.mapel).forEach((m) => set.add(m));
+      const ids = parseMapelIds(t.mapel);
+      ids.forEach((id) => {
+        const name = getMapelName(id, mapelOptions);
+        if (name) set.add(name);
+      });
     });
     mapelOptions.forEach((item) => {
       if (item?.nama_mapel) set.add(item.nama_mapel);
@@ -143,8 +156,9 @@ const ManajemenTutor = () => {
     return tutorList.filter((t) => {
       if (statusFilter !== 'all' && t.status !== statusFilter) return false;
       if (mapelFilter !== 'all') {
-        const list = splitList(t.mapel);
-        if (!list.includes(mapelFilter)) return false;
+        const ids = parseMapelIds(t.mapel);
+        const names = ids.map((id) => getMapelName(id, mapelOptions)).filter(Boolean);
+        if (!names.includes(mapelFilter)) return false;
       }
       if (keyword) {
         const haystack = `${t.nama || ''} ${t.nip || ''}`.toLowerCase();
@@ -152,7 +166,7 @@ const ManajemenTutor = () => {
       }
       return true;
     });
-  }, [tutorList, search, statusFilter, mapelFilter]);
+  }, [tutorList, search, statusFilter, mapelFilter, mapelOptions]);
 
   // Stats
   const stats = useMemo(() => {
@@ -187,7 +201,7 @@ const ManajemenTutor = () => {
       status: tutor.status || 'Aktif',
       alamat: tutor.alamat || '',
       no_hp: tutor.no_hp || '',
-      mapel: splitList(tutor.mapel),
+      mapel: parseMapelIds(tutor.mapel),
     });
     setEditError(null);
   };
@@ -244,7 +258,7 @@ const ManajemenTutor = () => {
         alamat: editForm.alamat || null,
         no_hp: editForm.no_hp || null,
         status: editForm.status,
-        mapel: editForm.mapel.join(', ') || null,
+        mapel: JSON.stringify(editForm.mapel),
       };
       const response = await api.put(`/guru/${editingTutor.id_tutor}`, payload);
       const updated = response.data?.data;
@@ -458,8 +472,9 @@ const ManajemenTutor = () => {
 
               {!loading &&
                 pagedTutor.map((tutor, index) => {
-                  const mapelList = splitList(tutor.mapel);
-                  const jadwalList = splitList(tutor.jadwal);
+                  const mapelIds = parseMapelIds(tutor.mapel);
+                  const mapelNames = mapelIds.map((id) => getMapelName(id, mapelOptions)).filter(Boolean);
+                  const jadwalList = Array.isArray(tutor.jadwal) ? tutor.jadwal : [];
                   const statusClass =
                     tutor.status === 'Aktif'
                       ? styles.badgeSuccess
@@ -471,13 +486,13 @@ const ManajemenTutor = () => {
                       <td className={styles.nipCell}>{tutor.nip || '—'}</td>
                       <td className={styles.nameCell}>{tutor.nama || '—'}</td>
                       <td>
-                        {mapelList.length === 0 ? (
+                        {mapelNames.length === 0 ? (
                           <span className={styles.muted}>—</span>
                         ) : (
                           <div className={styles.chipGroup}>
-                            {mapelList.map((m) => (
-                              <span key={m} className={styles.chip}>
-                                {m}
+                            {mapelNames.map((name) => (
+                              <span key={name} className={styles.chip}>
+                                {name}
                               </span>
                             ))}
                           </div>
@@ -840,12 +855,12 @@ const ManajemenTutor = () => {
                 />
               </div>
 
-              {/* Mata Pelajaran (multi-select chip) */}
+              {/* Mata Pelajaran (multi-select chip by ID) */}
               <div className={styles.field}>
                 <label className={styles.label}>Mata Pelajaran</label>
                 <div className={styles.chipSelectGroup}>
                   {mapelOptions.map((opt) => {
-                    const selected = editForm.mapel.includes(opt.nama_mapel);
+                    const selected = editForm.mapel.includes(opt.id_mapel);
                     return (
                       <button
                         key={opt.id_mapel}
@@ -853,7 +868,7 @@ const ManajemenTutor = () => {
                         className={`${styles.chipSelect} ${
                           selected ? styles.chipSelectActive : ''
                         }`}
-                        onClick={() => !saving && toggleMapel(opt.nama_mapel)}
+                        onClick={() => !saving && toggleMapel(opt.id_mapel)}
                         disabled={saving}
                       >
                         {opt.nama_mapel}
@@ -862,8 +877,7 @@ const ManajemenTutor = () => {
                   })}
                 </div>
                 <p className={styles.fieldHint}>
-                  Pilih satu atau lebih mata pelajaran. Tersimpan sebagai daftar
-                  dipisah koma.
+                  Chip berwarna biru menandakan mapel yang sudah dimiliki tutor.
                 </p>
               </div>
 

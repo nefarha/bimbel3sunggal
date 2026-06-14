@@ -1,35 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, NavLink } from 'react-router-dom';
+import { useNavigate, NavLink, useLocation } from 'react-router-dom';
 import {
-  MdDashboard,
-  MdPersonAdd,
-  MdPayments,
   MdSchool,
-  MdGroup,
-  MdCalendarMonth,
-  MdHowToReg,
+  MdAttachMoney,
   MdAssessment,
-  MdAccessTime,
-  MdClass,
   MdLogout,
 } from 'react-icons/md';
-import styles from './AdminLayout.module.css';
+import styles from './OwnerLayout.module.css';
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', icon: MdDashboard, to: '/admin/dashboard' },
-  { label: 'Pendaftaran Siswa', icon: MdPersonAdd, to: '/admin/pendaftaran' },
-  { label: 'Pembayaran Siswa', icon: MdPayments, to: '/admin/pembayaran' },
-  { label: 'Manajemen Siswa', icon: MdGroup, to: '/admin/manajemen_siswa' },
-  { label: 'Daftar Kelas', icon: MdClass, to: '/admin/kelas' },
-  { label: 'Manajemen Tutor', icon: MdSchool, to: '/admin/guru' },
-  { label: 'Presensi Tutor', icon: MdAccessTime, to: '/admin/presensi_guru' },
-  { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
-  { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
-  // { label: 'Laporan', icon: MdAssessment, to: '/admin/laporan' },
+  { label: 'Laporan Keuangan', icon: MdAssessment, to: '/owner/laporan-keuangan' },
+  { label: 'Kelola Gaji', icon: MdAttachMoney, to: '/owner/kelola-gaji' },
 ];
 
-function AdminLayout({ children }) {
+function OwnerLayout({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -49,6 +35,13 @@ function AdminLayout({ children }) {
     navigate('/login', { replace: true });
   };
 
+  // Determine page title from current path
+  const getPageTitle = () => {
+    if (location.pathname.includes('kelola-gaji')) return 'Kelola Gaji';
+    if (location.pathname.includes('laporan-keuangan')) return 'Laporan Keuangan';
+    return 'Owner';
+  };
+
   return (
     <div className={styles.appShell}>
       {/* Sidebar */}
@@ -59,7 +52,7 @@ function AdminLayout({ children }) {
           </div>
           <div>
             <h2 className={styles.brandTitle}>GT Sunggal</h2>
-            <p className={styles.brandSubtitle}>Management System</p>
+            <p className={styles.brandSubtitle}>Owner Panel</p>
           </div>
         </div>
 
@@ -97,13 +90,12 @@ function AdminLayout({ children }) {
       <main className={styles.main}>
         {/* Header */}
         <header className={styles.topBar}>
-          <h1 className={styles.pageTitle}>Administrator</h1>
+          <h1 className={styles.pageTitle}>{getPageTitle()}</h1>
           <div className={styles.userBlock}>
             <div className={styles.userInfo}>
-              <p className={styles.userName}>{user?.username || 'Admin Utama'}</p>
-              <p className={styles.userRole}>Super User</p>
+              <p className={styles.userName}>{user?.username || 'Pemilik'}</p>
+              <p className={styles.userRole}>Pemilik</p>
             </div>
-            {/* <div className={styles.avatar} aria-label="User profile" /> */}
           </div>
         </header>
 
@@ -114,4 +106,4 @@ function AdminLayout({ children }) {
   );
 }
 
-export default AdminLayout;
+export default OwnerLayout;

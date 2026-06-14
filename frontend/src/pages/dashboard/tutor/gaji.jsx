@@ -213,10 +213,7 @@ const Gaji = () => {
                 <div className={styles.adjustmentList}>
                   <div className={styles.adjustmentRow}>
                     <span className={styles.adjustmentLabel}>
-                      Penambahan (Kerajinan)
-                      <span className={styles.adjustmentDetail}>
-                        ({data.absensi.hadir}× Rp 15.000)
-                      </span>
+                      Penambahan                      
                     </span>
                     <span className={styles.adjustmentGreen}>
                       +{formatRupiah(data.bonus)}
@@ -224,10 +221,7 @@ const Gaji = () => {
                   </div>
                   <div className={styles.adjustmentRow}>
                     <span className={styles.adjustmentLabel}>
-                      Pengurangan (N× Off / Absen)
-                      <span className={styles.adjustmentDetail}>
-                        ({data.absensi.absen}× 5% dari A)
-                      </span>
+                      Potongan
                     </span>
                     <span className={styles.adjustmentRed}>
                       -{formatRupiah(data.potongan)}
@@ -263,19 +257,6 @@ const Gaji = () => {
                 </h3>
                 <div className={styles.grandTotalNominal}>
                   {formatRupiah(data.grand_total)}
-                </div>
-                <div className={styles.verificationStatus}>
-                  {data.is_confirmed ? (
-                    <>
-                      <MdCheckCircle className={styles.verifiedIcon} />
-                      <span>Telah Diverifikasi Sistem</span>
-                    </>
-                  ) : (
-                    <>
-                      <MdPending className={styles.pendingIcon} />
-                      <span>Belum Diverifikasi Sistem</span>
-                    </>
-                  )}
                 </div>
               </div>
               <div className={styles.grandTotalRight}>

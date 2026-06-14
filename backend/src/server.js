@@ -16,6 +16,7 @@ import absensiTutorRoutes from './routes/absensiTutor.js'
 import pembayaranRoutes from './routes/pembayaran.js'
 import dashboardRoutes from './routes/dashboard.js'
 import gajiRoutes from './routes/gaji.js'
+import keuanganRoutes from './routes/keuangan.js'
 
 dotenv.config()
 
@@ -45,6 +46,7 @@ app.use('/api/absensi-tutor', absensiTutorRoutes)
 app.use('/api/pembayaran', pembayaranRoutes)
 app.use('/api/dashboard', dashboardRoutes)
 app.use('/api/gaji', gajiRoutes)
+app.use('/api/keuangan', keuanganRoutes)
 
 // ─── 404 Handler ─────────────────────────────────────────────
 app.use((req, res) => {

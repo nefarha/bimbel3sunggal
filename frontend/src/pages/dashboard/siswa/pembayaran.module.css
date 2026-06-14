@@ -1,0 +1,279 @@
+/* =========================================================
+   Pembayaran Siswa Page
+   ========================================================= */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Loading & Error ───────────────────────────────────── */
+.loadingState,
+.errorState {
+  text-align: center;
+  padding: 48px 16px;
+  color: #757682;
+  font-size: 0.938rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.errorState {
+  color: #ba1a1a;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.headerCard {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.avatarWrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #e1e2e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarIcon {
+  font-size: 2rem;
+  color: #444651;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.headerName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #191c1e;
+  margin: 0 0 2px 0;
+}
+
+.headerMeta {
+  font-size: 0.813rem;
+  color: #757682;
+  margin: 0;
+}
+
+.headerMeta + .headerMeta {
+  margin-top: 1px;
+}
+
+/* ─── Stat Cards ────────────────────────────────────────── */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.statCard {
+  padding: 20px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #757682;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.statValueTotal {
+  color: #1e3a8a;
+}
+
+.statValuePaid {
+  color: #1e7e34;
+}
+
+.statValueActive {
+  color: #d97706;
+}
+
+.statSubtext {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+/* ─── Table Section ─────────────────────────────────────── */
+.tableSection {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tableTitle {
+  font-size: 1.063rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+.yearSelect {
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #191c1e;
+  background: #ffffff;
+  cursor: pointer;
+  min-width: 100px;
+}
+
+.yearSelect:focus {
+  outline: none;
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.15);
+}
+
+/* ─── Table ─────────────────────────────────────────────── */
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead th {
+  padding: 12px 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: left;
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody td {
+  padding: 12px 20px;
+  font-size: 0.875rem;
+  color: #334155;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.jenisBadge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 0.813rem;
+  font-weight: 500;
+  border-radius: 999px;
+}
+
+.jenisSpp {
+  color: #1e40af;
+  background: #eff6ff;
+}
+
+.jenisModul {
+  color: #7c3aed;
+  background: #f5f3ff;
+}
+
+.jenisOther {
+  color: #64748b;
+  background: #f1f5f9;
+}
+
+.nominalCell {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  text-align: right;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+.statusVerified {
+  color: #1e7e34;
+  background: #e8f5e9;
+}
+
+.statusPending {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.statusRejected {
+  color: #dc2626;
+  background: #fef2f2;
+}
+
+/* ─── Empty Table ───────────────────────────────────────── */
+.emptyTable {
+  text-align: center;
+  padding: 48px 20px !important;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+/* ─── Responsive ────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .statsRow {
+    grid-template-columns: 1fr;
+  }
+
+  .tableHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

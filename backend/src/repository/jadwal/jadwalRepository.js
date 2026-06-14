@@ -83,6 +83,21 @@ export class JadwalRepository {
     return await this.findById(id);
   }
 
+  async findBySiswa(id_siswa) {
+    return await query(
+      `SELECT ${SELECT_COLUMNS.join(', ')}
+       FROM \`${TABLE}\` j
+       INNER JOIN \`kelas\` k ON k.id_kelas = j.id_kelas
+       LEFT JOIN \`mapel\` m ON m.id_mapel = j.id_mapel
+       INNER JOIN \`tutor\` t ON t.id_tutor = j.id_tutor
+       INNER JOIN \`kelas_siswa\` ks ON ks.id_kelas = j.id_kelas
+       WHERE ks.id_siswa = ?
+       ORDER BY FIELD(j.hari, 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'),
+                j.jam ASC`,
+      [id_siswa]
+    );
+  }
+
   async findByTutor(id_tutor) {
     return await query(
       `SELECT ${SELECT_COLUMNS.join(', ')}

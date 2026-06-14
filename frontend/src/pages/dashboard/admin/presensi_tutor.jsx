@@ -10,6 +10,23 @@ import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './presensi_tutor.module.css';
 
+const parseMapelIds = (value) => {
+  if (!value) return [];
+  if (Array.isArray(value)) return value;
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed)) return parsed;
+    return [];
+  } catch {
+    return [];
+  }
+};
+
+const getMapelName = (id, options) => {
+  const found = options.find((m) => m.id_mapel === id);
+  return found ? found.nama_mapel : null;
+};
+
 const formatTanggalPanjang = (value) => {
   const date = value ? new Date(value) : new Date();
   if (Number.isNaN(date.getTime())) return '-';
@@ -31,6 +48,7 @@ const PresensiTutor = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [mapelOptions, setMapelOptions] = useState([]);
 
   const fetchPresensiTutor = useCallback(async () => {
     setLoading(true);
@@ -56,9 +74,21 @@ const PresensiTutor = () => {
     }
   }, []);
 
+  const fetchMapelOptions = useCallback(async () => {
+    try {
+      const response = await api.get('/mapel');
+      const data = Array.isArray(response.data?.data) ? response.data.data : [];
+      setMapelOptions(data);
+    } catch (err) {
+      console.error('Fetch mapel error:', err);
+      setMapelOptions([]);
+    }
+  }, []);
+
   useEffect(() => {
     fetchPresensiTutor();
-  }, [fetchPresensiTutor]);
+    fetchMapelOptions();
+  }, [fetchPresensiTutor, fetchMapelOptions]);
 
   const tanggalLabel = useMemo(() => formatTanggalPanjang(meta.tanggal), [meta.tanggal]);
 
@@ -219,7 +249,11 @@ const PresensiTutor = () => {
                     </td>
                     <td>
                       <span className={styles.classBadge}>
-                        {item.mapel}
+                        {(() => {
+                          const ids = parseMapelIds(item.mapel);
+                          const names = ids.map((id) => getMapelName(id, mapelOptions)).filter(Boolean);
+                          return names.length > 0 ? names.join(', ') : item.mapel || '—';
+                        })()}
                       </span>
                     </td>
                     <td>

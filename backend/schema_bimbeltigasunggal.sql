@@ -31,7 +31,7 @@ CREATE TABLE siswa (
     tanggal_lahir   DATE,
     jenis_kelamin   VARCHAR(10),
     kelas           VARCHAR(20),
-    mapel           VARCHAR(255),             -- bisa multi-nilai: 'Bimbel SMP, English Course'
+    mapel           TEXT,                     -- JSON array of mapel IDs: '[1, 2, 3]'
     asal_sekolah    VARCHAR(50),
     alamat          TEXT,
     tanggal_masuk   DATE,
@@ -167,7 +167,7 @@ CREATE TABLE absensi_tutor (
 CREATE TABLE gaji_tutor (
     id_gaji           INT          AUTO_INCREMENT PRIMARY KEY,
     id_tutor          INT          NOT NULL,
-    periode           VARCHAR(20)  NOT NULL,   
+    periode           DATETIME     NOT NULL,   
     total_pemasukan   BIGINT       DEFAULT 0,  
     potongan          BIGINT       DEFAULT 0,
     bonus             BIGINT       DEFAULT 0,

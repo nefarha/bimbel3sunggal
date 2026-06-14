@@ -59,6 +59,13 @@ export class SiswaRepository {
     return await this.findById(id);
   }
 
+  async findByUserId(idUser) {
+    return await queryOne(
+      `SELECT ${COLUMNS.map((c) => `\`${c}\``).join(', ')} FROM \`${TABLE}\` WHERE id_user = ? LIMIT 1`,
+      [idUser]
+    );
+  }
+
   async findByKelas(id_kelas) {
     return await query(
       `SELECT s.id_siswa, s.nama, s.nama_ortu, s.no_hp_ortu, s.status

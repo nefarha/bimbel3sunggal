@@ -10,9 +10,12 @@ const handleError = (res, error, defaultStatus = 500) => {
 // GET /api/guru
 export const getAllTutor = async (req, res) => {
   try {
-    const { status } = req.query;
+    const { status, search, id_mapel, jenjang } = req.query;
     const filters = {};
     if (status) filters.status = status;
+    if (search) filters.search = search;
+    if (id_mapel) filters.id_mapel = id_mapel;
+    if (jenjang) filters.jenjang = jenjang;
 
     const tutor = await tutorRepository.findAll({ where: filters });
     res.json({ success: true, data: tutor });

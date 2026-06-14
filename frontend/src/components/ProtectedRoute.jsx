@@ -44,9 +44,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
         case 'tutor':
           return <Navigate to="/tutor/dashboard" replace />;
         case 'siswa':
-          return <Navigate to="/siswa/dashboard" replace />;
+          return <Navigate to="/siswa/profile" replace />;
         case 'pemilik':
-          return <Navigate to="/owner/dashboard" replace />;
+          return <Navigate to="/owner/laporan-keuangan" replace />;
         default:
           return <Navigate to="/" replace />;
       }

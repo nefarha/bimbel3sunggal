@@ -125,13 +125,42 @@ async function main() {
       console.log(`✔ owner user (id: ${ownerId}, exists)`);
     }
 
+    // ─── Mapel (create first so tutors & siswa can reference IDs) ─
+    await conn.execute('DELETE FROM absensi_siswa');
+    await conn.execute('DELETE FROM kelas_siswa');
+    await conn.execute('DELETE FROM jadwal');
+    await conn.execute('DELETE FROM kelas');
+    await conn.execute('DELETE FROM mapel');
+
+    const mapelData = [
+      'SD',
+      'SMP',
+      'SMA',
+      'Calistung',
+      'MAFIA',
+    ];
+
+    const mapel = [];
+    for (const namaMapel of mapelData) {
+      const mapelId = await nextId(conn, 'mapel', 'id_mapel');
+      await conn.execute(
+        'INSERT INTO mapel (id_mapel, nama_mapel) VALUES (?, ?)',
+        [mapelId, namaMapel]
+      );
+      mapel.push({ id_mapel: mapelId, nama_mapel: namaMapel });
+    }
+    console.log(`✔ ${mapel.length} mapel`);
+
+    // Helper: get mapel ID by name
+    const mapelId = (name) => mapel.find((m) => m.nama_mapel === name)?.id_mapel;
+
     // ─── Tutors ────────────────────────────────────────────────
     const tutors = [];
     const tutorData = [
-      { username: 'budi.setiawan', nama: 'Budi Setiawan', jenis_kelamin: 'L', no_hp: '081234567001', mapel: 'SD, SMP' },
-      { username: 'ani.wijaya', nama: 'Ani Wijaya', jenis_kelamin: 'P', no_hp: '081234567002', mapel: 'SMA, Bahasa Inggris' },
-      { username: 'candra.putra', nama: 'Candra Putra', jenis_kelamin: 'L', no_hp: '081234567003', mapel: 'MAFIA' },
-      { username: 'dewi.lestari', nama: 'Dewi Lestari', jenis_kelamin: 'P', no_hp: '081234567004', mapel: 'calistung, SD' },
+      { username: 'budi.setiawan', nama: 'Budi Setiawan', jenis_kelamin: 'L', no_hp: '081234567001', mapel: ['SD', 'SMP'] },
+      { username: 'ani.wijaya', nama: 'Ani Wijaya', jenis_kelamin: 'P', no_hp: '081234567002', mapel: ['SMA', 'SD'] },
+      { username: 'candra.putra', nama: 'Candra Putra', jenis_kelamin: 'L', no_hp: '081234567003', mapel: ['MAFIA'] },
+      { username: 'dewi.lestari', nama: 'Dewi Lestari', jenis_kelamin: 'P', no_hp: '081234567004', mapel: ['Calistung', 'SD'] },
     ];
 
     for (const t of tutorData) {
@@ -146,10 +175,11 @@ async function main() {
       let tutorId = await findTutorId(conn, userId);
       if (!tutorId) {
         tutorId = await nextId(conn, 'tutor', 'id_tutor');
+        const mapelStr = JSON.stringify(t.mapel.map((name) => mapelId(name)).filter(Boolean));
         await conn.execute(
           `INSERT INTO tutor (id_tutor, id_user, nama_tutor, jenis_kelamin, no_hp, tanggal_bergabung, status, mapel)
            VALUES (?, ?, ?, ?, ?, ?, 'Aktif', ?)`,
-          [tutorId, userId, t.nama, t.jenis_kelamin, t.no_hp, toMySQLDate('2024-01-15'), t.mapel]
+          [tutorId, userId, t.nama, t.jenis_kelamin, t.no_hp, toMySQLDate('2024-01-15'), mapelStr]
         );
       }
       tutors.push({ id_tutor: tutorId, ...t });
@@ -159,18 +189,18 @@ async function main() {
     // ─── Siswa ─────────────────────────────────────────────────
     const siswa = [];
     const siswaData = [
-      { username: 'rizky.pratama', nama: 'Rizky Pratama', spp: 550000, no_hp_ortu: '081234500001', mapel: 'SMA, MAFIA' },
-      { username: 'siti.aminah', nama: 'Siti Aminah', spp: 300000, no_hp_ortu: '081234500002', mapel: 'SD, calistung' },
-      { username: 'andi.saputra', nama: 'Andi Saputra', spp: 450000, no_hp_ortu: '081234500003', mapel: 'SMP, Bahasa Inggris' },
-      { username: 'aisyah.putri', nama: 'Aisyah Putri', spp: 400000, no_hp_ortu: '081234500004', mapel: 'SMP' },
-      { username: 'budi.santoso', nama: 'Budi Santoso', spp: 500000, no_hp_ortu: '081234500005', mapel: 'SMA' },
-      { username: 'citra.dewi', nama: 'Citra Dewi', spp: 350000, no_hp_ortu: '081234500006', mapel: 'SD' },
-      { username: 'dimas.ari', nama: 'Dimas Ari', spp: 450000, no_hp_ortu: '081234500007', mapel: 'SMP, MAFIA' },
-      { username: 'eka.putri', nama: 'Eka Putri', spp: 500000, no_hp_ortu: '081234500008', mapel: 'SMA, Bahasa Inggris' },
-      { username: 'fajar.nugraha', nama: 'Fajar Nugraha', spp: 400000, no_hp_ortu: '081234500009', mapel: 'SMP' },
-      { username: 'gita.lestari', nama: 'Gita Lestari', spp: 350000, no_hp_ortu: '081234500010', mapel: 'SD, calistung' },
-      { username: 'hendra.wijaya', nama: 'Hendra Wijaya', spp: 450000, no_hp_ortu: '081234500011', mapel: 'SMP' },
-      { username: 'intan.permata', nama: 'Intan Permata', spp: 500000, no_hp_ortu: '081234500012', mapel: 'SMA, MAFIA' },
+      { username: 'rizky.pratama', nama: 'Rizky Pratama', spp: 550000, no_hp_ortu: '081234500001', mapel: ['SMA', 'MAFIA'] },
+      { username: 'siti.aminah', nama: 'Siti Aminah', spp: 300000, no_hp_ortu: '081234500002', mapel: ['SD', 'Calistung'] },
+      { username: 'andi.saputra', nama: 'Andi Saputra', spp: 450000, no_hp_ortu: '081234500003', mapel: ['SMP', 'SD'] },
+      { username: 'aisyah.putri', nama: 'Aisyah Putri', spp: 400000, no_hp_ortu: '081234500004', mapel: ['SMP'] },
+      { username: 'budi.santoso', nama: 'Budi Santoso', spp: 500000, no_hp_ortu: '081234500005', mapel: ['SMA'] },
+      { username: 'citra.dewi', nama: 'Citra Dewi', spp: 350000, no_hp_ortu: '081234500006', mapel: ['SD'] },
+      { username: 'dimas.ari', nama: 'Dimas Ari', spp: 450000, no_hp_ortu: '081234500007', mapel: ['SMP', 'MAFIA'] },
+      { username: 'eka.putri', nama: 'Eka Putri', spp: 500000, no_hp_ortu: '081234500008', mapel: ['SMA', 'SD'] },
+      { username: 'fajar.nugraha', nama: 'Fajar Nugraha', spp: 400000, no_hp_ortu: '081234500009', mapel: ['SMP'] },
+      { username: 'gita.lestari', nama: 'Gita Lestari', spp: 350000, no_hp_ortu: '081234500010', mapel: ['SD', 'Calistung'] },
+      { username: 'hendra.wijaya', nama: 'Hendra Wijaya', spp: 450000, no_hp_ortu: '081234500011', mapel: ['SMP'] },
+      { username: 'intan.permata', nama: 'Intan Permata', spp: 500000, no_hp_ortu: '081234500012', mapel: ['SMA', 'MAFIA'] },
     ];
 
     for (const s of siswaData) {
@@ -185,47 +215,25 @@ async function main() {
       let siswaId = await findSiswaId(conn, userId);
       if (!siswaId) {
         siswaId = await nextId(conn, 'siswa', 'id_siswa');
+        const mapelStr = JSON.stringify(s.mapel.map((name) => mapelId(name)).filter(Boolean));
         await conn.execute(
           `INSERT INTO siswa (id_siswa, id_user, nama, spp, no_hp_ortu, tanggal_masuk, status, mapel)
            VALUES (?, ?, ?, ?, ?, ?, 'Aktif', ?)`,
-          [siswaId, userId, s.nama, s.spp, s.no_hp_ortu, toMySQLDate('2024-08-01'), s.mapel]
+          [siswaId, userId, s.nama, s.spp, s.no_hp_ortu, toMySQLDate('2024-08-01'), mapelStr]
         );
       }
       siswa.push({ id_siswa: siswaId, ...s });
     }
     console.log(`✔ ${siswa.length} siswa`);
 
-    // ─── Mapel ────────────────────────────────────────────────
-    const mapelData = [
-      'SD',
-      'SMP',
-      'SMA',
-      'Bahasa Inggris',
-      'calistung',
-      'MAFIA',
-    ];
-
-    const mapel = [];
-    for (const namaMapel of mapelData) {
-      let mapelId = await findMapelId(conn, namaMapel);
-      if (!mapelId) {
-        mapelId = await nextId(conn, 'mapel', 'id_mapel');
-        await conn.execute(
-          'INSERT INTO mapel (id_mapel, nama_mapel) VALUES (?, ?)',
-          [mapelId, namaMapel]
-        );
-      }
-      mapel.push({ id_mapel: mapelId, nama_mapel: namaMapel });
-    }
-    console.log(`✔ ${mapel.length} mapel`);
-
     // ─── Kelas ─────────────────────────────────────────────────
     const kelas = [];
     const kelasData = [
-      { nama_kelas: 'Matematika A1', nama_mapel: 'SMA', id_tutor: tutors[0].id_tutor },
-      { nama_kelas: 'Bahasa Inggris B2', nama_mapel: 'Bahasa Inggris', id_tutor: tutors[1].id_tutor },
-      { nama_kelas: 'Fisika C1', nama_mapel: 'MAFIA', id_tutor: tutors[2].id_tutor },
-      { nama_kelas: 'Bahasa Indonesia D1', nama_mapel: 'SMP', id_tutor: tutors[3].id_tutor },
+      { nama_kelas: 'SD A1', nama_mapel: 'SD', id_tutor: tutors[0].id_tutor },
+      { nama_kelas: 'SMP B1', nama_mapel: 'SMP', id_tutor: tutors[1].id_tutor },
+      { nama_kelas: 'SMA C1', nama_mapel: 'SMA', id_tutor: tutors[2].id_tutor },
+      { nama_kelas: 'Calistung D1', nama_mapel: 'Calistung', id_tutor: tutors[3].id_tutor },
+      { nama_kelas: 'MAFIA E1', nama_mapel: 'MAFIA', id_tutor: tutors[2].id_tutor },
     ];
 
     for (const k of kelasData) {
@@ -255,13 +263,16 @@ async function main() {
     await conn.execute('DELETE FROM jadwal');
 
     const jadwalData = [
-      { id_kelas: kelas[0].id_kelas, id_tutor: tutors[0].id_tutor, id_mapel: kelas[0].id_mapel, hari: todayName, jam: '16:00:00' },
-      { id_kelas: kelas[1].id_kelas, id_tutor: tutors[1].id_tutor, id_mapel: kelas[1].id_mapel, hari: todayName, jam: '17:00:00' },
-      { id_kelas: kelas[2].id_kelas, id_tutor: tutors[2].id_tutor, id_mapel: kelas[2].id_mapel, hari: todayName, jam: '18:00:00' },
-      { id_kelas: kelas[0].id_kelas, id_tutor: tutors[0].id_tutor, id_mapel: kelas[0].id_mapel, hari: 'Senin',  jam: '16:00:00' },
-      { id_kelas: kelas[1].id_kelas, id_tutor: tutors[1].id_tutor, id_mapel: kelas[1].id_mapel, hari: 'Selasa', jam: '17:00:00' },
-      { id_kelas: kelas[2].id_kelas, id_tutor: tutors[2].id_tutor, id_mapel: kelas[2].id_mapel, hari: 'Rabu',   jam: '18:00:00' },
-      { id_kelas: kelas[3].id_kelas, id_tutor: tutors[3].id_tutor, id_mapel: kelas[3].id_mapel, hari: 'Kamis',  jam: '19:00:00' },
+      { id_kelas: kelas[0].id_kelas, id_tutor: tutors[0].id_tutor, id_mapel: kelas[0].id_mapel, hari: todayName, jam: '14:00:00' },
+      { id_kelas: kelas[1].id_kelas, id_tutor: tutors[1].id_tutor, id_mapel: kelas[1].id_mapel, hari: todayName, jam: '15:00:00' },
+      { id_kelas: kelas[2].id_kelas, id_tutor: tutors[2].id_tutor, id_mapel: kelas[2].id_mapel, hari: todayName, jam: '16:00:00' },
+      { id_kelas: kelas[3].id_kelas, id_tutor: tutors[3].id_tutor, id_mapel: kelas[3].id_mapel, hari: todayName, jam: '17:00:00' },
+      { id_kelas: kelas[4].id_kelas, id_tutor: tutors[2].id_tutor, id_mapel: kelas[4].id_mapel, hari: todayName, jam: '18:00:00' },
+      { id_kelas: kelas[0].id_kelas, id_tutor: tutors[0].id_tutor, id_mapel: kelas[0].id_mapel, hari: 'Senin',  jam: '14:00:00' },
+      { id_kelas: kelas[1].id_kelas, id_tutor: tutors[1].id_tutor, id_mapel: kelas[1].id_mapel, hari: 'Selasa', jam: '15:00:00' },
+      { id_kelas: kelas[2].id_kelas, id_tutor: tutors[2].id_tutor, id_mapel: kelas[2].id_mapel, hari: 'Rabu',   jam: '16:00:00' },
+      { id_kelas: kelas[3].id_kelas, id_tutor: tutors[3].id_tutor, id_mapel: kelas[3].id_mapel, hari: 'Kamis',  jam: '17:00:00' },
+      { id_kelas: kelas[4].id_kelas, id_tutor: tutors[2].id_tutor, id_mapel: kelas[4].id_mapel, hari: 'Jumat',  jam: '18:00:00' },
     ];
 
     for (const j of jadwalData) {

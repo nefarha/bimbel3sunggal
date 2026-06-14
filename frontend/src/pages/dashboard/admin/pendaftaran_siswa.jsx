@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import {
   MdPerson,
   MdPeople,
@@ -11,15 +11,6 @@ import {
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './pendaftaran_siswa.module.css';
-
-const KELAS_OPTIONS = [
-  'Calistung',
-  'Bimbel SD',
-  'Bimbel SMP',
-  'Bimbel SMA',
-  'English Course',
-  'Mafia',
-];
 
 const TINGKATAN_KELAS = [
   'Kelas I',
@@ -176,6 +167,42 @@ const PendaftaranSiswa = () => {
   const [submitError, setSubmitError] = useState(null);
   const [submitResult, setSubmitResult] = useState(null); // { siswa, credentials, whatsappLink, message }
   const [copiedField, setCopiedField] = useState(null);
+  const [mapelOptions, setMapelOptions] = useState([]);
+  const [kelasOptions, setKelasOptions] = useState([]);
+  const [selectedKelas, setSelectedKelas] = useState([]);
+
+  const fetchMapelOptions = useCallback(async () => {
+    try {
+      const response = await api.get('/mapel');
+      const data = Array.isArray(response.data?.data) ? response.data.data : [];
+      setMapelOptions(data);
+    } catch (err) {
+      console.error('Fetch mapel error:', err);
+      setMapelOptions([]);
+    }
+  }, []);
+
+  const fetchKelasOptions = useCallback(async () => {
+    try {
+      const response = await api.get('/kelas');
+      const data = Array.isArray(response.data?.data) ? response.data.data : [];
+      setKelasOptions(data);
+    } catch (err) {
+      console.error('Fetch kelas error:', err);
+      setKelasOptions([]);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMapelOptions();
+    fetchKelasOptions();
+  }, [fetchMapelOptions, fetchKelasOptions]);
+
+  // Filter kelas berdasarkan mapel yang dipilih
+  const filteredKelas = useMemo(() => {
+    if (formData.jenisProgram.length === 0) return [];
+    return kelasOptions.filter((k) => formData.jenisProgram.includes(k.id_mapel));
+  }, [kelasOptions, formData.jenisProgram]);
 
   const totalTagihan = useMemo(() => {
     const spp = parseNumericInput(biaya.sppBulanan);
@@ -189,15 +216,26 @@ const PendaftaranSiswa = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleProgramToggle = (program) => {
+  const handleProgramToggle = (idMapel) => {
     setFormData((prev) => {
-      const exists = prev.jenisProgram.includes(program);
+      const exists = prev.jenisProgram.includes(idMapel);
       return {
         ...prev,
         jenisProgram: exists
-          ? prev.jenisProgram.filter((item) => item !== program)
-          : [...prev.jenisProgram, program],
+          ? prev.jenisProgram.filter((item) => item !== idMapel)
+          : [...prev.jenisProgram, idMapel],
       };
+    });
+    // Reset pilihan kelas saat mapel berubah
+    setSelectedKelas([]);
+  };
+
+  const handleKelasToggle = (idKelas) => {
+    setSelectedKelas((prev) => {
+      const exists = prev.includes(idKelas);
+      return exists
+        ? prev.filter((item) => item !== idKelas)
+        : [...prev, idKelas];
     });
   };
 
@@ -214,6 +252,7 @@ const PendaftaranSiswa = () => {
     setSubmitError(null);
     setSubmitResult(null);
     setCopiedField(null);
+    setSelectedKelas([]);
   };
 
   const handleCloseResult = () => {
@@ -327,7 +366,8 @@ const PendaftaranSiswa = () => {
         tanggal_lahir: formData.tanggalLahir || null,
         jenis_kelamin: formData.jenisKelamin || null,
         kelas: formData.kelas,
-        mapel: formData.jenisProgram.join(', ') || null,
+        mapel: formData.jenisProgram, // array of mapel IDs
+        id_kelas: selectedKelas,      // array of kelas IDs — backend akan insert ke kelas_siswa
         asal_sekolah: formData.asalSekolah || null,
         alamat: formData.alamatLengkap || null,
         tanggal_masuk: formData.tanggalMasuk || null,
@@ -677,19 +717,49 @@ const PendaftaranSiswa = () => {
                   </div>
 
                   <div className={styles.field}>
-                    <label className={styles.label}>Jenis Program / Kelas</label>
+                    <label className={styles.label}>Jenis Program / Mapel</label>
                     <div className={styles.checkboxGroup}>
-                      {KELAS_OPTIONS.map((opt) => (
-                        <label key={opt} className={styles.checkboxOption}>
-                          <input
-                            type="checkbox"
-                            checked={formData.jenisProgram.includes(opt)}
-                            onChange={() => handleProgramToggle(opt)}
-                          />
-                          <span>{opt}</span>
-                        </label>
-                      ))}
+                      {mapelOptions.length === 0 ? (
+                        <span className={styles.muted}>Memuat data mapel…</span>
+                      ) : (
+                        mapelOptions.map((opt) => (
+                          <label key={opt.id_mapel} className={styles.checkboxOption}>
+                            <input
+                              type="checkbox"
+                              checked={formData.jenisProgram.includes(opt.id_mapel)}
+                              onChange={() => handleProgramToggle(opt.id_mapel)}
+                            />
+                            <span>{opt.nama_mapel}</span>
+                          </label>
+                        ))
+                      )}
                     </div>
+                  </div>
+
+                  <div className={styles.field}>
+                    <label className={styles.label}>Pilih Kelas</label>
+                    {formData.jenisProgram.length === 0 ? (
+                      <span className={styles.muted}>
+                        Pilih program terlebih dahulu untuk melihat kelas yang tersedia
+                      </span>
+                    ) : filteredKelas.length === 0 ? (
+                      <span className={styles.muted}>
+                        Tidak ada kelas tersedia untuk program yang dipilih
+                      </span>
+                    ) : (
+                      <div className={styles.checkboxGroup}>
+                        {filteredKelas.map((kelas) => (
+                          <label key={kelas.id_kelas} className={styles.checkboxOption}>
+                            <input
+                              type="checkbox"
+                              checked={selectedKelas.includes(kelas.id_kelas)}
+                              onChange={() => handleKelasToggle(kelas.id_kelas)}
+                            />
+                            <span>{kelas.nama_kelas} ({kelas.nama_tutor || '—'})</span>
+                          </label>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </section>

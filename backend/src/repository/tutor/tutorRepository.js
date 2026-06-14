@@ -11,8 +11,30 @@ const COLUMNS = [
 export class TutorRepository {
   async findAll(options = {}) {
     const filters = options.where || {};
-    const whereSql = filters.status ? 'WHERE t.status = ?' : '';
-    const params = filters.status ? [filters.status] : [];
+    const conditions = [];
+    const params = [];
+
+    if (filters.status) {
+      conditions.push('t.status = ?');
+      params.push(filters.status);
+    }
+
+    if (filters.search) {
+      conditions.push('t.nama_tutor LIKE ?');
+      params.push(`%${filters.search}%`);
+    }
+
+    if (filters.id_mapel) {
+      conditions.push('FIND_IN_SET(?, REPLACE(REPLACE(REPLACE(t.mapel, \'[\', \'\'), \']\', \'\'), \' \', \'\'))');
+      params.push(filters.id_mapel);
+    }
+
+    if (filters.jenjang) {
+      conditions.push('t.id_tutor IN (SELECT id_tutor FROM kelas WHERE nama_kelas = ?)');
+      params.push(filters.jenjang);
+    }
+
+    const whereSql = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
 
     return await query(
       `SELECT
@@ -28,7 +50,10 @@ export class TutorRepository {
          t.no_hp,
          t.tanggal_bergabung,
          t.status,
-         t.mapel,
+         COALESCE(
+           GROUP_CONCAT(DISTINCT m.nama_mapel ORDER BY m.nama_mapel ASC SEPARATOR ', '),
+           t.mapel
+         ) AS mapel,
          t.nama_tutor AS nama,
          COALESCE(u.username, CONCAT('TUTOR-', t.id_tutor)) AS nip,
          COALESCE(
@@ -42,6 +67,7 @@ export class TutorRepository {
        FROM \`${TABLE}\` t
        LEFT JOIN \`users\` u ON u.id_user = t.id_user
        LEFT JOIN \`jadwal\` j ON j.id_tutor = t.id_tutor
+       LEFT JOIN \`mapel\` m ON FIND_IN_SET(m.id_mapel, REPLACE(REPLACE(REPLACE(t.mapel, '[', ''), ']', ''), ' ', ''))
        ${whereSql}
        GROUP BY
          t.id_tutor,
@@ -77,7 +103,10 @@ export class TutorRepository {
          t.no_hp,
          t.tanggal_bergabung,
          t.status,
-         t.mapel,
+         COALESCE(
+           GROUP_CONCAT(DISTINCT m.nama_mapel ORDER BY m.nama_mapel ASC SEPARATOR ', '),
+           t.mapel
+         ) AS mapel,
          t.nama_tutor AS nama,
          COALESCE(u.username, CONCAT('TUTOR-', t.id_tutor)) AS nip,
          COALESCE(
@@ -91,6 +120,7 @@ export class TutorRepository {
        FROM \`${TABLE}\` t
        LEFT JOIN \`users\` u ON u.id_user = t.id_user
        LEFT JOIN \`jadwal\` j ON j.id_tutor = t.id_tutor
+       LEFT JOIN \`mapel\` m ON FIND_IN_SET(m.id_mapel, REPLACE(REPLACE(REPLACE(t.mapel, '[', ''), ']', ''), ' ', ''))
        WHERE t.id_tutor = ?
        GROUP BY
          t.id_tutor,
@@ -126,7 +156,10 @@ export class TutorRepository {
          t.no_hp,
          t.tanggal_bergabung,
          t.status,
-         t.mapel,
+         COALESCE(
+           GROUP_CONCAT(DISTINCT m.nama_mapel ORDER BY m.nama_mapel ASC SEPARATOR ', '),
+           t.mapel
+         ) AS mapel,
          t.nama_tutor AS nama,
          COALESCE(u.username, CONCAT('TUTOR-', t.id_tutor)) AS nip,
          COALESCE(
@@ -140,6 +173,7 @@ export class TutorRepository {
        FROM \`${TABLE}\` t
        LEFT JOIN \`users\` u ON u.id_user = t.id_user
        LEFT JOIN \`jadwal\` j ON j.id_tutor = t.id_tutor
+       LEFT JOIN \`mapel\` m ON FIND_IN_SET(m.id_mapel, REPLACE(REPLACE(REPLACE(t.mapel, '[', ''), ']', ''), ' ', ''))
        WHERE t.id_user = ?
        GROUP BY
          t.id_tutor,

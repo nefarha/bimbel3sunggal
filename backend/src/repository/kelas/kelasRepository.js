@@ -9,6 +9,7 @@ const SELECT_COLUMNS = [
   'm.nama_mapel',
   'k.id_tutor',
   't.nama_tutor',
+  '(SELECT COUNT(*) FROM `kelas_siswa` ks WHERE ks.id_kelas = k.id_kelas) AS jumlah_siswa',
 ];
 
 const FILTER_COLUMN_MAP = {

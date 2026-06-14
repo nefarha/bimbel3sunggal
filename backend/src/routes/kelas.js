@@ -5,11 +5,13 @@ import {
   createKelas,
   updateKelas,
   deleteKelas,
+  getJenjangOptions,
 } from '../controllers/kelasController.js';
 
 const router = Router();
 
 router.get('/', getAllKelas);
+router.get('/jenjang', getJenjangOptions);
 router.get('/:id', getKelasById);
 router.post('/', createKelas);
 router.put('/:id', updateKelas);

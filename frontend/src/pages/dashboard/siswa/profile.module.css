@@ -1,0 +1,400 @@
+/* =========================================================
+   Profile Siswa Page
+   ========================================================= */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 800px;
+}
+
+/* Loading & Error states */
+.loadingState,
+.errorState {
+  text-align: center;
+  padding: 48px 16px;
+  color: #757682;
+  font-size: 0.938rem;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.errorState {
+  color: #ba1a1a;
+}
+
+/* ─── Header ────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.avatarWrapper {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background-color: #e1e2e4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatarIcon {
+  font-size: 2.5rem;
+  color: #444651;
+}
+
+.headerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.headerName {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #191c1e;
+  margin: 0 0 2px 0;
+}
+
+.headerRole {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fea619;
+  margin: 0 0 2px 0;
+}
+
+.headerNip {
+  font-size: 0.813rem;
+  color: #757682;
+  margin: 0;
+}
+
+/* ─── Info Card ─────────────────────────────────────────── */
+.card {
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.cardTitle {
+  font-size: 1.063rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0 0 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 24px;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoItemFull {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  grid-column: 1 / -1;
+}
+
+.infoLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #757682;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.infoValue {
+  font-size: 0.938rem;
+  color: #191c1e;
+}
+
+.statusAktif {
+  color: #1e7e34;
+  font-weight: 600;
+}
+
+.statusNonaktif {
+  color: #ba1a1a;
+  font-weight: 600;
+}
+
+/* ─── Actions ───────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btnChangePassword {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background-color: #1e3a8a;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: inherit;
+}
+
+.btnChangePassword:hover {
+  background-color: #00236f;
+}
+
+.btnIcon {
+  font-size: 1.125rem;
+}
+
+/* =========================================================
+   Dialog / Modal (centered)
+   ========================================================= */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayFadeIn 0.2s ease;
+  padding: 16px;
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sheet {
+  width: 100%;
+  max-width: 440px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 12px 32px rgba(0, 0, 0, 0.15);
+  animation: dialogScaleIn 0.2s ease;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+@keyframes dialogScaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.sheetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+}
+
+.sheetTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #191c1e;
+  margin: 0;
+}
+
+.sheetClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #444651;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: background-color 0.2s ease;
+}
+
+.sheetClose:hover {
+  background: #e1e2e4;
+}
+
+.sheetBody {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ─── Alerts ────────────────────────────────────────────── */
+.alertSuccess,
+.alertError {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.alertSuccess {
+  background-color: #e8f5e9;
+  color: #1e7e34;
+}
+
+.alertError {
+  background-color: #ffdad6;
+  color: #ba1a1a;
+}
+
+.alertIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ─── Form ──────────────────────────────────────────────── */
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.formLabel {
+  font-size: 0.813rem;
+  font-weight: 600;
+  color: #444651;
+}
+
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.formInput {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #191c1e;
+  background: #ffffff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.15);
+}
+
+.formInput:disabled {
+  background: #f3f4f6;
+  color: #757682;
+}
+
+.formInput::placeholder {
+  color: #94a3b8;
+}
+
+.togglePassword {
+  position: absolute;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #757682;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: background-color 0.2s ease;
+}
+
+.togglePassword:hover {
+  background: #f3f4f6;
+}
+
+/* ─── Sheet Actions ─────────────────────────────────────── */
+.sheetActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btnCancel {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #444651;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: inherit;
+}
+
+.btnCancel:hover {
+  background: #f3f4f6;
+}
+
+.btnCancel:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSubmit {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #1e3a8a;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: inherit;
+}
+
+.btnSubmit:hover {
+  background: #00236f;
+}
+
+.btnSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

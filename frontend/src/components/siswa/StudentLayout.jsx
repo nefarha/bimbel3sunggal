@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
 import {
-  MdDashboard,
-  MdPersonAdd,
-  MdPayments,
   MdSchool,
-  MdGroup,
+  MdPerson,
   MdCalendarMonth,
-  MdHowToReg,
-  MdAssessment,
-  MdAccessTime,
-  MdClass,
+  MdAttachMoney,
   MdLogout,
 } from 'react-icons/md';
-import styles from './AdminLayout.module.css';
+import styles from './StudentLayout.module.css';
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', icon: MdDashboard, to: '/admin/dashboard' },
-  { label: 'Pendaftaran Siswa', icon: MdPersonAdd, to: '/admin/pendaftaran' },
-  { label: 'Pembayaran Siswa', icon: MdPayments, to: '/admin/pembayaran' },
-  { label: 'Manajemen Siswa', icon: MdGroup, to: '/admin/manajemen_siswa' },
-  { label: 'Daftar Kelas', icon: MdClass, to: '/admin/kelas' },
-  { label: 'Manajemen Tutor', icon: MdSchool, to: '/admin/guru' },
-  { label: 'Presensi Tutor', icon: MdAccessTime, to: '/admin/presensi_guru' },
-  { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
-  { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
-  // { label: 'Laporan', icon: MdAssessment, to: '/admin/laporan' },
+  { label: 'Profile Kehadiran', icon: MdPerson, to: '/siswa/profile' },
+  { label: 'Jadwal Les', icon: MdCalendarMonth, to: '/siswa/jadwal' },
+  { label: 'Pembayaran', icon: MdAttachMoney, to: '/siswa/pembayaran' },
 ];
 
-function AdminLayout({ children }) {
+function StudentLayout({ children }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
@@ -97,13 +84,12 @@ function AdminLayout({ children }) {
       <main className={styles.main}>
         {/* Header */}
         <header className={styles.topBar}>
-          <h1 className={styles.pageTitle}>Administrator</h1>
+          <h1 className={styles.pageTitle}>Siswa</h1>
           <div className={styles.userBlock}>
             <div className={styles.userInfo}>
-              <p className={styles.userName}>{user?.username || 'Admin Utama'}</p>
-              <p className={styles.userRole}>Super User</p>
+              <p className={styles.userName}>{user?.nama || 'Siswa'}</p>
+              <p className={styles.userRole}>Siswa</p>
             </div>
-            {/* <div className={styles.avatar} aria-label="User profile" /> */}
           </div>
         </header>
 
@@ -114,4 +100,4 @@ function AdminLayout({ children }) {
   );
 }
 
-export default AdminLayout;
+export default StudentLayout;

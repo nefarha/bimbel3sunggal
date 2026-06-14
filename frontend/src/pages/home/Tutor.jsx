@@ -1,19 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import styles from './Tutor.module.css';
-
-// SVG Icons
-const StarIcon = ({ size = 16 }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-  </svg>
-);
-
-const ArrowRightIcon = ({ size = 16 }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12"></line>
-    <polyline points="12 5 19 12 12 19"></polyline>
-  </svg>
-);
 
 const SearchIcon = ({ size = 20 }) => (
   <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -30,80 +17,72 @@ const PersonIcon = ({ size = 64, color = '#CBD5E1' }) => (
 );
 
 function Tutor() {
-  const tutors = [
-    {
-      id: 1,
-      name: 'Ahmad Hidayat',
-      subject: 'Matematika & Fisika',
-      level: 'SMA',
-      badgeClass: styles.badgeSMA,
-      rating: 4.9,
-      image: null // Menggunakan null untuk placeholder
-    },
-    {
-      id: 2,
-      name: 'Siti Aminah',
-      subject: 'Bahasa Inggris',
-      level: 'SMP / SMA',
-      badgeClass: styles.badgeSMPSMA,
-      rating: 5.0,
-      image: null
-    },
-    {
-      id: 3,
-      name: 'Budi Santoso',
-      subject: 'Tematik SD',
-      level: 'SD',
-      badgeClass: styles.badgeSD,
-      rating: 4.8,
-      image: null
-    },
-    {
-      id: 4,
-      name: 'Diana Putri',
-      subject: 'Biologi & Kimia',
-      level: 'SMA',
-      badgeClass: styles.badgeSMA,
-      rating: 4.9,
-      image: null
-    },
-    {
-      id: 5,
-      name: 'Erik Wijaya',
-      subject: 'Ekonomi & Akuntansi',
-      level: 'SMA',
-      badgeClass: styles.badgeSMA,
-      rating: 4.8,
-      image: null
-    },
-    {
-      id: 6,
-      name: 'Rina Kartika',
-      subject: 'Bahasa Indonesia',
-      level: 'SMP / SMA',
-      badgeClass: styles.badgeSMPSMA,
-      rating: 4.9,
-      image: null
-    },
-    {
-      id: 7,
-      name: 'Fajar Ramadhan',
-      subject: 'Sejarah & Geografi',
-      level: 'SMP / SMA',
-      badgeClass: styles.badgeSMPSMA,
-      rating: 4.7,
-      image: null
-    },
-    {
-      id: 8,
-      name: 'Lusi Amelia',
-      subject: 'Seni Budaya',
-      level: 'SD / SMP',
-      badgeClass: styles.badgeSD,
-      rating: 4.8,
-      image: null
+  const [tutors, setTutors] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [mapelOptions, setMapelOptions] = useState([]);
+  const [jenjangOptions, setJenjangOptions] = useState([]);
+
+  // Filter state
+  const [search, setSearch] = useState('');
+  const [selectedMapel, setSelectedMapel] = useState('');
+  const [selectedJenjang, setSelectedJenjang] = useState('');
+
+  const fetchTutors = useCallback(async () => {
+    setLoading(true);
+    try {
+      const params = { status: 'Aktif' };
+      if (search.trim()) params.search = search.trim();
+      if (selectedMapel) params.id_mapel = selectedMapel;
+      if (selectedJenjang) params.jenjang = selectedJenjang;
+
+      const response = await axios.get('http://localhost:5000/api/guru', { params });
+      if (response.data?.success) {
+        setTutors(response.data.data);
+      }
+    } catch (error) {
+      console.error('Gagal mengambil data tutor:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  }, [search, selectedMapel, selectedJenjang]);
+
+  useEffect(() => {
+    fetchTutors();
+  }, [fetchTutors]);
+
+  // Fetch mapel options
+  useEffect(() => {
+    const fetchMapel = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/mapel');
+        if (response.data?.success) {
+          setMapelOptions(response.data.data);
+        }
+      } catch (error) {
+        console.error('Gagal mengambil data mapel:', error);
+      }
+    };
+    fetchMapel();
+  }, []);
+
+  // Fetch jenjang options
+  useEffect(() => {
+    const fetchJenjang = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/kelas/jenjang');
+        if (response.data?.success) {
+          setJenjangOptions(response.data.data);
+        }
+      } catch (error) {
+        console.error('Gagal mengambil data jenjang:', error);
+      }
+    };
+    fetchJenjang();
+  }, []);
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
 
   return (
     <div className={styles.container}>
@@ -119,25 +98,30 @@ function Tutor() {
             <span className={styles.searchIcon}>
               <SearchIcon />
             </span>
-            <input type="text" className={styles.input} placeholder="Masukkan nama tutor..." />
+            <input
+              type="text"
+              className={styles.input}
+              placeholder="Masukkan nama tutor..."
+              value={search}
+              onChange={handleSearchChange}
+            />
           </div>
         </div>
 
         <div className={`${styles.filterGroup} ${styles.selectGroup}`}>
           <label className={styles.label}>Mata Pelajaran</label>
           <div className={styles.selectWrapper}>
-            <select className={styles.select}>
-              <option>Semua Mata Pelajaran</option>
-              <option>Matematika</option>
-              <option>Fisika</option>
-              <option>Bahasa Inggris</option>
-              <option>Biologi</option>
-              <option>Kimia</option>
-              <option>Ekonomi</option>
-              <option>Akuntansi</option>
-              <option>Sejarah</option>
-              <option>Geografi</option>
-              <option>Seni Budaya</option>
+            <select
+              className={styles.select}
+              value={selectedMapel}
+              onChange={(e) => setSelectedMapel(e.target.value)}
+            >
+              <option value="">Semua Mata Pelajaran</option>
+              {mapelOptions.map((opt) => (
+                <option key={opt.id_mapel} value={opt.id_mapel}>
+                  {opt.nama_mapel}
+                </option>
+              ))}
             </select>
             <span className={styles.selectIcon}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -150,11 +134,15 @@ function Tutor() {
         <div className={`${styles.filterGroup} ${styles.selectGroup}`}>
           <label className={styles.label}>Jenjang</label>
           <div className={styles.selectWrapper}>
-            <select className={styles.select}>
-              <option>Semua Jenjang</option>
-              <option>SD</option>
-              <option>SMP</option>
-              <option>SMA</option>
+            <select
+              className={styles.select}
+              value={selectedJenjang}
+              onChange={(e) => setSelectedJenjang(e.target.value)}
+            >
+              <option value="">Semua Jenjang</option>
+              {jenjangOptions.map((nama) => (
+                <option key={nama} value={nama}>{nama}</option>
+              ))}
             </select>
             <span className={styles.selectIcon}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -166,20 +154,20 @@ function Tutor() {
       </div>
 
       <div className={styles.tutorGrid}>
-        {tutors.map(tutor => (
-          <div key={tutor.id} className={styles.tutorCard}>
+        {loading ? (
+          <p>Memuat data tutor...</p>
+        ) : tutors.length === 0 ? (
+          <p>Belum ada tutor tersedia.</p>
+        ) : tutors.map(tutor => (
+          <div key={tutor.id_tutor} className={styles.tutorCard}>
             <div className={styles.tutorImageContainer}>
-              {tutor.image ? (
-                <img src={tutor.image} alt={tutor.name} className={styles.tutorImage} />
-              ) : (
-                <div className={styles.tutorPlaceholder}>
-                  <PersonIcon size={80} color="#94A3B8" />
-                </div>
-              )}
+              <div className={styles.tutorPlaceholder}>
+                <PersonIcon size={80} color="#94A3B8" />
+              </div>
             </div>
             <div className={styles.tutorInfo}>
-              <h3 className={styles.tutorName}>{tutor.name}</h3>
-              <p className={styles.tutorSubject}>{tutor.subject}</p>
+              <h3 className={styles.tutorName}>{tutor.nama_tutor}</h3>
+              <p className={styles.tutorSubject}>{tutor.mapel || '-'}</p>
             </div>
           </div>
         ))}

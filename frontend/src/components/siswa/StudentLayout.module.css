@@ -1,0 +1,224 @@
+/* =========================================================
+   StudentLayout — Sidebar + TopBar + main wrapper
+   Shared by all siswa pages (profile, jadwal, pembayaran).
+   ========================================================= */
+
+.appShell {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f3f4f6;
+  font-family: 'Inter', sans-serif;
+  color: #191c1e;
+}
+
+/* =========================================================
+   Sidebar
+   ========================================================= */
+.sidebar {
+  width: 16rem;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #ffffff;
+  border-right: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  padding: 0 8px;
+}
+
+.brandLogo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: #1e3a8a;
+  color: #dbeafe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.brandTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #00236f;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.brandSubtitle {
+  font-size: 0.75rem;
+  color: #757682;
+  margin: 0;
+  font-weight: 500;
+}
+
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.nav::-webkit-scrollbar { width: 4px; }
+.nav::-webkit-scrollbar-track { background: transparent; }
+.nav::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #444651;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.navItem:hover {
+  background-color: #e1e2e4;
+}
+
+.navItemActive,
+.navItemActive:hover {
+  background-color: #fea619;
+  color: #653e00;
+  font-weight: 600;
+}
+
+.navIcon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.sidebarFooter {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.navItemLogout {
+  color: #ba1a1a;
+}
+.navItemLogout:hover {
+  background-color: #ffdad6;
+}
+
+/* =========================================================
+   Main wrapper
+   ========================================================= */
+.main {
+  margin-left: 16rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.topBar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.pageTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+.userBlock {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.userInfo {
+  text-align: right;
+}
+
+.userName {
+  font-size: 0.875rem;
+  font-weight: 700;
+  margin: 0;
+  color: #191c1e;
+}
+
+.userRole {
+  font-size: 0.75rem;
+  color: #757682;
+  margin: 0;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e1e2e4;
+  background-size: cover;
+  background-position: center;
+}
+
+/* =========================================================
+   Content slot
+   ========================================================= */
+.content {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 1;
+}
+
+/* ─── Print ────────────────────────────────── */
+@media print {
+  .sidebar,
+  .topBar {
+    display: none !important;
+  }
+
+  .main {
+    margin-left: 0 !important;
+  }
+
+  .content {
+    padding: 0 !important;
+    gap: 16px !important;
+  }
+
+  .appShell {
+    background: #ffffff !important;
+    min-height: auto !important;
+  }
+}

@@ -24,6 +24,16 @@ export const getAllJadwal = async (req, res) => {
   }
 };
 
+// GET /api/jadwal/siswa/:id_siswa
+export const getJadwalBySiswa = async (req, res) => {
+  try {
+    const jadwal = await jadwalRepository.findBySiswa(parseInt(req.params.id_siswa, 10));
+    res.json({ success: true, data: jadwal });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
 // GET /api/jadwal/tutor/:id_tutor
 export const getJadwalByTutor = async (req, res) => {
   try {

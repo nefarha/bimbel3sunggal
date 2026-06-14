@@ -13,7 +13,7 @@ function Header() {
       <nav className={styles.nav}>
         <Link to="/" className={location.pathname === '/' ? styles.active : ''}>Beranda</Link>
         <Link to="/profile" className={location.pathname === '/profile' ? styles.active : ''}>Profile Bimbel</Link>
-        <Link to="/tutor" className={location.pathname === '/tutor' ? styles.active : ''}>Tutor</Link>
+        <Link to="/tutor_public" className={location.pathname === '/tutor_public' ? styles.active : ''}>Tutor</Link>
         <Link to="/berita" className={location.pathname === '/berita' ? styles.active : ''}>Berita</Link>
       </nav>
       <Link to="/login" className={styles.loginBtn}>Login</Link>
