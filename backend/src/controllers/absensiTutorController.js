@@ -1,7 +1,7 @@
 import { query, queryOne } from '../config/query.js';
 
 const HARI_MAP_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-const VALID_STATUS = ['Hadir', 'Absen'];
+const VALID_STATUS = ['Hadir', 'Absen', 'Sakit', 'Izin'];
 
 const pad = (value) => String(value).padStart(2, '0');
 
@@ -216,6 +216,151 @@ export const getTutorAttendanceRecap = async (req, res) => {
     res.json({
       success: true,
       data,
+      meta: {
+        bulan: targetMonth,
+        tahun: targetYear,
+        jumlah_hari: numDays,
+      },
+    });
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+// GET /api/absensi-tutor/recap/me
+export const getMyAttendanceRecap = async (req, res) => {
+  try {
+    const { bulan, tahun } = req.query;
+    const today = new Date();
+    const targetMonth = bulan ? parseInt(bulan, 10) : today.getMonth() + 1;
+    const targetYear = tahun ? parseInt(tahun, 10) : today.getFullYear();
+
+    // Find tutor by user ID
+    const tutorRow = await queryOne(
+      `SELECT id_tutor, nama_tutor FROM tutor WHERE id_user = ? LIMIT 1`,
+      [req.userId]
+    );
+
+    if (!tutorRow) {
+      return res.status(404).json({ success: false, message: 'Data tutor tidak ditemukan.' });
+    }
+
+    const idTutor = tutorRow.id_tutor;
+    const namaTutor = tutorRow.nama_tutor;
+
+    // Get attendance records for the selected month and year
+    const attendanceRecords = await query(
+      `SELECT DAY(tanggal) AS hari, status
+       FROM absensi_tutor
+       WHERE id_tutor = ? AND MONTH(tanggal) = ? AND YEAR(tanggal) = ?`,
+      [idTutor, targetMonth, targetYear]
+    );
+
+    // Build attendance map
+    const attendanceMap = {};
+    attendanceRecords.forEach((rec) => {
+      attendanceMap[rec.hari] = rec.status;
+    });
+
+    // Calculate number of days in the selected month
+    const numDays = new Date(targetYear, targetMonth, 0).getDate();
+
+    const days = [];
+    let hadirCount = 0;
+    let sakitCount = 0;
+    let izinCount = 0;
+    let absenCount = 0;
+    const hadirDates = [];
+    const sakitDates = [];
+    const izinDates = [];
+    const absenDates = [];
+
+    for (let d = 1; d <= numDays; d++) {
+      const dateObj = new Date(targetYear, targetMonth - 1, d);
+      const dayOfWeek = dateObj.getDay();
+      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+      const status = attendanceMap[d] || null;
+
+      let displayStatus = 'no-data';
+      if (status === 'Hadir') {
+        displayStatus = 'hadir';
+        hadirCount++;
+        hadirDates.push(d);
+      } else if (status === 'Sakit') {
+        displayStatus = 'sakit';
+        sakitCount++;
+        sakitDates.push(d);
+      } else if (status === 'Izin') {
+        displayStatus = 'izin';
+        izinCount++;
+        izinDates.push(d);
+      } else if (status === 'Absen') {
+        displayStatus = 'absen';
+        absenCount++;
+        absenDates.push(d);
+      } else if (isWeekend) {
+        displayStatus = 'weekend';
+      }
+
+      days.push({ day: d, status: displayStatus });
+    }
+
+    // Total effective days (weekdays only)
+    const totalEffectiveDays = days.filter((d) => d.status !== 'weekend').length;
+    const totalTidakHadir = sakitCount + izinCount + absenCount;
+    const persentase = totalEffectiveDays > 0
+      ? Math.round((hadirCount / totalEffectiveDays) * 100)
+      : 0;
+
+    // Build category table data
+    const categories = [];
+    if (hadirCount > 0) {
+      categories.push({
+        kategori: 'Hadir',
+        jumlah: hadirCount,
+        warna: 'hijau',
+        keterangan: 'Sesuai jadwal',
+      });
+    }
+    if (sakitCount > 0) {
+      categories.push({
+        kategori: 'Sakit',
+        jumlah: sakitCount,
+        warna: 'merah',
+        keterangan: `Tgl ${sakitDates.join(', ')}`,
+      });
+    }
+    if (izinCount > 0) {
+      categories.push({
+        kategori: 'Izin',
+        jumlah: izinCount,
+        warna: 'merah',
+        keterangan: `Tgl ${izinDates.join(', ')}`,
+      });
+    }
+    if (absenCount > 0) {
+      categories.push({
+        kategori: 'Absen',
+        jumlah: absenCount,
+        warna: 'merah',
+        keterangan: `Tgl ${absenDates.join(', ')}`,
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        id_tutor: idTutor,
+        nama_tutor: namaTutor,
+        hadir: hadirCount,
+        sakit: sakitCount,
+        izin: izinCount,
+        absen: absenCount,
+        total_tidak_hadir: totalTidakHadir,
+        persentase,
+        days,
+        categories,
+      },
       meta: {
         bulan: targetMonth,
         tahun: targetYear,

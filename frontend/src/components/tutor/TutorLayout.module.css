@@ -200,3 +200,25 @@
   gap: 24px;
   flex: 1;
 }
+
+/* ─── Print: sembunyikan sidebar & topbar ─────────────── */
+@media print {
+  .sidebar,
+  .topBar {
+    display: none !important;
+  }
+
+  .main {
+    margin-left: 0 !important;
+  }
+
+  .content {
+    padding: 0 !important;
+    gap: 16px !important;
+  }
+
+  .appShell {
+    background: #ffffff !important;
+    min-height: auto !important;
+  }
+}
