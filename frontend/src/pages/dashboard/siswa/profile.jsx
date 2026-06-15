@@ -18,6 +18,7 @@ const JENIS_KELAMIN_MAP = {
 
 const Profile = () => {
   const [siswa, setSiswa] = useState(null);
+  const [mapelMap, setMapelMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -30,6 +31,17 @@ const Profile = () => {
   const [submitError, setSubmitError] = useState(null);
   const [submitSuccess, setSubmitSuccess] = useState(null);
 
+  const getMapelNames = (mapelField) => {
+    if (!mapelField || !mapelField.trim()) return '—';
+    try {
+      const ids = JSON.parse(mapelField);
+      if (!Array.isArray(ids)) return mapelField;
+      return ids.map((id) => mapelMap[id] || `Mapel #${id}`).join(', ');
+    } catch {
+      return mapelField;
+    }
+  };
+
   useEffect(() => {
     const fetchSiswa = async () => {
       try {
@@ -40,6 +52,14 @@ const Profile = () => {
           return;
         }
         const user = JSON.parse(storedUser);
+
+        // Fetch mapel mapping
+        const mapelRes = await api.get('/mapel').catch(() => ({ data: { data: [] } }));
+        const mapelData = mapelRes.data?.data || [];
+        const mapelMapObj = {};
+        mapelData.forEach((m) => { mapelMapObj[m.id_mapel] = m.nama_mapel; });
+        setMapelMap(mapelMapObj);
+
         const response = await api.get(`/siswa/by-user/${user.id}`);
         setSiswa(response.data?.data || null);
       } catch (err) {
@@ -188,7 +208,7 @@ const Profile = () => {
           </div>
           <div className={styles.infoItem}>
             <span className={styles.infoLabel}>Mata Pelajaran</span>
-            <span className={styles.infoValue}>{siswa.mapel || '—'}</span>
+            <span className={styles.infoValue}>{getMapelNames(siswa.mapel)}</span>
           </div>
           <div className={styles.infoItem}>
             <span className={styles.infoLabel}>SPP</span>

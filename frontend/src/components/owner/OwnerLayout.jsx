@@ -9,6 +9,7 @@ import {
   MdSettings,
 } from 'react-icons/md';
 import styles from './OwnerLayout.module.css';
+import logogrand from '../../assets/logogrand.png';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', icon: MdDashboard, to: '/owner/dashboard' },
@@ -53,7 +54,7 @@ function OwnerLayout({ children }) {
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <div className={styles.brandLogo}>
-            <MdSchool style={{ fontVariationSettings: "'FILL' 1" }} />
+            <img src={logogrand} alt="GT Sunggal" className={styles.brandLogoImg} />
           </div>
           <div>
             <h2 className={styles.brandTitle}>GT Sunggal</h2>

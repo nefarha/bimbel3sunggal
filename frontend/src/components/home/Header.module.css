@@ -22,6 +22,12 @@
   font-size: 1.5rem;
 }
 
+.logoImg {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
 .nav {
   display: flex;
   gap: 2rem;

@@ -10,6 +10,7 @@ import {
   MdLogout,
 } from 'react-icons/md';
 import styles from './TutorLayout.module.css';
+import logogrand from '../../assets/logogrand.png';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', icon: MdDashboard, to: '/tutor/dashboard' },
@@ -56,7 +57,7 @@ function TutorLayout({ children }) {
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <div className={styles.brandLogo}>
-            <MdSchool style={{ fontVariationSettings: "'FILL' 1" }} />
+            <img src={logogrand} alt="GT Sunggal" className={styles.brandLogoImg} />
           </div>
           <div>
             <h2 className={styles.brandTitle}>GT Sunggal</h2>

@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import logogrand from '../../assets/logogrand.png';
 import styles from './Header.module.css';
 
 function Header() {
@@ -7,7 +8,7 @@ function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.logo}>
-        <span className={styles.logoIcon}>👑</span>
+        <img src={logogrand} alt="Grand 3 Sunggal" className={styles.logoImg} />
         <span>Grand 3<br/>Sunggal</span>
       </div>
       <nav className={styles.nav}>

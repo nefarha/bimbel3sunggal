@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Login.module.css';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
+import logogrand from '../../assets/logogrand.png';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -123,7 +124,7 @@ const Login = () => {
       </div>
 
       <div className={styles.imageContainer}>
-        {}
+        <img src={logogrand} alt="Grand 3 Sunggal" className={styles.brandLogo} />
       </div>
     </div>
   );

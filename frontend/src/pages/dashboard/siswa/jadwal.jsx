@@ -139,7 +139,7 @@ const Jadwal = () => {
                 <MdAccessTime className={styles.clockIcon} />
                 {formatJam(jadwal.jam)}
                 {jadwal.jam_selesai ? ` - ${formatJam(jadwal.jam_selesai)}` : ''}
-              </span>const derivedBonus = isBonusActive ? bonusNominalSetting : Number(row.bonus || 0);const derivedBonus = isBonusActive ? bonusNominalSetting : Number(row.bonus || 0);const derivedBonus = isBonusActive ? bonusNominalSetting : Number(row.bonus || 0);const derivedBonus = isBonusActive ? bonusNominalSetting : Number(row.bonus || 0);
+              </span>
             </div>
 
             {}

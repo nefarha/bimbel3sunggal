@@ -55,6 +55,19 @@
   margin-bottom: 8px; /* 4px baseline grid */
 }
 
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.brandLogo {
+  width: 400x;
+  height: 400px;
+  object-fit: contain;
+}
+
 .loginTitle {
   font-size: 2rem;
   font-weight: bold;
@@ -150,10 +163,9 @@
 }
 
 .imageContainer {
-  margin-left: 40px; /* Adjusted margin to match new padding */
-  width: 300px; /* Fixed width for placeholder */
-  height: 300px; /* Fixed height for placeholder */
-  background-color: #e2e8f0; /* Light gray placeholder */
+  margin-left: 100px; /* Adjusted margin to match new padding */
+  width: 400px; /* Fixed width for placeholder */
+  height: 400px; /* Fixed height for placeholder */
   border-radius: 1rem; /* Rounded corners for placeholder */
   display: flex;
   justify-content: center;

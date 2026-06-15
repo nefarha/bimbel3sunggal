@@ -17,9 +17,22 @@ const Pembayaran = () => {
   const [siswa, setSiswa] = useState(null);
   const [pembayaranList, setPembayaranList] = useState([]);
   const [tunggakan, setTunggakan] = useState({ count: 0, months: [] });
+  const [mapelMap, setMapelMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tahun, setTahun] = useState(new Date().getFullYear());
+
+  // Helper: resolve mapel IDs → names
+  const getMapelNames = (mapelField) => {
+    if (!mapelField || !mapelField.trim()) return '-';
+    try {
+      const ids = JSON.parse(mapelField);
+      if (!Array.isArray(ids)) return mapelField;
+      return ids.map((id) => mapelMap[id] || `Mapel #${id}`).join(', ');
+    } catch {
+      return mapelField;
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +47,13 @@ const Pembayaran = () => {
         }
 
         const user = JSON.parse(storedUser);
+
+        // Fetch mapel mapping
+        const mapelRes = await api.get('/mapel').catch(() => ({ data: { data: [] } }));
+        const mapelData = mapelRes.data?.data || [];
+        const mapelMapObj = {};
+        mapelData.forEach((m) => { mapelMapObj[m.id_mapel] = m.nama_mapel; });
+        setMapelMap(mapelMapObj);
 
         const siswaRes = await api.get(`/siswa/by-user/${user.id}`);
         const siswaData = siswaRes.data?.data;
@@ -141,7 +161,7 @@ const Pembayaran = () => {
           </div>
           <div className={styles.headerInfo}>
             <h1 className={styles.headerName}>{siswa.nama}</h1>
-            <p className={styles.headerMeta}>{siswa.kelas || '-'} | {siswa.mapel || '-'}</p>
+            <p className={styles.headerMeta}>{siswa.kelas || '-'} | {getMapelNames(siswa.mapel)}</p>
             <p className={styles.headerMeta}>SPP: {formatRupiah(siswa.spp)}/bulan</p>
           </div>
         </div>
