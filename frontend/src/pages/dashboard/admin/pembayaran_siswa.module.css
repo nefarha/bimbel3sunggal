@@ -1,10 +1,4 @@
-/* =========================================================
-   Pembayaran Siswa — Admin
-   Design tokens follow the global design system
-   (Deep Academic Blue + Energetic Orange, Inter, 8px radius).
-   Layout (sidebar + topbar + main wrapper) lives in
-   components/admin/AdminLayout.module.css
-   ========================================================= */
+
 
 .pageHeader {
   display: flex;
@@ -34,9 +28,7 @@
   border-radius: 2px;
 }
 
-/* =========================================================
-   Form grid (form + summary)
-   ========================================================= */
+
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -64,9 +56,7 @@
   top: 88px;
 }
 
-/* =========================================================
-   Card
-   ========================================================= */
+
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -103,9 +93,7 @@
   gap: 20px;
 }
 
-/* =========================================================
-   Fields
-   ========================================================= */
+
 .fieldRow {
   display: grid;
   grid-template-columns: 1fr;
@@ -160,7 +148,7 @@
   cursor: not-allowed;
 }
 
-/* Search input with icon */
+
 .searchWrap {
   position: relative;
   display: block;
@@ -234,9 +222,7 @@
   list-style: none;
 }
 
-/* =========================================================
-   Action row
-   ========================================================= */
+
 .actionRow {
   display: flex;
   flex-wrap: wrap;
@@ -299,9 +285,7 @@
   font-size: 1.05rem;
 }
 
-/* =========================================================
-   Summary card
-   ========================================================= */
+
 .summaryCard {
   display: flex;
   flex-direction: column;
@@ -408,9 +392,7 @@
   line-height: 1.1;
 }
 
-/* =========================================================
-   Error / success banners
-   ========================================================= */
+
 .alertError {
   display: flex;
   align-items: center;
@@ -507,9 +489,7 @@
   color: #ffffff;
 }
 
-/* =========================================================
-   Toast notification (auto-dismiss dialog)
-   ========================================================= */
+
 .toastOverlay {
   position: fixed;
   inset: 0;
@@ -604,9 +584,7 @@
   }
 }
 
-/* =========================================================
-   Tunggakan (arrears) warning
-   ========================================================= */
+
 .tunggakanAlert {
   display: flex;
   align-items: flex-start;

@@ -30,7 +30,7 @@
   color: #64748b;
 }
 
-/* ─── Cards Row ─────────────────── */
+
 .cardsRow {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -93,7 +93,7 @@
 .statDetailGreen { color: #16a34a; }
 .statDetailRed { color: #dc2626; }
 
-/* ─── Bottom Section ────────────── */
+
 .bottomSection {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -149,7 +149,7 @@
   align-items: center;
 }
 
-/* ─── Tabel Jadwal ──────────────── */
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -195,7 +195,7 @@
   font-size: .813rem;
 }
 
-/* ─── Ringkasan Gaji ────────────── */
+
 .gajiSummary {
   padding: 16px 20px;
   display: flex;

@@ -5,7 +5,7 @@
   padding: 8px 0;
 }
 
-/* ─── Header & Filter ─────────────── */
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -82,7 +82,7 @@
 }
 .errorState { color: #dc2626; background: #fef2f2; border-color: #fecaca; }
 
-/* ─── Global Stats ────────────────── */
+
 .globalStatsRow {
   display: flex;
   gap: 16px;
@@ -108,7 +108,7 @@
 .statValue { font-size: 2rem; font-weight: 800; line-height: 1.2; }
 .statLabel { font-size: .85rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .05em; }
 
-/* ─── Per-Jadwal Cards ────────────── */
+
 .jadwalCards {
   display: flex;
   flex-direction: column;
@@ -182,7 +182,7 @@
   gap: 20px;
 }
 
-/* ─── Mini Stats ──────────────────── */
+
 .miniStatsRow {
   display: flex;
   gap: 12px;
@@ -201,7 +201,7 @@
 .miniStatYellow { color: #ca8a04; }
 .miniStatBlue { color: #3b82f6; }
 
-/* ─── Mini Calendar ───────────────── */
+
 .calendarWrapper { overflow-x: auto; }
 .miniCalendar { display: flex; flex-direction: column; gap: 8px; align-items: center; }
 .calendarRow { display: flex; gap: 6px; justify-content: center; }
@@ -217,7 +217,7 @@
 .dayNoData { background: #fff; color: #94a3b8; border: 1px solid #e2e8f0; }
 .dayEmpty { background: transparent; border: none; }
 
-/* ─── Bottom Table ────────────────── */
+
 .tableCard {
   background: #fff;
   border: 1px solid #e2e8f0;

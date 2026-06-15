@@ -1,9 +1,6 @@
-/* =========================================================
-   Daftar Kelas — Admin
-   Design tokens mengikuti sistem desain global.
-   ========================================================= */
 
-/* ─── Page header ─────────────────────────────────────────── */
+
+
 .pageHeader {
   display: flex;
   align-items: center;
@@ -62,7 +59,7 @@
   font-size: 1.05rem;
 }
 
-/* ─── Alert ───────────────────────────────────────────────── */
+
 .alertError {
   display: flex;
   align-items: center;
@@ -87,7 +84,7 @@
   padding: 0 4px;
 }
 
-/* ─── Toast ───────────────────────────────────────────────── */
+
 .toastOverlay {
   position: fixed;
   inset: 0;
@@ -164,7 +161,7 @@
   background-color: #001a52;
 }
 
-/* ─── Action bar ──────────────────────────────────────────── */
+
 .actionBar {
   display: flex;
   align-items: center;
@@ -237,7 +234,7 @@
   box-shadow: 0 0 0 2px rgba(0, 35, 111, 0.15);
 }
 
-/* ─── Stats grid ──────────────────────────────────────────── */
+
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -307,7 +304,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* ─── Table card ──────────────────────────────────────────── */
+
 .tableCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -378,7 +375,7 @@
   font-weight: 500;
 }
 
-/* ─── Modal ───────────────────────────────────────────────── */
+
 .modalOverlay {
   position: fixed;
   inset: 0;

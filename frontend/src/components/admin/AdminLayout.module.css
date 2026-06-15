@@ -1,21 +1,16 @@
-/* =========================================================
-   AdminLayout — Sidebar + TopBar + main wrapper
-   Shared by all admin pages (dashboard, pembayaran, pendaftaran).
-   ========================================================= */
+
 
 .appShell {
   display: flex;
   min-height: 100vh;
-  background-color: #f3f4f6; /* Level 0 Background */
+  background-color: #f3f4f6; 
   font-family: 'Inter', sans-serif;
   color: #191c1e;
 }
 
-/* =========================================================
-   Sidebar
-   ========================================================= */
+
 .sidebar {
-  width: 16rem; /* 256px */
+  width: 16rem; 
   height: 100vh;
   position: fixed;
   top: 0;
@@ -55,14 +50,14 @@
 .brandTitle {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #00236f; /* primary */
+  color: #00236f; 
   line-height: 1.2;
   margin: 0;
 }
 
 .brandSubtitle {
   font-size: 0.75rem;
-  color: #757682; /* outline */
+  color: #757682; 
   margin: 0;
   font-weight: 500;
 }
@@ -86,7 +81,7 @@
   gap: 16px;
   padding: 8px 16px;
   border-radius: 8px;
-  color: #444651; /* on-surface-variant */
+  color: #444651; 
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
@@ -100,13 +95,13 @@
 }
 
 .navItem:hover {
-  background-color: #e1e2e4; /* surface-container-highest */
+  background-color: #e1e2e4; 
 }
 
 .navItemActive,
 .navItemActive:hover {
-  background-color: #fea619; /* secondary-container */
-  color: #653e00;            /* on-secondary-container */
+  background-color: #fea619; 
+  color: #653e00;            
   font-weight: 600;
 }
 
@@ -125,15 +120,13 @@
 }
 
 .navItemLogout {
-  color: #ba1a1a; /* error */
+  color: #ba1a1a; 
 }
 .navItemLogout:hover {
-  background-color: #ffdad6; /* error-container */
+  background-color: #ffdad6; 
 }
 
-/* =========================================================
-   Main wrapper
-   ========================================================= */
+
 .main {
   margin-left: 16rem;
   min-height: 100vh;
@@ -194,9 +187,7 @@
   background-position: center;
 }
 
-/* =========================================================
-   Content slot
-   ========================================================= */
+
 .content {
   padding: 32px;
   display: flex;

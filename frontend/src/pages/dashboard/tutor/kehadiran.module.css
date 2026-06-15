@@ -5,7 +5,7 @@
   padding: 8px 0;
 }
 
-/* ─── Header & Filter ──────────────────────────────────── */
+
 
 .header {
   display: flex;
@@ -73,7 +73,7 @@
   box-shadow: 0 0 0 2px rgba(0, 35, 111, 0.1);
 }
 
-/* ─── Info Cards ───────────────────────────────────────── */
+
 
 .cardsRow {
   display: flex;
@@ -135,7 +135,7 @@
   letter-spacing: 0.05em;
 }
 
-/* ─── Legend Card ──────────────────────────────────────── */
+
 
 .legendCard {
   background-color: #ffffff;
@@ -195,7 +195,7 @@
   border: 1px solid #e2e8f0;
 }
 
-/* ─── Calendar Card ────────────────────────────────────── */
+
 
 .calendarCard {
   background-color: #ffffff;
@@ -267,7 +267,7 @@
   border: 1px solid #e2e8f0;
 }
 
-/* ─── Table Card ───────────────────────────────────────── */
+
 
 .tableCard {
   background-color: #ffffff;
@@ -351,7 +351,7 @@
   padding: 32px 16px !important;
 }
 
-/* ─── States ───────────────────────────────────────────── */
+
 
 .loadingState,
 .errorState,

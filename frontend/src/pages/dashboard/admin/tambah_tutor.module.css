@@ -1,12 +1,6 @@
-/* =========================================================
-   Tambah Tutor — Admin
-   Design tokens follow the global design system
-   (Deep Academic Blue + Energetic Orange, Inter, 8px radius).
-   ========================================================= */
 
-/* =========================================================
-   Page header (back button)
-   ========================================================= */
+
+
 .pageHeader {
   display: flex;
   align-items: center;
@@ -35,9 +29,7 @@
   border-color: #00236f;
 }
 
-/* =========================================================
-   Intro card (title + deskripsi)
-   ========================================================= */
+
 .introCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -79,7 +71,7 @@
   bottom: 0;
   width: 96px;
   height: 3px;
-  background-color: #fea619; /* Energetic Orange */
+  background-color: #fea619; 
   border-radius: 2px;
 }
 
@@ -90,9 +82,7 @@
   line-height: 1.5;
 }
 
-/* =========================================================
-   Alert / error
-   ========================================================= */
+
 .alertError {
   display: flex;
   align-items: center;
@@ -118,9 +108,7 @@
   padding: 0 4px;
 }
 
-/* =========================================================
-   Success card (kredensial tutor)
-   ========================================================= */
+
 .successCard {
   background-color: #ffffff;
   border: 1px solid #c6efd6;
@@ -267,13 +255,13 @@
   line-height: 1.5;
 }
 
-/* WhatsApp CTA (green WA brand) */
+
 .btnWhatsapp {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: #25d366; /* WhatsApp green */
+  background-color: #25d366; 
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -313,9 +301,7 @@
   cursor: not-allowed;
 }
 
-/* =========================================================
-   Form card
-   ========================================================= */
+
 .formCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -371,9 +357,7 @@
   margin: 2px 0 0;
 }
 
-/* =========================================================
-   Form grid
-   ========================================================= */
+
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -441,9 +425,7 @@
   line-height: 1.5;
 }
 
-/* =========================================================
-   Form actions
-   ========================================================= */
+
 .formActions {
   display: flex;
   justify-content: flex-end;
@@ -508,7 +490,7 @@
   font-size: 1.05rem;
 }
 
-/* Chip-style multi-select inside form */
+
 .chipSelectGroup {
   display: flex;
   flex-wrap: wrap;

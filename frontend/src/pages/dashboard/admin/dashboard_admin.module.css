@@ -1,10 +1,6 @@
-/* =========================================================
-   Dashboard Admin — page-specific styles
-   Layout (sidebar + topbar + main wrapper) lives in
-   components/admin/AdminLayout.module.css
-   ========================================================= */
 
-/* Stat cards */
+
+
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
@@ -72,7 +68,7 @@
 }
 .statValueDanger { color: #ba1a1a; }
 
-/* Card */
+
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -97,7 +93,7 @@
   margin: 0;
 }
 
-/* Tables */
+
 .tableWrap {
   overflow-x: auto;
 }
@@ -110,7 +106,7 @@
 }
 
 .table thead {
-  background-color: #edeef0; /* surface-container */
+  background-color: #edeef0; 
   color: #444651;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -144,9 +140,9 @@
   font-weight: 500;
 }
 
-/* Receivables table — light blue header */
+
 .tableReceivables thead {
-  background-color: #dbeafe; /* blue-100 */
+  background-color: #dbeafe; 
   color: #1e3a8a;
   text-transform: none;
   letter-spacing: 0;
@@ -162,13 +158,13 @@
   padding: 14px 24px;
 }
 
-/* WhatsApp number input (orange-tinted) */
+
 .whatsappInput {
   width: 100%;
   min-width: 140px;
   padding: 6px 12px;
   border: 1px solid #fed7aa;
-  background-color: #fff7ed; /* orange-50 */
+  background-color: #fff7ed; 
   color: #9a3412;
   border-radius: 6px;
   font-size: 0.85rem;
@@ -185,9 +181,9 @@
   box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
 }
 
-/* CTA button (Kirim Tagihan) — Energetic Orange */
+
 .btnCta {
-  background-color: #f97316; /* orange-500 */
+  background-color: #f97316; 
   color: #ffffff;
   border: none;
   padding: 6px 16px;
@@ -201,14 +197,14 @@
 }
 
 .btnCta:hover {
-  background-color: #ea580c; /* orange-600 */
+  background-color: #ea580c; 
 }
 
 .btnCta:active {
   opacity: 0.9;
 }
 
-/* Pills / badges */
+
 .pill {
   display: inline-block;
   padding: 2px 8px;
@@ -222,7 +218,7 @@
 .badgeOverdue { background-color: #ffdad6; color: #93000a; }
 .badgePaid    { background-color: #e1e2e4; color: #444651; }
 
-/* Action group */
+
 .actionGroup {
   display: flex;
   gap: 4px;
@@ -247,7 +243,7 @@
 .iconDanger  { color: #ba1a1a; }
 .iconMuted   { color: #757682; }
 
-/* Buttons */
+
 .btnPrimary {
   background-color: #00236f;
   color: #ffffff;
@@ -317,7 +313,7 @@
 }
 .linkButton:hover { text-decoration: underline; }
 
-/* Table footer / pagination */
+
 .tableFooter {
   padding: 16px 24px;
   background-color: #f3f4f6;
@@ -352,9 +348,7 @@
 }
 .pagerBtn:hover { background-color: #e1e2e4; }
 
-/* =========================================================
-   Footer
-   ========================================================= */
+
 .footer {
   width: 100%;
   margin-top: auto;
@@ -363,7 +357,7 @@
   flex-direction: column;
   gap: 24px;
   align-items: center;
-  background-color: #2e3132; /* inverse-surface */
+  background-color: #2e3132; 
   color: #f0f1f3;
   border-top: 1px solid #e2e8f0;
 }
@@ -390,13 +384,13 @@
 .footerTitle {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #dce1ff; /* primary-fixed */
+  color: #dce1ff; 
   margin: 0;
 }
 
 .footerCopy {
   font-size: 0.75rem;
-  color: #c5c5d3; /* outline-variant */
+  color: #c5c5d3; 
   margin: 0;
   opacity: 0.8;
 }
@@ -419,9 +413,7 @@
   opacity: 0.8;
 }
 
-/* =========================================================
-   Dashboard enhancements — alert / action bar / empty state
-   ========================================================= */
+
 .alertError {
   display: flex;
   align-items: center;

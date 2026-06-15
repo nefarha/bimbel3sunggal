@@ -1,10 +1,4 @@
-/* =========================================================
-   Pendaftaran Siswa — Admin
-   Design tokens follow the global design system
-   (Deep Academic Blue + Energetic Orange, Inter, 8px radius).
-   Layout (sidebar + topbar + main wrapper) lives in
-   components/admin/AdminLayout.module.css
-   ========================================================= */
+
 
 .pageHeader {
   display: flex;
@@ -30,7 +24,7 @@
   bottom: 0;
   width: 96px;
   height: 3px;
-  background-color: #fea619; /* Energetic Orange */
+  background-color: #fea619; 
   border-radius: 2px;
 }
 
@@ -53,9 +47,7 @@
   color: #00236f;
 }
 
-/* =========================================================
-   Form grid (form + summary)
-   ========================================================= */
+
 .formGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -83,9 +75,7 @@
   top: 88px;
 }
 
-/* =========================================================
-   Card
-   ========================================================= */
+
 .card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -122,9 +112,7 @@
   gap: 20px;
 }
 
-/* =========================================================
-   Fields
-   ========================================================= */
+
 .fieldRow {
   display: grid;
   grid-template-columns: 1fr;
@@ -156,7 +144,7 @@
 .numericInput {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #cbd5e1; /* slate-300 */
+  border: 1px solid #cbd5e1; 
   border-radius: 8px;
   background-color: #ffffff;
   color: #191c1e;
@@ -195,7 +183,7 @@
   }
 }
 
-/* Radio group */
+
 .radioGroup {
   display: flex;
   align-items: center;
@@ -218,7 +206,7 @@
   height: 16px;
 }
 
-/* Checkbox group */
+
 .checkboxGroup {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -256,9 +244,7 @@
   height: 16px;
 }
 
-/* =========================================================
-   Form actions
-   ========================================================= */
+
 .formActions {
   display: flex;
   justify-content: center;
@@ -287,7 +273,7 @@
 }
 
 .btnSubmit {
-  background-color: #fea619; /* Energetic Orange CTA */
+  background-color: #fea619; 
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -307,9 +293,7 @@
   opacity: 0.9;
 }
 
-/* =========================================================
-   Cost summary (right column)
-   ========================================================= */
+
 .summaryCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -321,7 +305,7 @@
 }
 
 .summaryHeader {
-  background-color: #00236f; /* Deep Academic Blue */
+  background-color: #00236f; 
   padding: 16px 24px;
 }
 
@@ -377,7 +361,7 @@
   margin: 4px 0;
 }
 
-/* Numeric input with "Rp" prefix */
+
 .numericInputWrap {
   display: inline-flex;
   align-items: center;
@@ -432,7 +416,7 @@
   font-weight: 600;
 }
 
-/* Total box (dashed accent) */
+
 .totalBox {
   margin: 0 24px 24px;
   border: 1px dashed #00236f;
@@ -469,9 +453,7 @@
   color: #00236f;
 }
 
-/* =========================================================
-   Error banner (submit)
-   ========================================================= */
+
 .alertError {
   display: flex;
   align-items: center;
@@ -497,9 +479,7 @@
   font-family: inherit;
 }
 
-/* =========================================================
-   Success card (after submit) — Level 2 elevation
-   ========================================================= */
+
 .successCard {
   position: relative;
   background-color: #ffffff;
@@ -564,7 +544,7 @@
   color: #191c1e;
 }
 
-/* Credential grid (username + password) */
+
 .credentialGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -645,13 +625,13 @@
   line-height: 1.5;
 }
 
-/* WhatsApp CTA (green WA brand) */
+
 .btnWhatsapp {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background-color: #25d366; /* WhatsApp green */
+  background-color: #25d366; 
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -691,7 +671,7 @@
   cursor: not-allowed;
 }
 
-/* "Daftarkan siswa lain" secondary button */
+
 .btnRegisterAnother {
   display: inline-flex;
   align-items: center;
@@ -715,7 +695,7 @@
   border-color: #00236f;
 }
 
-/* Submit button disabled state */
+
 .btnSubmit:disabled {
   opacity: 0.7;
   cursor: not-allowed;

@@ -1,12 +1,6 @@
-/* =========================================================
-   Manajemen Tutor — Admin
-   Design tokens follow the global design system
-   (Deep Academic Blue + Energetic Orange, Inter, 8px radius).
-   ========================================================= */
 
-/* =========================================================
-   Page header
-   ========================================================= */
+
+
 .pageHeader {
   display: flex;
   align-items: center;
@@ -31,7 +25,7 @@
   bottom: 0;
   width: 96px;
   height: 3px;
-  background-color: #fea619; /* Energetic Orange */
+  background-color: #fea619; 
   border-radius: 2px;
 }
 
@@ -65,9 +59,7 @@
   font-size: 1.05rem;
 }
 
-/* =========================================================
-   Toast
-   ========================================================= */
+
 .toastOverlay {
   position: fixed;
   inset: 0;
@@ -144,9 +136,7 @@
   background-color: #001a52;
 }
 
-/* =========================================================
-   Stats grid (3 kartu sesuai desain)
-   ========================================================= */
+
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -221,9 +211,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* =========================================================
-   Action bar (Tambah Tutor + Search)
-   ========================================================= */
+
 .actionBar {
   display: grid;
   grid-template-columns: 1fr;
@@ -331,9 +319,7 @@
   box-shadow: 0 0 0 2px rgba(0, 35, 111, 0.15);
 }
 
-/* =========================================================
-   Table card
-   ========================================================= */
+
 .tableCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -411,9 +397,7 @@
   font-weight: 500;
 }
 
-/* =========================================================
-   Chip (mapel)
-   ========================================================= */
+
 .chipGroup {
   display: flex;
   flex-wrap: wrap;
@@ -427,15 +411,13 @@
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 600;
-  background-color: #e0e7ff; /* light indigo */
+  background-color: #e0e7ff; 
   color: #3730a3;
   border: 1px solid #c7d2fe;
   white-space: nowrap;
 }
 
-/* =========================================================
-   Status badge
-   ========================================================= */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -467,9 +449,7 @@
   color: #64748b;
 }
 
-/* =========================================================
-   Action icons
-   ========================================================= */
+
 .actionCell {
   display: inline-flex;
   align-items: center;
@@ -513,9 +493,7 @@
   background-color: #fde68a;
 }
 
-/* =========================================================
-   Table footer / pagination
-   ========================================================= */
+
 .tableFooter {
   display: flex;
   align-items: center;
@@ -581,9 +559,7 @@
   color: #ffffff;
 }
 
-/* =========================================================
-   Modal
-   ========================================================= */
+
 .modalOverlay {
   position: fixed;
   inset: 0;

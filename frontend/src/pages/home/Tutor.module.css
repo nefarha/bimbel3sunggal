@@ -33,14 +33,14 @@
   padding: 1.5rem;
   border-radius: 8px;
   border: 1px solid var(--color-surface-variant, #e1e2e4);
-  flex-wrap: wrap; /* Allow filters to wrap on smaller screens */
+  flex-wrap: wrap; 
 }
 
 .filterGroup {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  min-width: 150px; /* Ensure filter groups don't get too small */
+  min-width: 150px; 
 }
 
 .filterGroup.searchGroup {
@@ -106,7 +106,7 @@
   outline: none;
 }
 
-/* Tutor Grid */
+
 .tutorGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -129,9 +129,9 @@
 
 .tutorImageContainer {
   width: 100%;
-  padding-top: 100%; /* 1:1 Aspect Ratio */
+  padding-top: 100%; 
   position: relative;
-  background-color: var(--color-surface-container-low, #f3f4f6); /* Placeholder background */
+  background-color: var(--color-surface-container-low, #f3f4f6); 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -159,18 +159,18 @@
 }
 
 .tutorPlaceholder svg {
-  width: 40%; /* Adjust size of the person icon */
+  width: 40%; 
   height: 40%;
   color: var(--color-outline, #94A3B8);
 }
 
-/* Removed badge styles */
+
 
 .tutorInfo {
   padding: 1.25rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Allow info section to grow */
+  flex-grow: 1; 
 }
 
 .tutorName {
@@ -183,12 +183,12 @@
 .tutorSubject {
   font-size: 0.95rem;
   color: var(--color-on-surface-variant, #444651);
-  margin-bottom: 0; /* Adjusted margin since footer is removed */
+  margin-bottom: 0; 
 }
 
-/* Removed tutorFooter, rating, and profileLink styles */
 
-/* Responsive adjustments */
+
+
 @media (max-width: 768px) {
   .filterBox {
     flex-direction: column;

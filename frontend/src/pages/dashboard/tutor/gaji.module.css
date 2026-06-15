@@ -1,6 +1,4 @@
-/* =========================================================
-   Gaji Page (Tutor)
-   ========================================================= */
+
 
 .container {
   display: flex;
@@ -8,7 +6,7 @@
   gap: 20px;
 }
 
-/* ─── Filter Bar ───────────────────────────────────────── */
+
 .filterBar {
   display: flex;
   align-items: flex-end;
@@ -81,7 +79,7 @@
   font-size: 1.1rem;
 }
 
-/* ─── Loading & Error ──────────────────────────────────── */
+
 .loadingState,
 .errorAlert {
   display: flex;
@@ -105,7 +103,7 @@
   border-color: #fecaca;
 }
 
-/* ─── Title Section ────────────────────────────────────── */
+
 .titleSection {
   display: flex;
   justify-content: space-between;
@@ -137,7 +135,7 @@
   margin: 0;
 }
 
-/* ─── Empty State ──────────────────────────────────────── */
+
 .emptyState {
   display: flex;
   flex-direction: column;
@@ -187,7 +185,7 @@
   white-space: nowrap;
 }
 
-/* ─── Table Section ────────────────────────────────────── */
+
 .tableSection {
   background: #ffffff;
   border-radius: 16px;
@@ -265,7 +263,7 @@
   padding: 32px 20px !important;
 }
 
-/* ─── Table Footer ─────────────────────────────────────── */
+
 .table tfoot td {
   padding: 14px 20px;
   font-size: 0.875rem;
@@ -287,7 +285,7 @@
   white-space: nowrap;
 }
 
-/* ─── Cards Row ────────────────────────────────────────── */
+
 .cardsRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -344,7 +342,7 @@
   color: #64748b;
 }
 
-/* ─── Adjustment Items ─────────────────────────────────── */
+
 .adjustmentList {
   display: flex;
   flex-direction: column;
@@ -399,7 +397,7 @@
   white-space: nowrap;
 }
 
-/* ─── Selisih Row ──────────────────────────────────────── */
+
 .selisihRow {
   display: flex;
   justify-content: space-between;
@@ -429,7 +427,7 @@
   color: #dc2626;
 }
 
-/* ─── Grand Total Card ─────────────────────────────────── */
+
 .grandTotalCard {
   background: #ffffff;
   border-radius: 16px;
@@ -529,7 +527,7 @@
   color: #1e40af;
 }
 
-/* ─── Print: sembunyikan filter & bersihkan tampilan ─── */
+
 @media print {
   .filterBar {
     display: none !important;

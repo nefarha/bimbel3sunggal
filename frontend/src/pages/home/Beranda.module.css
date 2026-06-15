@@ -3,7 +3,7 @@
   flex-direction: column;
 }
 
-/* Typography & Layout */
+
 .sectionTitle {
   font-size: 1.8rem;
   font-weight: 700;
@@ -21,7 +21,7 @@
   align-items: center;
 }
 
-/* Buttons */
+
 .btnPrimary {
   background-color: var(--color-primary-dark);
   color: white;
@@ -46,7 +46,7 @@
 }
 .btnOutline:hover { background-color: rgba(30, 58, 138, 0.05); }
 
-/* Hero */
+
 .hero {
   display: flex;
   align-items: center;
@@ -98,7 +98,7 @@
   background-position: center;
 }
 
-/* Features */
+
 .features {
   padding: 4rem 5%;
   display: grid;
@@ -160,7 +160,7 @@
   color: var(--color-text-muted);
 }
 
-/* Testimonials */
+
 .testimonials {
   padding: 4rem 5%;
   background-color: white;
@@ -212,7 +212,7 @@
   font-size: 0.8rem;
 }
 
-/* Video */
+
 .videoSection {
   padding: 4rem 5%;
   background-color: #fafafa;
@@ -247,7 +247,7 @@
 .videoText { font-weight: 700; }
 .videoDuration { color: var(--color-text-muted); font-size: 0.85rem; }
 
-/* Gallery */
+
 .gallery {
   padding: 4rem 5%;
   background-color: white;

@@ -13,7 +13,7 @@
   margin: 0 auto;
 }
 
-/* MAIN CONTENT */
+
 .mainContent {
   display: flex;
   flex-direction: column;
@@ -74,7 +74,7 @@
   margin-bottom: 1rem;
 }
 
-/* Info Boxes */
+
 .infoBox {
   background: #F8FAFC;
   border-radius: 8px;
@@ -134,7 +134,7 @@
   color: #1E3A8A;
 }
 
-/* SIDEBAR */
+
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -149,7 +149,7 @@
   border: 1px solid var(--color-border, #E2E8F0);
 }
 
-/* Search */
+
 .searchContainer {
   display: flex;
   flex-direction: column;
@@ -192,7 +192,7 @@
   background: #001A38;
 }
 
-/* Widget Title */
+
 .widgetTitle {
   font-size: 1.125rem;
   font-weight: 600;
@@ -203,7 +203,7 @@
   display: inline-block;
 }
 
-/* Recent News */
+
 .recentNewsList {
   display: flex;
   flex-direction: column;
@@ -235,7 +235,7 @@
   font-weight: 600;
 }
 
-/* Categories */
+
 .tagCloud {
   display: flex;
   flex-wrap: wrap;
@@ -266,7 +266,7 @@
   background: #D97706;
 }
 
-/* CTA Widget */
+
 .ctaWidget {
   background: #002B5B;
   color: white;
@@ -323,7 +323,7 @@
   background: #F1F5F9;
 }
 
-/* Responsive */
+
 @media (max-width: 992px) {
   .layout {
     grid-template-columns: 1fr;

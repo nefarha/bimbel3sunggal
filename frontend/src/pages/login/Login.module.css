@@ -3,8 +3,8 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #e0f2f7; /* Light blue background from the image */
-  padding: 40px; /* Increased padding for overall layout */
+  background-color: #e0f2f7; 
+  padding: 40px; 
 }
 
 .leftSection {
@@ -38,21 +38,21 @@
 }
 
 .loginCard {
-  background-color: #ffffff; /* Level 1 (Cards/Widgets): Pure white */
-  border: 1px solid #e2e8f0; /* Level 1: subtle 1px border */
-  border-radius: 1rem; /* rounded-lg (1rem) for large containers */
-  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05); /* Level 1: soft, diffused shadow */
-  padding: 32px; /* Adjusted padding inside the card */
+  background-color: #ffffff; 
+  border: 1px solid #e2e8f0; 
+  border-radius: 1rem; 
+  box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05); 
+  padding: 32px; 
   width: 100%;
   max-width: 400px;
-  font-family: 'Inter', sans-serif; /* Inter typeface */
+  font-family: 'Inter', sans-serif; 
 }
 
 .brandName {
-  color: #ef4444; /* Red color from the image */
+  color: #ef4444; 
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 8px; /* 4px baseline grid */
+  margin-bottom: 8px; 
 }
 
 .brandRow {
@@ -71,39 +71,39 @@
 .loginTitle {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 16px; /* 4px baseline grid */
+  margin-bottom: 16px; 
 }
 
 .welcomeMessage {
   font-size: 1rem;
-  color: #64748b; /* Slate gray */
-  margin-bottom: 24px; /* lg gutter */
+  color: #64748b; 
+  margin-bottom: 24px; 
 }
 
 .formGroup {
-  margin-bottom: 16px; /* 4px baseline grid */
+  margin-bottom: 16px; 
 }
 
 .formGroup label {
   display: block;
-  margin-bottom: 4px; /* 4px baseline grid */
-  font-weight: 600; /* semi-bold for labels */
-  color: #334155; /* Darker slate for labels */
+  margin-bottom: 4px; 
+  font-weight: 600; 
+  color: #334155; 
 }
 
 .inputField {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #cbd5e1; /* Slate-300 border */
-  border-radius: 8px; /* 8px rounded corners for input fields */
+  border: 1px solid #cbd5e1; 
+  border-radius: 8px; 
   font-size: 1rem;
   box-sizing: border-box;
 }
 
 .inputField:focus {
   outline: none;
-  border-color: #3b82f6; /* Primary Blue ring on focus */
-  box-shadow: 0 0 0 2px #bfdbfe; /* 2px Primary Blue ring */
+  border-color: #3b82f6; 
+  box-shadow: 0 0 0 2px #bfdbfe; 
 }
 
 .passwordInputContainer {
@@ -116,15 +116,15 @@
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  color: #64748b; /* Slate gray */
+  color: #64748b; 
 }
 
 .optionsContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px; /* lg gutter */
-  font-size: 0.875rem; /* body-sm */
+  margin-bottom: 24px; 
+  font-size: 0.875rem; 
 }
 
 .rememberMe {
@@ -137,7 +137,7 @@
 }
 
 .forgotPassword {
-  color: #3b82f6; /* Primary Blue */
+  color: #3b82f6; 
   text-decoration: none;
 }
 
@@ -148,10 +148,10 @@
 .loginButton {
   width: 100%;
   padding: 12px;
-  background-color: #2563eb; /* Darker blue from design system */
+  background-color: #2563eb; 
   color: #ffffff;
   border: none;
-  border-radius: 8px; /* 8px rounded corners for buttons */
+  border-radius: 8px; 
   font-size: 1.125rem;
   font-weight: 600;
   cursor: pointer;
@@ -159,26 +159,26 @@
 }
 
 .loginButton:hover {
-  background-color: #1e40af; /* Slightly darker blue on hover */
+  background-color: #1e40af; 
 }
 
 .imageContainer {
-  margin-left: 100px; /* Adjusted margin to match new padding */
-  width: 400px; /* Fixed width for placeholder */
-  height: 400px; /* Fixed height for placeholder */
-  border-radius: 1rem; /* Rounded corners for placeholder */
+  margin-left: 100px; 
+  width: 400px; 
+  height: 400px; 
+  border-radius: 1rem; 
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0; /* Prevent shrinking */
+  flex-shrink: 0; 
 }
 
-/* Remove schoolLogo as it's replaced by a placeholder div */
+
 
 .errorMessage {
-  color: #ef4444; /* Red color for error messages */
-  font-size: 0.875rem; /* body-sm */
-  margin-top: 12px; /* Spacing above the error message */
-  text-align: center; /* Center the error message */
+  color: #ef4444; 
+  font-size: 0.875rem; 
+  margin-top: 12px; 
+  text-align: center; 
 }
 

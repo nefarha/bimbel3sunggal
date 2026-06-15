@@ -1,6 +1,4 @@
-/* =========================================================
-   Pembayaran Siswa Page
-   ========================================================= */
+
 
 .container {
   display: flex;
@@ -8,7 +6,7 @@
   gap: 24px;
 }
 
-/* ─── Loading & Error ───────────────────────────────────── */
+
 .loadingState,
 .errorState {
   text-align: center;
@@ -25,7 +23,7 @@
   color: #ba1a1a;
 }
 
-/* ─── Header ────────────────────────────────────────────── */
+
 .headerCard {
   display: flex;
   align-items: center;
@@ -75,7 +73,7 @@
   margin-top: 1px;
 }
 
-/* ─── Stat Cards ────────────────────────────────────────── */
+
 .statsRow {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -124,7 +122,7 @@
   color: #94a3b8;
 }
 
-/* ─── Table Section ─────────────────────────────────────── */
+
 .tableSection {
   background: #ffffff;
   border-radius: 16px;
@@ -168,7 +166,7 @@
   box-shadow: 0 0 0 2px rgba(30, 58, 138, 0.15);
 }
 
-/* ─── Table ─────────────────────────────────────────────── */
+
 .tableWrapper {
   overflow-x: auto;
 }
@@ -258,7 +256,7 @@
   background: #fef2f2;
 }
 
-/* ─── Empty Table ───────────────────────────────────────── */
+
 .emptyTable {
   text-align: center;
   padding: 48px 20px !important;
@@ -266,7 +264,7 @@
   font-size: 0.875rem;
 }
 
-/* ─── Responsive ────────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .statsRow {
     grid-template-columns: 1fr;

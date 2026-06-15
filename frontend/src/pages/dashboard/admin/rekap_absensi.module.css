@@ -23,13 +23,13 @@
   margin: 0;
   font-size: 1.75rem;
   font-weight: 800;
-  color: #00236f; /* Deep Academic Blue */
+  color: #00236f; 
 }
 
 .pageSubtitle {
   margin: 0;
   font-size: 0.95rem;
-  color: #64748b; /* Slate-500 */
+  color: #64748b; 
 }
 
 .filterSection {
@@ -112,15 +112,15 @@
 }
 
 .colorBoxHadir {
-  background-color: #10b981; /* Emerald-500 */
+  background-color: #10b981; 
 }
 
 .colorBoxAlpha {
-  background-color: #ef4444; /* Red-500 */
+  background-color: #ef4444; 
 }
 
 .colorBoxWeekend {
-  background-color: #f1f5f9; /* Slate-100 */
+  background-color: #f1f5f9; 
   border: 1px solid #e2e8f0;
 }
 

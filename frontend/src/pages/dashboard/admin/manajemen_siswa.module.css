@@ -1,14 +1,6 @@
-/* =========================================================
-   Manajemen Siswa — Admin
-   Design tokens follow the global design system
-   (Deep Academic Blue + Energetic Orange, Inter, 8px radius).
-   Layout (sidebar + topbar + main wrapper) lives in
-   components/admin/AdminLayout.module.css
-   ========================================================= */
 
-/* =========================================================
-   Page header
-   ========================================================= */
+
+
 .pageHeader {
   display: flex;
   align-items: center;
@@ -33,7 +25,7 @@
   bottom: 0;
   width: 96px;
   height: 3px;
-  background-color: #fea619; /* Energetic Orange */
+  background-color: #fea619; 
   border-radius: 2px;
 }
 
@@ -67,9 +59,7 @@
   font-size: 1.05rem;
 }
 
-/* =========================================================
-   Alert / error banner
-   ========================================================= */
+
 .alertError {
   display: flex;
   align-items: center;
@@ -94,9 +84,7 @@
   padding: 0 4px;
 }
 
-/* =========================================================
-   Toast dialog (success notification)
-   ========================================================= */
+
 .toastOverlay {
   position: fixed;
   inset: 0;
@@ -173,9 +161,7 @@
   background-color: #001a52;
 }
 
-/* =========================================================
-   Stats grid
-   ========================================================= */
+
 .statsGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -248,9 +234,7 @@
   line-height: 1.1;
 }
 
-/* =========================================================
-   Filter bar
-   ========================================================= */
+
 .filterBar {
   display: grid;
   grid-template-columns: 1fr;
@@ -357,9 +341,7 @@
   border-color: #00236f;
 }
 
-/* =========================================================
-   Table card
-   ========================================================= */
+
 .tableCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -462,9 +444,7 @@
   font-weight: 500;
 }
 
-/* =========================================================
-   Student cell (avatar + name)
-   ========================================================= */
+
 .studentCell {
   display: flex;
   align-items: center;
@@ -506,9 +486,7 @@
   font-weight: 500;
 }
 
-/* =========================================================
-   Status badge
-   ========================================================= */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -530,9 +508,7 @@
   color: #64748b;
 }
 
-/* =========================================================
-   Chips (jenis_kelas)
-   ========================================================= */
+
 .chipGroup {
   display: flex;
   flex-wrap: wrap;
@@ -551,9 +527,7 @@
   border: 1px solid rgba(0, 35, 111, 0.15);
 }
 
-/* =========================================================
-   Action button
-   ========================================================= */
+
 .btnAction {
   display: inline-flex;
   align-items: center;
@@ -576,9 +550,7 @@
   color: #ffffff;
 }
 
-/* =========================================================
-   Edit modal
-   ========================================================= */
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -713,7 +685,7 @@
   margin: 0;
 }
 
-/* Chip-style multi-select inside modal */
+
 .chipSelectGroup {
   display: flex;
   flex-wrap: wrap;
@@ -762,7 +734,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #fea619; /* Energetic Orange CTA */
+  background-color: #fea619; 
   color: #ffffff;
   border: none;
   border-radius: 8px;

@@ -1,4 +1,4 @@
-/* ─── Wrapper (positioning anchor) ─────────────────────────────────────────── */
+
 .wrapper {
   position: fixed;
   bottom: 2rem;
@@ -9,7 +9,7 @@
   align-items: flex-end;
 }
 
-/* ─── Chat Panel ────────────────────────────────────────────────────────────── */
+
 .panel {
   width: 360px;
   max-height: 0;
@@ -33,7 +33,7 @@
   visibility: visible;
 }
 
-/* ─── Header ────────────────────────────────────────────────────────────────── */
+
 .panelHeader {
   display: flex;
   align-items: center;
@@ -91,7 +91,7 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* ─── Messages ──────────────────────────────────────────────────────────────── */
+
 .messages {
   flex: 1;
   padding: 12px 14px;
@@ -103,7 +103,7 @@
   min-height: 0;
 }
 
-/* scrollbar styling */
+
 .messages::-webkit-scrollbar {
   width: 5px;
 }
@@ -115,7 +115,7 @@
   border-radius: 4px;
 }
 
-/* ─── Bubbles ───────────────────────────────────────────────────────────────── */
+
 .bubble {
   max-width: 85%;
   padding: 10px 14px;
@@ -151,7 +151,7 @@
   font-size: inherit;
 }
 
-/* ─── Input Area ────────────────────────────────────────────────────────────── */
+
 .inputArea {
   display: flex;
   align-items: flex-end;
@@ -212,7 +212,7 @@
   cursor: not-allowed;
 }
 
-/* ─── Toggle Button ─────────────────────────────────────────────────────────── */
+
 .chatBtn {
   position: relative;
   background: #fff;

@@ -30,7 +30,7 @@
   color: #64748b;
 }
 
-/* ─── Stat Cards ────────────────── */
+
 .cardsRow {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -89,7 +89,7 @@
 .statDetailRed { color: #dc2626; }
 .statDetailGray { color: #94a3b8; }
 
-/* ─── Bottom Section ────────────── */
+
 .bottomSection {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -141,7 +141,7 @@
   color: #94a3b8;
 }
 
-/* ─── Table ─────────────────────── */
+
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -168,7 +168,7 @@
 .table tbody tr:hover { background: #f8fafc; }
 .colJam { white-space: nowrap; color: #1e40af; font-weight: 600; }
 
-/* ─── Absensi recap ────────────── */
+
 .absensiList {
   display: flex;
   flex-direction: column;
