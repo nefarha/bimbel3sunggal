@@ -103,38 +103,11 @@
 }
 
 
-.bonusToggleLabel {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+.bonusCheckbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #16a34a;
   cursor: pointer;
-  vertical-align: middle;
-}
-.bonusCheckbox { display: none; }
-.bonusToggleSwitch {
-  position: relative;
-  width: 36px; height: 20px;
-  background: #cbd5e1;
-  border-radius: 10px;
-  transition: background .2s;
-  flex-shrink: 0;
-}
-.bonusToggleSwitch::after {
-  content: '';
-  position: absolute;
-  top: 2px; left: 2px;
-  width: 16px; height: 16px;
-  background: #fff;
-  border-radius: 50%;
-  transition: transform .2s;
-}
-.bonusCheckbox:checked + .bonusToggleSwitch { background: #16a34a; }
-.bonusCheckbox:checked + .bonusToggleSwitch::after { transform: translateX(16px); }
-.bonusNominal {
-  font-size: .688rem;
-  font-weight: 600;
-  color: #16a34a;
-  line-height: 1.2;
 }
 
 
@@ -262,6 +235,139 @@
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 500;
+}
+
+
+.toastOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.toastDialog {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 28px 32px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.toastIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #d1fae5;
+  color: #047857;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin-bottom: 4px;
+}
+
+.toastTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+.toastMessage {
+  font-size: 0.9rem;
+  color: #444651;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.toastActions {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.toastButton {
+  background-color: #00236f;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.toastButton:hover {
+  background-color: #001a52;
+}
+
+
+/* ========== Confirm Dialog (Kirim Semua) ========== */
+
+.confirmDialog {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirmIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #dbeafe;
+  color: #00236f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.confirmTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+.confirmMessage {
+  font-size: 0.9rem;
+  color: #444651;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.confirmMessage strong {
+  color: #00236f;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  width: 100%;
 }
 
 

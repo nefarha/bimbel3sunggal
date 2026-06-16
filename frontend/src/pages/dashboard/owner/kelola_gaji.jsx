@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { MdClose } from 'react-icons/md';
+import { MdClose, MdCheckCircle } from 'react-icons/md';
 import api from '../../../services/api';
 import styles from './kelola_gaji.module.css';
 
@@ -35,7 +35,7 @@ const KelolaGaji = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMsg, setSuccessMsg] = useState('');
+  const [toast, setToast] = useState(null);
 
   const [editState, setEditState] = useState({});
 
@@ -49,6 +49,13 @@ const KelolaGaji = () => {
   const [bonusToggle, setBonusToggle] = useState({});
   const [bonusNominalSetting, setBonusNominalSetting] = useState(65000);
   const [sendingAll, setSendingAll] = useState(false);
+  const [confirmKirimSemua, setConfirmKirimSemua] = useState(false);
+
+  useEffect(() => {
+    if (!toast) return undefined;
+    const timer = setTimeout(() => setToast(null), 3500);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -152,10 +159,12 @@ const KelolaGaji = () => {
       };
       const res = await api.post('/gaji/send', body);
       if (res.data?.success) {
-        setSuccessMsg(`Data gaji tutor berhasil dikirim`);
+        setToast({
+          title: 'Berhasil',
+          message: `Data gaji tutor berhasil dikirim`,
+        });
         setEditState((prev) => ({ ...prev, [idTutor]: undefined }));
         fetchData();
-        setTimeout(() => setSuccessMsg(''), 3000);
       }
     } catch (err) {
       console.error('Gagal mengirim data gaji:', err);
@@ -163,8 +172,12 @@ const KelolaGaji = () => {
     }
   };
 
-  const handleKirimSemua = async () => {
-    if (!window.confirm(`Kirim gaji semua tutor untuk ${MONTHS.find(m => m.value === bulan)?.label} ${tahun}?`)) return;
+  const handleKirimSemua = () => {
+    setConfirmKirimSemua(true);
+  };
+
+  const execKirimSemua = async () => {
+    setConfirmKirimSemua(false);
     try {
       setSendingAll(true);
       setError(null);
@@ -174,14 +187,12 @@ const KelolaGaji = () => {
         const derivedBonus = isBonusActive ? bonusNominalSetting : 0;
         const totalNeto = row.honor + derivedBonus - (row.potongan || 0) + (row.total_infal || 0);
 
-        // Simpan bonus assignment
         await api.post('/gaji/bonus', {
           assignments: [{ id_tutor: row.id_tutor, nominal: isBonusActive ? bonusNominalSetting : 0 }],
           bulan,
           tahun,
         });
 
-        // Kirim gaji
         await api.post('/gaji/send', {
           id_tutor: row.id_tutor,
           bulan,
@@ -194,9 +205,11 @@ const KelolaGaji = () => {
         });
       }
 
-      setSuccessMsg(`Gaji semua tutor berhasil dikirim`);
+      setToast({
+        title: 'Berhasil',
+        message: `Gaji semua tutor untuk ${MONTHS.find(m => m.value === bulan)?.label} ${tahun} berhasil dikirim.`,
+      });
       fetchData();
-      setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err) {
       console.error('Gagal mengirim gaji semua:', err);
       setError(err.response?.data?.message || 'Gagal mengirim gaji semua tutor');
@@ -248,7 +261,37 @@ const KelolaGaji = () => {
   return (
     <div className={styles.container}>
       {}
-      {successMsg && <div className={styles.successAlert}>{successMsg}</div>}
+      {toast && (
+        <div
+          className={styles.toastOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="toast-title"
+          onClick={() => setToast(null)}
+        >
+          <div
+            className={styles.toastDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.toastIcon}>
+              <MdCheckCircle />
+            </div>
+            <h3 id="toast-title" className={styles.toastTitle}>
+              {toast.title}
+            </h3>
+            <p className={styles.toastMessage}>{toast.message}</p>
+            <div className={styles.toastActions}>
+              <button
+                type="button"
+                className={styles.toastButton}
+                onClick={() => setToast(null)}
+              >
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {}
       <div className={styles.filterBar}>
@@ -353,18 +396,12 @@ const KelolaGaji = () => {
                           {formatRupiah(row.honor)}
                         </td>
                         <td className={styles.colCenter}>
-                          <label className={styles.bonusToggleLabel}>
-                            <input
-                              type="checkbox"
-                              className={styles.bonusCheckbox}
-                              checked={!!bonusToggle[row.id_tutor]}
-                              onChange={() => handleBonusToggle(row.id_tutor)}
-                            />
-                            <span className={styles.bonusToggleSwitch} />
-                          </label>
-                          {bonusToggle[row.id_tutor] && (
-                            <div className={styles.bonusNominal}>{formatRupiah(bonusNominalSetting)}</div>
-                          )}
+                          <input
+                            type="checkbox"
+                            className={styles.bonusCheckbox}
+                            checked={!!bonusToggle[row.id_tutor]}
+                            onChange={() => handleBonusToggle(row.id_tutor)}
+                          />
                         </td>
                         <td className={styles.colNominal}>
                           {isEditing ? (
@@ -619,6 +656,44 @@ const KelolaGaji = () => {
                   )}
                 </>
               ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {}
+      {confirmKirimSemua && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setConfirmKirimSemua(false)}
+        >
+          <div
+            className={styles.confirmDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.confirmIcon}>
+              <MdCheckCircle />
+            </div>
+            <h3 className={styles.confirmTitle}>Kirim Gaji Semua Tutor</h3>
+            <p className={styles.confirmMessage}>
+              Apakah Anda yakin ingin mengirim gaji semua tutor untuk{' '}
+              <strong>{MONTHS.find(m => m.value === bulan)?.label} {tahun}</strong>?
+            </p>
+            <div className={styles.confirmActions}>
+              <button
+                type="button"
+                className={styles.btnSecondary}
+                onClick={() => setConfirmKirimSemua(false)}
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                className={styles.btnPrimary}
+                onClick={execKirimSemua}
+              >
+                Ya, Kirim Semua
+              </button>
             </div>
           </div>
         </div>

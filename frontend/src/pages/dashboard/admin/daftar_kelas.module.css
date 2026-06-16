@@ -525,3 +525,217 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* ========== Action Buttons (Lihat, Edit, Hapus) ========== */
+
+.actionCell {
+  text-align: center;
+}
+
+.actionGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #ffffff;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.actionBtn svg {
+  display: block;
+}
+
+.actionLihat {
+  color: #00236f;
+  border-color: #cbd5e1;
+}
+
+.actionLihat:hover {
+  background-color: #00236f;
+  color: #ffffff;
+  border-color: #00236f;
+}
+
+.actionEdit {
+  color: #d97706;
+  border-color: #fde68a;
+}
+
+.actionEdit:hover {
+  background-color: #d97706;
+  color: #ffffff;
+  border-color: #d97706;
+}
+
+.actionHapus {
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.actionHapus:hover {
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+
+/* ========== Confirm Dialog (Hapus) ========== */
+
+.confirmDialog {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 400px;
+  padding: 32px 28px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirmIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #fef2f2;
+  color: #dc2626;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+
+.confirmTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+.confirmMessage {
+  font-size: 0.9rem;
+  color: #444651;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.confirmMessage strong {
+  color: #dc2626;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.btnDanger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #dc2626;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+}
+
+.btnDanger:hover:not(:disabled) {
+  background-color: #b91c1c;
+}
+
+.btnDanger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ========== Dialog Daftar Siswa ========== */
+
+.siswaDialog {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 640px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.siswaBody {
+  padding: 8px 24px 24px;
+  overflow-y: auto;
+  min-height: 120px;
+}
+
+.siswaEmpty {
+  text-align: center;
+  color: #757682;
+  font-style: italic;
+  padding: 40px 16px;
+  margin: 0;
+}
+
+.siswaTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  color: #191c1e;
+}
+
+.siswaTable thead th {
+  background-color: #f3f4f6;
+  color: #444651;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  white-space: nowrap;
+}
+
+.siswaTable tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.siswaTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.siswaTable tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+.siswaIcon {
+  font-size: 0.95rem;
+  color: #00236f;
+  vertical-align: middle;
+  margin-right: 4px;
+}

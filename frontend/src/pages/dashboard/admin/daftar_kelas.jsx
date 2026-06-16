@@ -7,6 +7,11 @@ import {
   MdCheckCircle,
   MdClose,
   MdSave,
+  MdVisibility,
+  MdEdit,
+  MdDelete,
+  MdPerson,
+  MdGroup,
 } from 'react-icons/md';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
@@ -19,6 +24,8 @@ const DaftarKelas = () => {
   const [search, setSearch] = useState('');
 
   const [showModal, setShowModal] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({ nama_kelas: '', id_mapel: '', id_tutor: '' });
   const [formError, setFormError] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -27,6 +34,13 @@ const DaftarKelas = () => {
   const [tutorOptions, setTutorOptions] = useState([]);
 
   const [toast, setToast] = useState(null);
+
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const [siswaDialog, setSiswaDialog] = useState(null);
+  const [siswaList, setSiswaList] = useState([]);
+  const [siswaLoading, setSiswaLoading] = useState(false);
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -85,7 +99,21 @@ const DaftarKelas = () => {
   const totalSiswa = kelasList.reduce((sum, k) => sum + Number(k.jumlah_siswa || 0), 0);
 
   const openModal = () => {
+    setEditMode(false);
+    setEditingId(null);
     setFormData({ nama_kelas: '', id_mapel: '', id_tutor: '' });
+    setFormError(null);
+    setShowModal(true);
+  };
+
+  const openEditModal = (kelas) => {
+    setEditMode(true);
+    setEditingId(kelas.id_kelas);
+    setFormData({
+      nama_kelas: kelas.nama_kelas || '',
+      id_mapel: String(kelas.id_mapel || ''),
+      id_tutor: String(kelas.id_tutor || ''),
+    });
     setFormError(null);
     setShowModal(true);
   };
@@ -93,6 +121,8 @@ const DaftarKelas = () => {
   const closeModal = () => {
     if (saving) return;
     setShowModal(false);
+    setEditMode(false);
+    setEditingId(null);
     setFormError(null);
   };
 
@@ -125,23 +155,73 @@ const DaftarKelas = () => {
         id_mapel: Number(formData.id_mapel),
         id_tutor: Number(formData.id_tutor),
       };
-      await api.post('/kelas', payload);
-      setToast({
-        title: 'Kelas Berhasil Ditambahkan',
-        message: `Kelas "${payload.nama_kelas}" berhasil ditambahkan.`,
-      });
+
+      if (editMode) {
+        await api.put(`/kelas/${editingId}`, payload);
+        setToast({
+          title: 'Kelas Berhasil Diperbarui',
+          message: `Kelas "${payload.nama_kelas}" berhasil diperbarui.`,
+        });
+      } else {
+        await api.post('/kelas', payload);
+        setToast({
+          title: 'Kelas Berhasil Ditambahkan',
+          message: `Kelas "${payload.nama_kelas}" berhasil ditambahkan.`,
+        });
+      }
       closeModal();
       fetchKelas();
     } catch (err) {
-      console.error('Create kelas error:', err);
+      console.error('Save kelas error:', err);
       setFormError(
         err.response?.data?.message ||
         err.response?.data?.error ||
         err.message ||
-        'Gagal menambahkan kelas.'
+        'Gagal menyimpan kelas.'
       );
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!deleteConfirm) return;
+    setDeleting(true);
+    try {
+      await api.delete(`/kelas/${deleteConfirm.id_kelas}`);
+      setToast({
+        title: 'Kelas Berhasil Dihapus',
+        message: `Kelas "${deleteConfirm.nama_kelas}" berhasil dihapus.`,
+      });
+      setDeleteConfirm(null);
+      fetchKelas();
+    } catch (err) {
+      console.error('Delete kelas error:', err);
+      setToast({
+        title: 'Gagal Menghapus Kelas',
+        message:
+          err.response?.data?.message ||
+          err.message ||
+          'Terjadi kesalahan saat menghapus kelas.',
+      });
+      setDeleteConfirm(null);
+    } finally {
+      setDeleting(false);
+    }
+  };
+
+  const openSiswaDialog = async (kelas) => {
+    setSiswaDialog(kelas);
+    setSiswaList([]);
+    setSiswaLoading(true);
+    try {
+      const response = await api.get(`/siswa/kelas/${kelas.id_kelas}`);
+      setSiswaList(Array.isArray(response.data?.data) ? response.data.data : []);
+    } catch (err) {
+      console.error('Fetch siswa by kelas error:', err);
+      setSiswaList([]);
+    } finally {
+      setSiswaLoading(false);
     }
   };
 
@@ -256,17 +336,18 @@ const DaftarKelas = () => {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th style={{ width: '8%' }}>No</th>
-                <th style={{ width: '28%' }}>Nama Kelas</th>
-                <th style={{ width: '22%' }}>Tutor</th>
-                <th style={{ width: '22%' }}>Mata Pelajaran</th>
+                <th style={{ width: '6%' }}>No</th>
+                <th style={{ width: '22%' }}>Nama Kelas</th>
+                <th style={{ width: '18%' }}>Tutor</th>
+                <th style={{ width: '18%' }}>Mata Pelajaran</th>
                 <th style={{ width: '10%', textAlign: 'center' }}>Jumlah Siswa</th>
+                <th style={{ width: '26%', textAlign: 'center' }}>Aksi</th>
               </tr>
             </thead>
             <tbody>
               {loading && (
                 <tr>
-                  <td colSpan={5} className={styles.tableEmpty}>
+                  <td colSpan={6} className={styles.tableEmpty}>
                     Memuat data kelas…
                   </td>
                 </tr>
@@ -274,7 +355,7 @@ const DaftarKelas = () => {
 
               {!loading && filteredKelas.length === 0 && (
                 <tr>
-                  <td colSpan={5} className={styles.tableEmpty}>
+                  <td colSpan={6} className={styles.tableEmpty}>
                     {kelasList.length === 0
                       ? 'Belum ada data kelas.'
                       : 'Tidak ada kelas yang cocok dengan pencarian.'}
@@ -290,6 +371,34 @@ const DaftarKelas = () => {
                     <td className={styles.tutorCell}>{kelas.nama_tutor || '—'}</td>
                     <td className={styles.mapelCell}>{kelas.nama_mapel || '—'}</td>
                     <td className={styles.numericCell}>{kelas.jumlah_siswa || 0}</td>
+                    <td className={styles.actionCell}>
+                      <div className={styles.actionGroup}>
+                        <button
+                          type="button"
+                          className={`${styles.actionBtn} ${styles.actionLihat}`}
+                          title="Lihat daftar siswa"
+                          onClick={() => openSiswaDialog(kelas)}
+                        >
+                          <MdVisibility />
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.actionBtn} ${styles.actionEdit}`}
+                          title="Edit kelas"
+                          onClick={() => openEditModal(kelas)}
+                        >
+                          <MdEdit />
+                        </button>
+                        <button
+                          type="button"
+                          className={`${styles.actionBtn} ${styles.actionHapus}`}
+                          title="Hapus kelas"
+                          onClick={() => setDeleteConfirm(kelas)}
+                        >
+                          <MdDelete />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -313,8 +422,8 @@ const DaftarKelas = () => {
             <header className={styles.modalHeader}>
               <div>
                 <h3 id="tambah-title" className={styles.modalTitle}>
-                  <MdAdd className={styles.modalTitleIcon} />
-                  Tambah Kelas
+                  {editMode ? <MdEdit className={styles.modalTitleIcon} /> : <MdAdd className={styles.modalTitleIcon} />}
+                  {editMode ? 'Edit Kelas' : 'Tambah Kelas'}
                 </h3>
               </div>
               <button
@@ -416,6 +525,119 @@ const DaftarKelas = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {}
+      {deleteConfirm && (
+        <div
+          className={styles.modalOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="hapus-title"
+          onClick={() => !deleting && setDeleteConfirm(null)}
+        >
+          <div
+            className={styles.confirmDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.confirmIcon}>
+              <MdDelete />
+            </div>
+            <h3 id="hapus-title" className={styles.confirmTitle}>
+              Hapus Kelas
+            </h3>
+            <p className={styles.confirmMessage}>
+              Apakah Anda yakin ingin menghapus kelas{' '}
+              <strong>{deleteConfirm.nama_kelas}</strong>?
+              <br />
+              Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div className={styles.confirmActions}>
+              <button
+                type="button"
+                className={styles.btnSecondary}
+                onClick={() => setDeleteConfirm(null)}
+                disabled={deleting}
+              >
+                Batal
+              </button>
+              <button
+                type="button"
+                className={styles.btnDanger}
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? 'Menghapus…' : 'Ya, Hapus'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {}
+      {siswaDialog && (
+        <div
+          className={styles.modalOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="siswa-title"
+          onClick={() => setSiswaDialog(null)}
+        >
+          <div
+            className={styles.siswaDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <header className={styles.modalHeader}>
+              <div>
+                <h3 id="siswa-title" className={styles.modalTitle}>
+                  <MdGroup className={styles.modalTitleIcon} />
+                  Siswa Kelas {siswaDialog.nama_kelas}
+                </h3>
+              </div>
+              <button
+                type="button"
+                className={styles.modalClose}
+                onClick={() => setSiswaDialog(null)}
+                aria-label="Tutup"
+              >
+                ×
+              </button>
+            </header>
+
+            <div className={styles.siswaBody}>
+              {siswaLoading && (
+                <p className={styles.siswaEmpty}>Memuat daftar siswa…</p>
+              )}
+
+              {!siswaLoading && siswaList.length === 0 && (
+                <p className={styles.siswaEmpty}>Belum ada siswa di kelas ini.</p>
+              )}
+
+              {!siswaLoading && siswaList.length > 0 && (
+                <table className={styles.siswaTable}>
+                  <thead>
+                    <tr>
+                      <th style={{ width: '10%' }}>No</th>
+                      <th style={{ width: '40%' }}>Nama Siswa</th>
+                      <th style={{ width: '25%' }}>Nama Orang Tua</th>
+                      <th style={{ width: '25%' }}>No. HP Orang Tua</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {siswaList.map((s, i) => (
+                      <tr key={s.id_siswa}>
+                        <td>{i + 1}</td>
+                        <td><MdPerson className={styles.siswaIcon} /> {s.nama || '—'}</td>
+                        <td>{s.nama_ortu || '—'}</td>
+                        <td>{s.no_hp_ortu || '—'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       )}
