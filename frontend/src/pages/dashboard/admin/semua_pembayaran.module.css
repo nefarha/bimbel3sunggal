@@ -83,17 +83,21 @@
   font-size: 1.05rem;
 }
 
-/* ─── Stats ─── */
+/* ─── Stats Row ─── */
 
-.statsGrid {
-  display: grid;
-  grid-template-columns: 1fr;
+.statsRow {
+  display: flex;
   gap: 16px;
+  align-items: stretch;
 }
 
-@media (min-width: 640px) {
-  .statsGrid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+.statsRow .statCard {
+  flex: 1;
+}
+
+@media (max-width: 640px) {
+  .statsRow {
+    flex-direction: column;
   }
 }
 
@@ -151,27 +155,45 @@
 
 /* ─── Total Row ─── */
 
-.totalRow {
+.totalCard {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  justify-content: center;
+  min-width: 200px;
+  padding: 20px 28px;
+  background: linear-gradient(135deg, #00236f, #0033a0);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px -2px rgba(0, 35, 111, 0.25);
+}
+
+.totalBody {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
 }
 
 .totalLabel {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #444651;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .totalValue {
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  color: #00236f;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .totalCard {
+    min-width: unset;
+    width: 100%;
+  }
 }
 
 /* ─── Controls ─── */

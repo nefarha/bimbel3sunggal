@@ -63,6 +63,7 @@ const formatJenisKelamin = (value) => {
 const initialEditForm = {
   id_tutor: null,
   nama_tutor: '',
+  nik: '',
   tempat_lahir: '',
   tanggal_lahir: '',
   jenis_kelamin: '',
@@ -187,6 +188,7 @@ const ManajemenTutor = () => {
     setEditForm({
       id_tutor: tutor.id_tutor,
       nama_tutor: tutor.nama_tutor || tutor.nama || '',
+      nik: tutor.nik || '',
       tempat_lahir: tutor.tempat_lahir || '',
       tanggal_lahir: tutor.tanggal_lahir ? String(tutor.tanggal_lahir).slice(0, 10) : '',
       jenis_kelamin: tutor.jenis_kelamin || '',
@@ -243,6 +245,7 @@ const ManajemenTutor = () => {
     setEditError(null);
     try {
       const payload = {
+        nik: editForm.nik || null,
         nama_tutor: editForm.nama_tutor.trim(),
         tempat_lahir: editForm.tempat_lahir || null,
         tanggal_lahir: editForm.tanggal_lahir || null,
@@ -778,6 +781,22 @@ const ManajemenTutor = () => {
                   type="text"
                   className={styles.input}
                   value={editForm.nama_tutor}
+                  onChange={handleEditChange}
+                  disabled={saving}
+                />
+              </div>
+
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="edit-nik">
+                  NIK (Nomor Induk Kependudukan)
+                </label>
+                <input
+                  id="edit-nik"
+                  name="nik"
+                  type="text"
+                  className={styles.input}
+                  placeholder="cth: 1201010203040005"
+                  value={editForm.nik}
                   onChange={handleEditChange}
                   disabled={saving}
                 />

@@ -138,8 +138,8 @@ const SemuaPembayaran = () => {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className={styles.statsGrid}>
+      {/* Summary Row */}
+      <div className={styles.statsRow}>
         <div className={styles.statCard}>
           <div className={`${styles.statIcon} ${styles.statIconBlue}`}>
             <MdPayments />
@@ -149,39 +149,12 @@ const SemuaPembayaran = () => {
             <span className={styles.statValue}>{stats.total}</span>
           </div>
         </div>
-        <div className={styles.statCard}>
-          <div className={`${styles.statIcon} ${styles.statIconGreen}`}>
-            <MdCheckCircle />
-          </div>
-          <div className={styles.statBody}>
-            <span className={styles.statLabel}>Verified</span>
-            <span className={styles.statValue}>{stats.verified}</span>
+        <div className={styles.totalCard}>
+          <div className={styles.totalBody}>
+            <span className={styles.totalLabel}>Total Nominal</span>
+            <span className={styles.totalValue}>{formatRupiah(stats.totalJumlah)}</span>
           </div>
         </div>
-        <div className={styles.statCard}>
-          <div className={`${styles.statIcon} ${styles.statIconOrange}`}>
-            <MdHourglassEmpty />
-          </div>
-          <div className={styles.statBody}>
-            <span className={styles.statLabel}>Pending</span>
-            <span className={styles.statValue}>{stats.pending}</span>
-          </div>
-        </div>
-        <div className={styles.statCard}>
-          <div className={`${styles.statIcon} ${styles.statIconRed}`}>
-            <MdCancel />
-          </div>
-          <div className={styles.statBody}>
-            <span className={styles.statLabel}>Rejected</span>
-            <span className={styles.statValue}>{stats.rejected}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Total nominal */}
-      <div className={styles.totalRow}>
-        <span className={styles.totalLabel}>Total Nominal:</span>
-        <span className={styles.totalValue}>{formatRupiah(stats.totalJumlah)}</span>
       </div>
 
       {/* Filter & Search */}
@@ -196,7 +169,7 @@ const SemuaPembayaran = () => {
             className={styles.searchInput}
           />
         </div>
-        <select
+        {/* <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
           className={styles.select}
@@ -206,7 +179,7 @@ const SemuaPembayaran = () => {
               {o.label}
             </option>
           ))}
-        </select>
+        </select> */}
       </div>
 
       {/* Table */}
@@ -223,7 +196,7 @@ const SemuaPembayaran = () => {
                 <th>Jenis</th>
                 <th style={{ textAlign: 'right' }}>Jumlah</th>
                 <th>Metode</th>
-                <th>Status</th>
+                {/* <th>Status</th> */}
                 <th style={{ textAlign: 'center', width: 100 }}>Aksi</th>
               </tr>
             </thead>
@@ -258,12 +231,12 @@ const SemuaPembayaran = () => {
                       )}
                     </td>
                     <td>{item.metode_pembayaran || '—'}</td>
-                    <td>
+                    {/* <td>
                       <span className={`${styles.badge} ${statusBadge(item.status)}`}>
                         <span className={styles.badgeIcon}>{statusIcon(item.status)}</span>
                         {item.status}
                       </span>
-                    </td>
+                    </td> */}
                     <td className={styles.actionCell}>
                       <button
                         type="button"

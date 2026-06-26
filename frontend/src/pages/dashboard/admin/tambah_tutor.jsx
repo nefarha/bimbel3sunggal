@@ -84,6 +84,7 @@ const todayIsoDate = () => new Date().toISOString().slice(0, 10);
 
 const INITIAL_FORM = {
   namaTutor: '',
+  nik: '',
   tempatLahir: '',
   tanggalLahir: '',
   jenisKelamin: '',
@@ -226,6 +227,7 @@ const TambahTutor = () => {
 
       const tutorPayload = {
         id_user: idUser,
+        nik: formData.nik.trim() || null,
         nama_tutor: formData.namaTutor.trim(),
         tempat_lahir: formData.tempatLahir || null,
         tanggal_lahir: formData.tanggalLahir || null,
@@ -487,6 +489,22 @@ const TambahTutor = () => {
                   <option value="L">Laki-laki</option>
                   <option value="P">Perempuan</option>
                 </select>
+              </div>
+
+              <div className={`${styles.field} ${styles.fieldFull}`}>
+                <label className={styles.label} htmlFor="nik">
+                  NIK (Nomor Induk Kependudukan)
+                </label>
+                <input
+                  id="nik"
+                  name="nik"
+                  type="text"
+                  className={styles.input}
+                  placeholder="cth: 1201010203040005"
+                  value={formData.nik}
+                  onChange={handleInputChange}
+                  maxLength={20}
+                />
               </div>
 
               <div className={`${styles.field} ${styles.fieldFull}`}>

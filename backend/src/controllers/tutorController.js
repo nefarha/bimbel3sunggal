@@ -76,6 +76,7 @@ export const createTutor = async (req, res) => {
 
     const payload = {
       id_user: Number(req.body.id_user),
+      nik: req.body.nik || null,
       nama_tutor: String(nama_tutor).trim(),
       tempat_lahir: req.body.tempat_lahir || null,
       tanggal_lahir: req.body.tanggal_lahir || null,

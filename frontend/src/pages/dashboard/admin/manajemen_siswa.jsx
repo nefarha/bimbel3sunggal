@@ -91,6 +91,7 @@ const getMapelName = (id, options) => {
 const initialEditForm = {
   id_siswa: null,
   nama: '',
+  nis: '',
   kelas: '',
   status: 'Aktif',
   spp: '',
@@ -222,6 +223,7 @@ const ManajemenSiswa = () => {
     setEditForm({
       id_siswa: siswa.id_siswa,
       nama: siswa.nama || '',
+      nis: siswa.nis || '',
       kelas: siswa.kelas || '',
       status: siswa.status || 'Aktif',
       spp: formatNumericInput(siswa.spp ?? 0),
@@ -303,6 +305,7 @@ const ManajemenSiswa = () => {
     setEditError(null);
     try {
       const payload = {
+        nis: editForm.nis || null,
         status: editForm.status,
         spp: parseNumericInput(editForm.spp),
         mapel: JSON.stringify(editForm.mapel),
@@ -718,6 +721,23 @@ const ManajemenSiswa = () => {
                     </option>
                   ))}
                 </select>
+              </div>
+
+              {/* NIS */}
+              <div className={styles.field}>
+                <label className={styles.label} htmlFor="edit-nis">
+                  NIS (Nomor Induk Siswa)
+                </label>
+                <input
+                  id="edit-nis"
+                  name="nis"
+                  type="text"
+                  className={styles.input}
+                  placeholder="Contoh: 1234567890"
+                  value={editForm.nis}
+                  onChange={handleEditChange}
+                  disabled={saving}
+                />
               </div>
 
               {}
