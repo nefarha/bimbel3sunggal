@@ -136,6 +136,7 @@ const buildWhatsAppLink = (phone, message) => {
 };
 
 const INITIAL_FORM = {
+  nis: '',
   namaLengkap: '',
   tempatLahir: '',
   tanggalLahir: '',
@@ -352,6 +353,7 @@ const PendaftaranSiswa = () => {
 
       const siswaPayload = {
         id_user: idUser,
+        nis: formData.nis || null,
         nama: formData.namaLengkap.trim(),
         tempat_lahir: formData.tempatLahir || null,
         tanggal_lahir: formData.tanggalLahir || null,
@@ -582,6 +584,24 @@ const PendaftaranSiswa = () => {
                       />
                     </div>
 
+                    <div className={styles.field}>
+                      <label className={styles.label} htmlFor="nis">
+                        NIS (Nomor Induk Siswa)
+                      </label>
+                      <input
+                        id="nis"
+                        name="nis"
+                        type="text"
+                        className={styles.input}
+                        placeholder="cth: 1234567890"
+                        value={formData.nis}
+                        onChange={handleInputChange}
+                        maxLength={30}
+                      />
+                    </div>
+                  </div>
+
+                  <div className={styles.fieldRow}>
                     <div className={styles.field}>
                       <label className={styles.label} htmlFor="tempatLahir">
                         Tempat &amp; Tanggal Lahir

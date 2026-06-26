@@ -289,9 +289,9 @@ const DashboardAdmin = () => {
                             >
                               Konfirmasi
                             </button>
-                            <button type="button" className={styles.btnDanger}>
+                            {/* <button type="button" className={styles.btnDanger}>
                               Koreksi
-                            </button>
+                            </button> */}
                           </div>
                         </td>
                       </tr>
@@ -302,8 +302,8 @@ const DashboardAdmin = () => {
             </div>
           </div>
 
-          {}
-          <div className={styles.card}>
+          {/* {} */}
+          {/* <div className={styles.card}>
             <div className={styles.cardHeader}>
               <h2 className={styles.cardTitle}>
                 Monitoring Piutang &amp; Tagihan Siswa (Jatuh Tempo)
@@ -399,8 +399,8 @@ const DashboardAdmin = () => {
                 </button>
               </div>
             </div>
-          </div>
-        {}
+          </div> */}
+        {/* {} */}
         <footer className={styles.footer}>
           <div className={styles.footerLeft}>
             <p className={styles.footerTitle}>Grand Tiga Sunggal</p>

@@ -13,6 +13,7 @@ import {
   MdClass,
   MdLogout,
   MdSwapHoriz,
+  MdBook,
 } from 'react-icons/md';
 import styles from './AdminLayout.module.css';
 import logogrand from '../../assets/logogrand.png';
@@ -28,6 +29,7 @@ const NAV_ITEMS = [
   { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
   { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
   { label: 'Infal Tutor', icon: MdSwapHoriz, to: '/admin/infal-tutor' },
+  { label: 'Manajemen Mapel', icon: MdBook, to: '/admin/mapel' },
 ];
 
 function AdminLayout({ children }) {

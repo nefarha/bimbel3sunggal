@@ -70,6 +70,39 @@ export const createJadwal = async (req, res) => {
       }
     }
 
+    const hariArray = typeof hari === 'string' ? (() => { try { return JSON.parse(hari); } catch { return [hari]; } })() : hari;
+    if (!Array.isArray(hariArray) || hariArray.length === 0) {
+      return res.status(400).json({ success: false, message: 'Hari harus berupa array yang valid' });
+    }
+
+    // Cek konflik jadwal (tutor & kelas)
+    const conflicts = await jadwalRepository.findConflicts({
+      id_tutor: parseInt(id_tutor, 10),
+      id_kelas: parseInt(id_kelas, 10),
+      hari: hariArray,
+      jam,
+      jam_selesai: jam_selesai || null,
+    });
+
+    if (conflicts.length > 0) {
+      const tutorConflicts = conflicts.filter(c => c.id_tutor === parseInt(id_tutor, 10));
+      const kelasConflicts = conflicts.filter(c => c.id_kelas === parseInt(id_kelas, 10));
+      const messages = [];
+      if (tutorConflicts.length > 0) {
+        const days = tutorConflicts.map(c => Array.isArray(c.hari) ? c.hari.join(', ') : c.hari).join(', ');
+        messages.push(`Tutor "${tutorConflicts[0].nama_tutor}" sudah memiliki jadwal pada ${days} jam ${tutorConflicts[0].jam} - ${tutorConflicts[0].jam_selesai || 'selesai'}`);
+      }
+      if (kelasConflicts.length > 0) {
+        const days = kelasConflicts.map(c => Array.isArray(c.hari) ? c.hari.join(', ') : c.hari).join(', ');
+        messages.push(`Kelas "${kelasConflicts[0].nama_kelas}" sudah memiliki jadwal pada ${days} jam ${kelasConflicts[0].jam} - ${kelasConflicts[0].jam_selesai || 'selesai'}`);
+      }
+      return res.status(409).json({
+        success: false,
+        message: 'Jadwal bentrok: ' + messages.join('; '),
+        conflicts,
+      });
+    }
+
     const payload = {
       ...req.body,
       id_kelas: parseInt(id_kelas, 10),
@@ -99,6 +132,48 @@ export const updateJadwal = async (req, res) => {
           success: false,
           message: 'Jam selesai harus lebih besar dari jam mulai',
         });
+      }
+    }
+
+    // Cek konflik jadwal (tutor & kelas) — kecuali jadwal yang sedang diedit
+    if (payload.hari || payload.jam || payload.id_tutor || payload.id_kelas) {
+      const existing = await jadwalRepository.findById(parseInt(req.params.id, 10));
+      const hariArray = payload.hari
+        ? (typeof payload.hari === 'string' ? (() => { try { return JSON.parse(payload.hari); } catch { return [payload.hari]; } })() : payload.hari)
+        : existing?.hari || [];
+      const id_tutor = payload.id_tutor || existing?.id_tutor;
+      const id_kelas = payload.id_kelas || existing?.id_kelas;
+      const jam = payload.jam || existing?.jam;
+      const jam_selesai = payload.jam_selesai !== undefined ? payload.jam_selesai : (existing?.jam_selesai || null);
+
+      if (Array.isArray(hariArray) && hariArray.length > 0 && id_tutor && id_kelas) {
+        const conflicts = await jadwalRepository.findConflicts({
+          id_tutor,
+          id_kelas,
+          hari: hariArray,
+          jam,
+          jam_selesai: jam_selesai || null,
+          excludeId: parseInt(req.params.id, 10),
+        });
+
+        if (conflicts.length > 0) {
+          const tutorConflicts = conflicts.filter(c => c.id_tutor === id_tutor);
+          const kelasConflicts = conflicts.filter(c => c.id_kelas === id_kelas);
+          const messages = [];
+          if (tutorConflicts.length > 0) {
+            const days = tutorConflicts.map(c => Array.isArray(c.hari) ? c.hari.join(', ') : c.hari).join(', ');
+            messages.push(`Tutor "${tutorConflicts[0].nama_tutor}" sudah memiliki jadwal pada ${days} jam ${tutorConflicts[0].jam} - ${tutorConflicts[0].jam_selesai || 'selesai'}`);
+          }
+          if (kelasConflicts.length > 0) {
+            const days = kelasConflicts.map(c => Array.isArray(c.hari) ? c.hari.join(', ') : c.hari).join(', ');
+            messages.push(`Kelas "${kelasConflicts[0].nama_kelas}" sudah memiliki jadwal pada ${days} jam ${kelasConflicts[0].jam} - ${kelasConflicts[0].jam_selesai || 'selesai'}`);
+          }
+          return res.status(409).json({
+            success: false,
+            message: 'Jadwal bentrok: ' + messages.join('; '),
+            conflicts,
+          });
+        }
       }
     }
 

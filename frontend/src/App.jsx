@@ -35,6 +35,7 @@ import KelolaGaji from './pages/dashboard/owner/kelola_gaji'
 import LaporanKeuangan from './pages/dashboard/owner/laporan_keuangan'
 import Pengaturan from './pages/dashboard/owner/pengaturan'
 import InfalTutor from './pages/dashboard/admin/infal_tutor'
+import ManajemenMapel from './pages/dashboard/admin/manajemen_mapel'
 import './App.css'
 
 function App() {
@@ -135,6 +136,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <InfalTutor />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/mapel"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <ManajemenMapel />
             </ProtectedRoute>
           }
         />

@@ -3,7 +3,7 @@ import { query, queryOne } from '../../config/query.js';
 const TABLE = 'siswa';
 
 const COLUMNS = [
-  'id_siswa', 'id_user', 'nama', 'tempat_lahir', 'tanggal_lahir',
+  'id_siswa', 'id_user', 'nis', 'nama', 'tempat_lahir', 'tanggal_lahir',
   'jenis_kelamin', 'kelas', 'mapel', 'asal_sekolah', 'alamat',
   'tanggal_masuk', 'nama_ortu', 'pekerjaan_ortu', 'no_hp_ortu',
   'pendidikan_ortu', 'spp', 'status',

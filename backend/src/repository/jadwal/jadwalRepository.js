@@ -133,6 +133,69 @@ export class JadwalRepository {
     ));
   }
 
+  /**
+   * Cari jadwal yang bentrok (konflik) untuk tutor dan/atau kelas
+   * pada hari dan jam yang sama.
+   *
+   * @param {Object} params
+   * @param {number} params.id_tutor
+   * @param {number} params.id_kelas
+   * @param {string[]} params.hari - array nama hari, e.g. ['Senin','Rabu']
+   * @param {string} params.jam - jam mulai baru (HH:mm)
+   * @param {string|null} params.jam_selesai - jam selesai baru (HH:mm) atau null
+   * @param {number} [params.excludeId] - id_jadwal yang dikecualikan (saat edit)
+   * @returns {Promise<Array>} daftar jadwal yang bentrok
+   */
+  async findConflicts({ id_tutor, id_kelas, hari, jam, jam_selesai, excludeId }) {
+    if (!hari || hari.length === 0) return [];
+
+    // Build JSON_CONTAINS untuk setiap hari yang dipilih
+    const dayConditions = hari.map(() => 'JSON_CONTAINS(j.hari, ?)');
+    const dayParams = hari.map((h) => JSON.stringify(h));
+
+    // new_end: jika jam_selesai diisi pakai itu, fallback ke jam (point)
+    const newEnd = jam_selesai || jam;
+
+    const conditions = [
+      '(j.id_tutor = ? OR j.id_kelas = ?)',
+      `(${dayConditions.join(' OR ')})`,
+      // Time-overlap: existingStart < newEnd AND existingEnd > newStart
+      // Jika jam_selesai IS NULL, anggap sebagai point (existingEnd = existingStart)
+      `(
+        (j.jam < ? AND COALESCE(j.jam_selesai, j.jam) > ?)
+        OR
+        (j.jam = ? AND j.jam_selesai IS NULL AND ? IS NULL)
+      )`,
+    ];
+
+    const params = [
+      id_tutor,
+      id_kelas,
+      ...dayParams,
+      newEnd,    // j.jam < newEnd
+      jam,       // COALESCE(j.jam_selesai, j.jam) > jam_baru
+      jam,       // j.jam = jam_baru (untuk point conflict)
+      jam_selesai, // ? IS NULL (cek apakah baru juga point)
+    ];
+
+    if (excludeId) {
+      conditions.push('j.id_jadwal != ?');
+      params.push(excludeId);
+    }
+
+    const sql = `
+      SELECT ${SELECT_COLUMNS.join(', ')}
+      FROM \`${TABLE}\` j
+      INNER JOIN \`kelas\` k ON k.id_kelas = j.id_kelas
+      LEFT JOIN \`mapel\` m ON m.id_mapel = j.id_mapel
+      INNER JOIN \`tutor\` t ON t.id_tutor = j.id_tutor
+      WHERE ${conditions.join(' AND ')}
+      ORDER BY j.jam ASC
+    `;
+
+    return parseHariList(await query(sql, params));
+  }
+
   async delete(id) {
     await query(`DELETE FROM \`${TABLE}\` WHERE id_jadwal = ?`, [id]);
     return { id_jadwal: id };

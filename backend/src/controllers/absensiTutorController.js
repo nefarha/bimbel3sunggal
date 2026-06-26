@@ -32,18 +32,21 @@ export const getTutorAttendanceToday = async (req, res) => {
     const todayDate = formatDateOnly(tanggalDate);
 
     const rows = await query(
-      `SELECT
+      `SELECT DISTINCT
          t.id_tutor,
          t.nama_tutor,
          t.mapel,
          att.status AS status_kehadiran
        FROM tutor t
+       INNER JOIN jadwal j
+         ON j.id_tutor = t.id_tutor
+        AND JSON_CONTAINS(j.hari, ?)
        LEFT JOIN absensi_tutor att
          ON att.id_tutor = t.id_tutor
         AND att.tanggal = ?
        WHERE t.status = 'Aktif'
        ORDER BY t.nama_tutor ASC`,
-      [todayDate]
+      [JSON.stringify(todayName), todayDate]
     );
 
     const data = rows.map((row) => ({
