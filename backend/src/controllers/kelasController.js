@@ -10,7 +10,10 @@ const handleError = (res, error) => {
 
 export const getAllKelas = async (req, res) => {
   try {
-    const kelas = await kelasRepository.findAll();
+    const { id_tutor } = req.query;
+    const filters = {};
+    if (id_tutor) filters.id_tutor = parseInt(id_tutor, 10);
+    const kelas = await kelasRepository.findAll({ where: filters });
     res.json({ success: true, data: kelas });
   } catch (error) {
     handleError(res, error);

@@ -1,0 +1,296 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pageTitle {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #00236f;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 0.85rem;
+  color: #757682;
+  margin: 4px 0 0;
+}
+
+.btnRefresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #00236f;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btnRefresh:hover {
+  background-color: #eef2ff;
+}
+
+.btnRefresh:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnIcon {
+  font-size: 1.05rem;
+}
+
+.alertError {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #b91c1c;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.alertClose {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #b91c1c;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+
+/* ─── Card ─── */
+
+.card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 16px 24px;
+  border-bottom: 1px solid #e1e2e4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f3f4f6;
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0;
+}
+
+/* ─── Table ─── */
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background-color: #f9fafb;
+  color: #444651;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #f0f1f3;
+  transition: background-color 0.15s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+.table tbody td {
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: #191c1e;
+  white-space: nowrap;
+}
+
+.tdBold {
+  font-weight: 700;
+}
+
+.tableReceivables thead {
+  background-color: #dbeafe;
+  color: #1e3a8a;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.tableReceivables thead th {
+  padding: 14px 24px;
+}
+
+.tableReceivables tbody tr td {
+  padding: 14px 24px;
+}
+
+/* ─── Pill ─── */
+
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.pillPending {
+  background-color: #fea619;
+  color: #653e00;
+}
+
+/* ─── WhatsApp Input ─── */
+
+.whatsappInput {
+  width: 100%;
+  min-width: 140px;
+  padding: 6px 12px;
+  border: 1px solid #fed7aa;
+  background-color: #fff7ed;
+  color: #9a3412;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: inherit;
+  font-weight: 500;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.whatsappInput::placeholder {
+  color: #fdba74;
+}
+
+.whatsappInput:focus {
+  border-color: #f97316;
+  box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.2);
+}
+
+/* ─── Button CTA ─── */
+
+.btnCta {
+  background-color: #f97316;
+  color: #ffffff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+.btnCta:hover {
+  background-color: #ea580c;
+}
+
+.btnCta:active {
+  opacity: 0.9;
+}
+
+/* ─── Empty Cell ─── */
+
+.emptyCell {
+  text-align: center;
+  color: #757682;
+  font-style: italic;
+  padding: 24px !important;
+  white-space: normal !important;
+}
+
+/* ─── Footer / Pagination ─── */
+
+.tableFooter {
+  padding: 16px 24px;
+  background-color: #f3f4f6;
+  border-top: 1px solid #e1e2e4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tableFooterText {
+  font-size: 0.875rem;
+  color: #757682;
+  margin: 0;
+}
+
+.pager {
+  display: flex;
+  gap: 8px;
+}
+
+.pagerBtn {
+  padding: 4px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #191c1e;
+  transition: background-color 0.15s ease;
+}
+
+.pagerBtn:hover {
+  background-color: #e1e2e4;
+}
+
+.pagerBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pagerPage {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8rem;
+  color: #444651;
+  font-weight: 500;
+  padding: 0 4px;
+}

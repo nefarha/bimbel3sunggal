@@ -35,6 +35,7 @@ const InfalTutor = () => {
 
   const [tutors, setTutors] = useState([]);
   const [kelas, setKelas] = useState([]);
+  const [filteredKelas, setFilteredKelas] = useState([]);
   const [modal, setModal] = useState({ open: false, mode: 'add' });
   const [form, setForm] = useState({
     id_tutor_pengganti: '',
@@ -83,7 +84,7 @@ const InfalTutor = () => {
   useEffect(() => {
     fetchData();
     fetchTutors();
-    fetchData();
+    fetchKelas();
   }, [fetchData]);
 
   const handleExport = () => {
@@ -110,7 +111,25 @@ const InfalTutor = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => {
+      const updated = { ...prev, [name]: value };
+      // Jika tutor absen berubah, load kelas yang diajar oleh tutor tersebut
+      if (name === 'id_tutor_absen') {
+        updated.id_kelas = '';
+        if (value) {
+          api
+            .get(`/kelas?id_tutor=${value}`)
+            .then((res) => {
+              const list = Array.isArray(res.data?.data) ? res.data.data : [];
+              setFilteredKelas(list);
+            })
+            .catch(() => setFilteredKelas([]));
+        } else {
+          setFilteredKelas([]);
+        }
+      }
+      return updated;
+    });
   };
 
   const openAddModal = () => {
@@ -129,12 +148,21 @@ const InfalTutor = () => {
       nominal: item.nominal,
       keterangan: item.keterangan || '',
     });
+    // Load kelas untuk tutor absen
+    api
+      .get(`/kelas?id_tutor=${item.id_tutor_absen}`)
+      .then((res) => {
+        const list = Array.isArray(res.data?.data) ? res.data.data : [];
+        setFilteredKelas(list);
+      })
+      .catch(() => setFilteredKelas([]));
     setModal({ open: true, mode: 'edit' });
   };
 
   const closeModal = () => {
     setModal({ open: false, mode: 'add' });
     setEditId(null);
+    setFilteredKelas([]);
   };
 
   const handleSubmit = async (e) => {
@@ -274,17 +302,23 @@ const InfalTutor = () => {
                 </div>
                 <div className={styles.formField}>
                   <label>Tutor Absen (Yang digantikan) *</label>
-                  <select name="id_tutor_absen" value={form.id_tutor_absen} onChange={handleInputChange} required>
+                  <select name="id_tutor_absen" value={form.id_tutor_absen} onChange={handleInputChange} required disabled={!form.id_tutor_pengganti}>
                     <option value="">-- Pilih Tutor --</option>
-                    {tutors.map((t) => (<option key={t.id_tutor} value={t.id_tutor}>{t.nama_tutor}</option>))}
+                    {tutors.filter((t) => String(t.id_tutor) !== form.id_tutor_pengganti).map((t) => (<option key={t.id_tutor} value={t.id_tutor}>{t.nama_tutor}</option>))}
                   </select>
+                  {!form.id_tutor_pengganti && <span style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 4 }}>Pilih tutor pengganti terlebih dahulu</span>}
                 </div>
                 <div className={styles.formField}>
                   <label>Kelas *</label>
-                  <select name="id_kelas" value={form.id_kelas} onChange={handleInputChange} required>
+                  <select name="id_kelas" value={form.id_kelas} onChange={handleInputChange} required disabled={!form.id_tutor_absen}>
                     <option value="">-- Pilih Kelas --</option>
-                    {kelas.map((k) => (<option key={k.id_kelas} value={k.id_kelas}>{k.nama_kelas}</option>))}
+                    {filteredKelas.map((k) => (<option key={k.id_kelas} value={k.id_kelas}>{k.nama_kelas}</option>))}
                   </select>
+                  {!form.id_tutor_absen ? (
+                    <span style={{ fontSize: '0.75rem', color: '#64748b', marginTop: 4 }}>Pilih tutor absen terlebih dahulu</span>
+                  ) : filteredKelas.length === 0 ? (
+                    <span style={{ fontSize: '0.75rem', color: '#ea580c', marginTop: 4 }}>Tutor ini belum memiliki jadwal kelas</span>
+                  ) : null}
                 </div>
                 <div className={styles.formField}>
                   <label>Nominal Infal</label>
