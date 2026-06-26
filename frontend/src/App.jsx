@@ -23,6 +23,7 @@ import Kehadiran from './pages/dashboard/tutor/kehadiran'
 import Gaji from './pages/dashboard/tutor/gaji'
 import ProfileTutor from './pages/dashboard/tutor/profile'
 import AbsensiSiswaTutor from './pages/dashboard/tutor/absensi_siswa'
+import InfalTutorPage from './pages/dashboard/tutor/infal'
 import StudentLayout from './components/siswa/StudentLayout'
 import SiswaDashboard from './pages/dashboard/siswa/siswa_dashboard'
 import ProfileSiswa from './pages/dashboard/siswa/profile'
@@ -36,6 +37,8 @@ import LaporanKeuangan from './pages/dashboard/owner/laporan_keuangan'
 import Pengaturan from './pages/dashboard/owner/pengaturan'
 import InfalTutor from './pages/dashboard/admin/infal_tutor'
 import ManajemenMapel from './pages/dashboard/admin/manajemen_mapel'
+import RekapAbsensiSiswaAdmin from './pages/dashboard/admin/rekap_absensi_siswa'
+import SemuaPembayaran from './pages/dashboard/admin/semua_pembayaran'
 import './App.css'
 
 function App() {
@@ -72,6 +75,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <PembayaranSiswa />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/semua-pembayaran"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <SemuaPembayaran />
             </ProtectedRoute>
           }
         />
@@ -120,6 +131,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <RekapAbsensi />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/rekap-absensi-siswa"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <RekapAbsensiSiswaAdmin />
             </ProtectedRoute>
           }
         />
@@ -211,6 +230,16 @@ function App() {
             <ProtectedRoute allowedRoles={['tutor']}>
               <TutorLayout>
                 <AbsensiSiswaTutor />
+              </TutorLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/tutor/infal"
+          element={
+            <ProtectedRoute allowedRoles={['tutor']}>
+              <TutorLayout>
+                <InfalTutorPage />
               </TutorLayout>
             </ProtectedRoute>
           }

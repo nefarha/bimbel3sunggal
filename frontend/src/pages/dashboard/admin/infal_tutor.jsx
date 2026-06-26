@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { MdDelete, MdEdit, MdClose } from 'react-icons/md';
+import { MdDelete, MdEdit, MdClose, MdFileDownload } from 'react-icons/md';
+import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './infal_tutor.module.css';
@@ -82,8 +83,30 @@ const InfalTutor = () => {
   useEffect(() => {
     fetchData();
     fetchTutors();
-    fetchKelas();
+    fetchData();
   }, [fetchData]);
+
+  const handleExport = () => {
+    const columns = [
+      { header: 'No', key: 'no' },
+      { header: 'Tanggal', key: 'tanggal' },
+      { header: 'Tutor Pengganti', key: 'pengganti' },
+      { header: 'Tutor Absen', key: 'absen' },
+      { header: 'Kelas', key: 'kelas' },
+      { header: 'Nominal', key: 'nominal' },
+      { header: 'Keterangan', key: 'keterangan' },
+    ];
+    const rows = data.map((d, i) => ({
+      no: i + 1,
+      tanggal: d.tanggal ? new Date(d.tanggal).toLocaleDateString('id-ID') : '',
+      pengganti: d.nama_tutor_pengganti || '',
+      absen: d.nama_tutor_absen || '',
+      kelas: d.nama_kelas || '',
+      nominal: d.nominal || 0,
+      keterangan: d.keterangan || '',
+    }));
+    exportToExcel(rows, columns, `Infal_Tutor_${bulan}_${tahun}`);
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -178,6 +201,9 @@ const InfalTutor = () => {
             })}
           </select>
         </div>
+        <button className={styles.addBtn} onClick={handleExport}>
+          <MdFileDownload /> Export Excel
+        </button>
         <button className={styles.addBtn} onClick={openAddModal}>+ Catat Infal</button>
       </div>
 

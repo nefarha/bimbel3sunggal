@@ -8,6 +8,7 @@ import {
   MdHowToReg,
   MdAttachMoney,
   MdLogout,
+  MdSwapHoriz,
 } from 'react-icons/md';
 import styles from './TutorLayout.module.css';
 import logogrand from '../../assets/logogrand.png';
@@ -18,6 +19,7 @@ const NAV_ITEMS = [
   { label: 'Jadwal Mengajar', icon: MdCalendarMonth, to: '/tutor/jadwal-mengajar' },
   { label: 'Kehadiran', icon: MdHowToReg, to: '/tutor/kehadiran' },
   { label: 'Gaji', icon: MdAttachMoney, to: '/tutor/gaji' },
+  { label: 'Infal', icon: MdSwapHoriz, to: '/tutor/infal' },
 ];
 
 function TutorLayout({ children }) {
@@ -42,6 +44,7 @@ function TutorLayout({ children }) {
     if (location.pathname.includes('jadwal-mengajar')) return 'Jadwal Mengajar';
     if (location.pathname.includes('kehadiran')) return 'Kehadiran';
     if (location.pathname.includes('gaji')) return 'Gaji';
+    if (location.pathname.includes('infal')) return 'Infal';
     return 'Tutor';
   };
 

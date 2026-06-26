@@ -20,7 +20,7 @@ const MONTHS = [
   { value: 12, label: 'Desember' },
 ];
 
-const RekapAbsensi = () => {
+const RekapAbsensiSiswa = () => {
   const today = new Date();
   const [bulan, setBulan] = useState(today.getMonth() + 1);
   const [tahun, setTahun] = useState(today.getFullYear());
@@ -38,13 +38,13 @@ const RekapAbsensi = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await api.get('/absensi-tutor/recap', {
+      const response = await api.get('/absensi-siswa/recap', {
         params: { bulan, tahun },
       });
       if (response.data?.success) {
         setData(response.data.data || []);
       } else {
-        setError('Gagal memuat data rekap absensi.');
+        setError('Gagal memuat data rekap absensi siswa.');
       }
     } catch (err) {
       console.error('Fetch recap error:', err);
@@ -63,19 +63,19 @@ const RekapAbsensi = () => {
   const handleExport = () => {
     const columns = [
       { header: 'No', key: 'no' },
-      { header: 'Nama Tutor', key: 'nama' },
+      { header: 'Nama Siswa', key: 'nama' },
       { header: 'Kelas', key: 'kelas' },
       { header: 'Hadir', key: 'hadir' },
       { header: 'Alpha', key: 'alpha' },
     ];
     const rows = data.map((d, i) => ({
       no: i + 1,
-      nama: d.nama_tutor || '',
+      nama: d.nama_siswa || '',
       kelas: d.kelas_list || '',
       hadir: d.hadir || 0,
       alpha: d.alpha || 0,
     }));
-    exportToExcel(rows, columns, `Rekap_Absensi_Tutor_${bulan}_${tahun}`);
+    exportToExcel(rows, columns, `Rekap_Absensi_Siswa_${bulan}_${tahun}`);
   };
 
   return (
@@ -84,8 +84,8 @@ const RekapAbsensi = () => {
         {/* Header Section */}
         <div className={styles.header}>
           <div className={styles.titleSection}>
-            <h1 className={styles.pageTitle}>Rekap Absensi Tutor</h1>
-            <p className={styles.pageSubtitle}>Monitoring kehadiran tutor bulanan</p>
+            <h1 className={styles.pageTitle}>Rekap Absensi Siswa</h1>
+            <p className={styles.pageSubtitle}>Monitoring kehadiran siswa bulanan</p>
           </div>
 
           <div className={styles.headerActions}>
@@ -150,7 +150,7 @@ const RekapAbsensi = () => {
         {loading ? (
           <div className={styles.loadingState}>
             <div className={styles.spinner} />
-            <span>Memuat data rekap absensi...</span>
+            <span>Memuat data rekap absensi siswa...</span>
           </div>
         ) : error ? (
           <div className={styles.errorState}>
@@ -158,24 +158,24 @@ const RekapAbsensi = () => {
           </div>
         ) : data.length === 0 ? (
           <div className={styles.emptyState}>
-            <span>Tidak ada data tutor aktif ditemukan.</span>
+            <span>Tidak ada data siswa aktif ditemukan.</span>
           </div>
         ) : (
-          data.map((tutor) => (
-            <div key={tutor.id_tutor} className={styles.tutorCard}>
+          data.map((siswa) => (
+            <div key={siswa.id_siswa} className={styles.tutorCard}>
               <div className={styles.tutorHeader}>
                 <div className={styles.tutorInfo}>
-                  <h3 className={styles.tutorName}>{tutor.nama_tutor}</h3>
-                  <p className={styles.tutorClass}>{tutor.kelas_list}</p>
+                  <h3 className={styles.tutorName}>{siswa.nama_siswa}</h3>
+                  <p className={styles.tutorClass}>{siswa.kelas_list}</p>
                 </div>
 
                 <div className={styles.summaryBoxes}>
                   <div className={`${styles.summaryBox} ${styles.summaryBoxHadir}`}>
-                    <span className={styles.summaryValue}>{tutor.hadir}</span>
+                    <span className={styles.summaryValue}>{siswa.hadir}</span>
                     <span className={styles.summaryLabel}>HADIR</span>
                   </div>
                   <div className={`${styles.summaryBox} ${styles.summaryBoxAlpha}`}>
-                    <span className={styles.summaryValue}>{tutor.alpha}</span>
+                    <span className={styles.summaryValue}>{siswa.alpha}</span>
                     <span className={styles.summaryLabel}>ALPHA</span>
                   </div>
                 </div>
@@ -186,7 +186,7 @@ const RekapAbsensi = () => {
               </div>
 
               <div className={styles.calendarGrid}>
-                {tutor.days.map((day) => {
+                {siswa.days.map((day) => {
                   let circleClass = styles.dayCircle;
                   if (day.status === 'hadir') {
                     circleClass += ` ${styles.dayCircleHadir}`;
@@ -211,4 +211,4 @@ const RekapAbsensi = () => {
   );
 };
 
-export default RekapAbsensi;
+export default RekapAbsensiSiswa;

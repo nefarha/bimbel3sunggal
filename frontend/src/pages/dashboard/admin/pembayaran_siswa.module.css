@@ -143,11 +143,35 @@
 }
 
 .input[readonly] {
-  background-color: #f3f4f6;
+  background-color: #f9fafb;
   color: #444651;
   cursor: not-allowed;
 }
 
+.textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #191c1e;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  resize: vertical;
+  min-height: 72px;
+  line-height: 1.5;
+}
+
+.textarea::placeholder {
+  color: #94a3b8;
+}
+
+.textarea:focus {
+  border-color: #00236f;
+  box-shadow: 0 0 0 2px rgba(0, 35, 111, 0.15);
+}
 
 .searchWrap {
   position: relative;

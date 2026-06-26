@@ -9,6 +9,12 @@
   gap: 12px;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .pageTitle {
   font-size: 1.5rem;
   font-weight: 700;
@@ -59,6 +65,26 @@
   font-size: 1.05rem;
 }
 
+.btnExport {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btnExport:hover {
+  background-color: #d1fae5;
+  border-color: #047857;
+}
 
 .toastOverlay {
   position: fixed;

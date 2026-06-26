@@ -14,6 +14,8 @@ import {
   MdLogout,
   MdSwapHoriz,
   MdBook,
+  MdPeople,
+  MdReceipt,
 } from 'react-icons/md';
 import styles from './AdminLayout.module.css';
 import logogrand from '../../assets/logogrand.png';
@@ -22,14 +24,16 @@ const NAV_ITEMS = [
   { label: 'Dashboard', icon: MdDashboard, to: '/admin/dashboard' },
   { label: 'Pendaftaran Siswa', icon: MdPersonAdd, to: '/admin/pendaftaran' },
   { label: 'Pembayaran Siswa', icon: MdPayments, to: '/admin/pembayaran' },
+  { label: 'Semua Pembayaran', icon: MdReceipt, to: '/admin/semua-pembayaran' },
   { label: 'Manajemen Siswa', icon: MdGroup, to: '/admin/manajemen_siswa' },
   { label: 'Daftar Kelas', icon: MdClass, to: '/admin/kelas' },
+  { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
+  { label: 'Mata Pelajaran', icon: MdBook, to: '/admin/mapel' },
   { label: 'Manajemen Tutor', icon: MdSchool, to: '/admin/guru' },
   { label: 'Presensi Tutor', icon: MdAccessTime, to: '/admin/presensi_guru' },
-  { label: 'Jadwal', icon: MdCalendarMonth, to: '/admin/jadwal' },
   { label: 'Rekap Absensi', icon: MdHowToReg, to: '/admin/absensi' },
+  { label: 'Rekap Absensi Siswa', icon: MdPeople, to: '/admin/rekap-absensi-siswa' },
   { label: 'Infal Tutor', icon: MdSwapHoriz, to: '/admin/infal-tutor' },
-  { label: 'Manajemen Mapel', icon: MdBook, to: '/admin/mapel' },
 ];
 
 function AdminLayout({ children }) {

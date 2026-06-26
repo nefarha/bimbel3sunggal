@@ -337,3 +337,110 @@ export const getMyAbsensiRecap = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// ─── GET /absensi-siswa/recap — rekap absensi semua siswa (admin) ───
+export const getSiswaRecap = async (req, res) => {
+  try {
+    const { bulan, tahun } = req.query;
+    const today = new Date();
+    const targetMonth = bulan ? parseInt(bulan, 10) : today.getMonth() + 1;
+    const targetYear = tahun ? parseInt(tahun, 10) : today.getFullYear();
+
+    // Ambil semua siswa aktif
+    const siswa = await query(
+      `SELECT
+         s.id_siswa,
+         s.nama AS nama_siswa,
+         GROUP_CONCAT(DISTINCT k.nama_kelas ORDER BY k.nama_kelas SEPARATOR ', ') AS kelas_list
+       FROM siswa s
+       LEFT JOIN kelas_siswa ks ON ks.id_siswa = s.id_siswa
+       LEFT JOIN kelas k ON k.id_kelas = ks.id_kelas
+       WHERE s.status = 'Aktif'
+       GROUP BY s.id_siswa, s.nama
+       ORDER BY s.nama ASC`
+    );
+
+    // Ambil semua absensi siswa di bulan tersebut
+    const attendanceRecords = await query(
+      `SELECT id_siswa, DAY(tanggal) AS hari, status
+       FROM absensi_siswa
+       WHERE MONTH(tanggal) = ? AND YEAR(tanggal) = ?`,
+      [targetMonth, targetYear]
+    );
+
+    // Kelompokkan per siswa per hari
+    const attendanceMap = {};
+    attendanceRecords.forEach((rec) => {
+      if (!attendanceMap[rec.id_siswa]) {
+        attendanceMap[rec.id_siswa] = {};
+      }
+      // Jika sudah ada catatan 'Hadir', jangan ditimpa status lain
+      if (!attendanceMap[rec.id_siswa][rec.hari] || attendanceMap[rec.id_siswa][rec.hari] === 'Tidak Hadir') {
+        attendanceMap[rec.id_siswa][rec.hari] = rec.status;
+      }
+    });
+
+    const numDays = new Date(targetYear, targetMonth, 0).getDate();
+
+    const data = siswa.map((s) => {
+      const siswaAttendance = attendanceMap[s.id_siswa] || {};
+      const days = [];
+      let hadirCount = 0;
+      let alphaCount = 0;
+
+      for (let d = 1; d <= numDays; d++) {
+        const dateObj = new Date(targetYear, targetMonth - 1, d);
+        const dayOfWeek = dateObj.getDay();
+        const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+        const status = siswaAttendance[d] || null;
+
+        let displayStatus = 'alpha';
+        if (status === 'Hadir') {
+          displayStatus = 'hadir';
+          hadirCount++;
+        } else if (status === 'Tidak Hadir' || status === 'Absen') {
+          displayStatus = 'alpha';
+          alphaCount++;
+        } else if (status === 'Sakit' || status === 'Izin') {
+          // Sakit/Izin ikut dihitung sebagai alpha untuk baris rekap
+          displayStatus = 'alpha';
+          alphaCount++;
+        } else if (isWeekend) {
+          displayStatus = 'weekend';
+        } else {
+          // Hari tanpa data dianggap alpha untuk weekday
+          displayStatus = 'alpha';
+          alphaCount++;
+        }
+
+        days.push({
+          day: d,
+          status: displayStatus,
+        });
+      }
+
+      return {
+        id_siswa: s.id_siswa,
+        nama_siswa: s.nama_siswa,
+        kelas_list: s.kelas_list || '-',
+        hadir: hadirCount,
+        alpha: alphaCount,
+        days,
+      };
+    });
+
+    res.json({
+      success: true,
+      data,
+      meta: {
+        bulan: targetMonth,
+        tahun: targetYear,
+        jumlah_hari: numDays,
+      },
+    });
+  } catch (error) {
+    console.error('❌ getSiswaRecap error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

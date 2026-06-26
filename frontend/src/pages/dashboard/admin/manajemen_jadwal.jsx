@@ -8,7 +8,9 @@ import {
   MdSave,
   MdChevronLeft,
   MdChevronRight,
+  MdFileDownload,
 } from 'react-icons/md';
+import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './manajemen_jadwal.module.css';
@@ -336,14 +338,41 @@ const ManajemenJadwal = () => {
     }
   };
 
+  const handleExport = () => {
+    const columns = [
+      { header: 'No', key: 'no' },
+      { header: 'Hari', key: 'hari' },
+      { header: 'Jam Mulai', key: 'jam' },
+      { header: 'Jam Selesai', key: 'jam_selesai' },
+      { header: 'Kelas', key: 'kelas' },
+      { header: 'Mata Pelajaran', key: 'mapel' },
+      { header: 'Tutor', key: 'tutor' },
+    ];
+    const rows = filteredSchedules.map((s, i) => ({
+      no: i + 1,
+      hari: Array.isArray(s.hari) ? sortHari(s.hari).join(', ') : s.hari || '',
+      jam: s.jam || '',
+      jam_selesai: s.jam_selesai || '',
+      kelas: s.nama_kelas || '',
+      mapel: s.nama_mapel || '',
+      tutor: s.nama_tutor || '',
+    }));
+    exportToExcel(rows, columns, 'Manajemen_Jadwal');
+  };
+
   return (
     <AdminLayout>
       <div className={styles.manajemenJadwal}>
         <div className={styles.header}>
           <h1>Manajemen Jadwal</h1>
-          <button className={styles.addButton} onClick={handleAddClick}>
-            <MdAdd /> Tambah Jadwal
-          </button>
+          <div className={styles.headerActions}>
+            <button className={styles.addButton} onClick={handleExport}>
+              <MdFileDownload /> Export Excel
+            </button>
+            <button className={styles.addButton} onClick={handleAddClick}>
+              <MdAdd /> Tambah Jadwal
+            </button>
+          </div>
         </div>
 
         <div className={styles.controls}>

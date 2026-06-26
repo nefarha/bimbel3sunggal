@@ -17,14 +17,52 @@ const toNumber = (val) => (val !== undefined && val !== null ? Number(val) : 0);
 
 export const getAllPembayaran = async (req, res) => {
   try {
-    const { id_siswa, status, bulan } = req.query;
-    const filters = {};
-    if (id_siswa) filters.id_siswa = parseInt(id_siswa, 10);
-    if (status) filters.status = status;
-    if (bulan) filters.bulan = bulan;
+    const { id_siswa, status, bulan, search } = req.query;
+    const conditions = [];
+    const params = [];
 
-    const data = await pembayaranRepository.findAll({ where: filters });
-    res.json({ success: true, data });
+    if (id_siswa) {
+      conditions.push('p.id_siswa = ?');
+      params.push(parseInt(id_siswa, 10));
+    }
+    if (status) {
+      conditions.push('p.status = ?');
+      params.push(status);
+    }
+    if (bulan) {
+      conditions.push('p.bulan = ?');
+      params.push(bulan);
+    }
+    if (search && search.trim()) {
+      conditions.push('(s.nama LIKE ? OR CAST(p.id_siswa AS CHAR) LIKE ?)');
+      const like = `%${search.trim()}%`;
+      params.push(like, like);
+    }
+
+    const whereSql = conditions.length > 0 ? 'WHERE ' + conditions.join(' AND ') : '';
+
+    const rows = await query(
+      `SELECT
+         p.id_pembayaran,
+         p.id_siswa,
+         s.nama AS nama_siswa,
+         p.bulan,
+         p.tanggal_bayar,
+         p.jenis_pembayaran,
+         p.jumlah,
+         p.metode_pembayaran,
+         p.diskon,
+         p.status,
+         p.tanggal_verifikasi,
+         p.catatan
+       FROM pembayaran p
+       INNER JOIN siswa s ON s.id_siswa = p.id_siswa
+       ${whereSql}
+       ORDER BY p.tanggal_bayar DESC, p.id_pembayaran DESC`,
+      params
+    );
+
+    res.json({ success: true, data: rows });
   } catch (error) {
     handleError(res, error);
   }

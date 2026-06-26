@@ -8,7 +8,17 @@ import {
   MdClose,
   MdSave,
   MdFilterList,
+  MdVisibility,
+  MdPerson,
+  MdSchool,
+  MdCalendarToday,
+  MdPhone,
+  MdAttachMoney,
+  MdBook,
+  MdClass,
+  MdFileDownload,
 } from 'react-icons/md';
+import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './manajemen_siswa.module.css';
@@ -99,6 +109,7 @@ const ManajemenSiswa = () => {
   const [mapelOptions, setMapelOptions] = useState([]);
 
   const [editingSiswa, setEditingSiswa] = useState(null);
+  const [previewSiswa, setPreviewSiswa] = useState(null);
   const [editForm, setEditForm] = useState(initialEditForm);
   const [editSelectedKelas, setEditSelectedKelas] = useState([]);
   const [editError, setEditError] = useState(null);
@@ -231,6 +242,14 @@ const ManajemenSiswa = () => {
       });
   };
 
+  const openPreviewModal = (siswa) => {
+    setPreviewSiswa(siswa);
+  };
+
+  const closePreviewModal = () => {
+    setPreviewSiswa(null);
+  };
+
   const closeEditModal = () => {
     if (saving) return;
     setEditingSiswa(null);
@@ -322,20 +341,56 @@ const ManajemenSiswa = () => {
     setMapelFilter('all');
   };
 
+  const handleExport = () => {
+    const columns = [
+      { header: 'No', key: 'no' },
+      { header: 'NIS', key: 'nis' },
+      { header: 'Nama', key: 'nama' },
+      { header: 'Kelas', key: 'kelas' },
+      { header: 'Asal Sekolah', key: 'asal_sekolah' },
+      { header: 'Status', key: 'status' },
+      { header: 'No. HP', key: 'no_hp' },
+      { header: 'SPP', key: 'spp' },
+      { header: 'Tanggal Masuk', key: 'tanggal_masuk' },
+    ];
+    const rows = filteredSiswa.map((s, i) => ({
+      no: i + 1,
+      nis: s.nis || '',
+      nama: s.nama || '',
+      kelas: s.kelas || '',
+      asal_sekolah: s.asal_sekolah || '',
+      status: s.status || '',
+      no_hp: s.no_hp || '',
+      spp: s.spp || 0,
+      tanggal_masuk: s.tanggal_masuk ? new Date(s.tanggal_masuk).toLocaleDateString('id-ID') : '',
+    }));
+    exportToExcel(rows, columns, 'Manajemen_Siswa');
+  };
+
   return (
     <AdminLayout>
       {}
       <div className={styles.pageHeader}>
         <h2 className={styles.pageTitle}>MANAJEMEN SISWA</h2>
-        <button
-          type="button"
-          className={styles.btnRefresh}
-          onClick={fetchSiswa}
-          disabled={loading}
-        >
-          <MdRefresh className={styles.btnIcon} />
-          {loading ? 'Memuat…' : 'Refresh Data'}
-        </button>
+        <div className={styles.headerActions}>
+          <button
+            type="button"
+            className={styles.btnRefresh}
+            onClick={fetchSiswa}
+            disabled={loading}
+          >
+            <MdRefresh className={styles.btnIcon} />
+            {loading ? 'Memuat…' : 'Refresh Data'}
+          </button>
+          <button
+            type="button"
+            className={styles.btnExport}
+            onClick={handleExport}
+          >
+            <MdFileDownload className={styles.btnIcon} />
+            Export Excel
+          </button>
+        </div>
       </div>
 
       {}
@@ -573,15 +628,26 @@ const ManajemenSiswa = () => {
                         {formatRupiah(siswa.spp)}
                       </td>
                       <td className={styles.actionCell}>
-                        <button
-                          type="button"
-                          className={styles.btnAction}
-                          onClick={() => openEditModal(siswa)}
-                          title="Edit siswa"
-                        >
-                          <MdEdit className={styles.btnIcon} />
-                          Edit
-                        </button>
+                        <div className={styles.actionGroup}>
+                          <button
+                            type="button"
+                            className={styles.btnAction}
+                            onClick={() => openPreviewModal(siswa)}
+                            title="Lihat detail siswa"
+                          >
+                            <MdVisibility className={styles.btnIcon} />
+                            Preview
+                          </button>
+                          <button
+                            type="button"
+                            className={styles.btnAction}
+                            onClick={() => openEditModal(siswa)}
+                            title="Edit siswa"
+                          >
+                            <MdEdit className={styles.btnIcon} />
+                            Edit
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -797,6 +863,143 @@ const ManajemenSiswa = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Preview Modal ──────────────── */}
+      {previewSiswa && (
+        <div
+          className={styles.modalOverlay}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="preview-title"
+          onClick={closePreviewModal}
+        >
+          <div
+            className={styles.previewDialog}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <header className={styles.modalHeader}>
+              <div>
+                <h3 id="preview-title" className={styles.modalTitle}>
+                  <MdVisibility className={styles.modalTitleIcon} />
+                  Detail Siswa
+                </h3>
+                <p className={styles.modalSubtitle}>
+                  Informasi lengkap data siswa
+                </p>
+              </div>
+              <button
+                type="button"
+                className={styles.modalClose}
+                onClick={closePreviewModal}
+                aria-label="Tutup"
+              >
+                ×
+              </button>
+            </header>
+
+            <div className={styles.previewBody}>
+              {/* Data Siswa */}
+              <div className={styles.previewSection}>
+                <h4 className={styles.previewSectionTitle}>
+                  <MdPerson style={{ marginRight: 6, verticalAlign: 'middle' }} />
+                  Data Siswa
+                </h4>
+                <div className={styles.previewGrid}>
+                  <div className={styles.previewFieldFull}>
+                    <span className={styles.previewLabel}>Nama Lengkap</span>
+                    <span className={styles.previewValue}>{previewSiswa.nama || '—'}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>NIS</span>
+                    <span className={styles.previewValue}>{previewSiswa.nis || '—'}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Status</span>
+                    <span className={`${styles.previewBadge} ${previewSiswa.status === 'Aktif' ? styles.previewBadgeAktif : styles.previewBadgeNonaktif}`}>
+                      {previewSiswa.status || '—'}
+                    </span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Kelas (Sekolah)</span>
+                    <span className={styles.previewValue}>{previewSiswa.kelas || '—'}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Tanggal Masuk</span>
+                    <span className={styles.previewValue}>{formatTanggalID(previewSiswa.tanggal_masuk)}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Asal Sekolah</span>
+                    <span className={styles.previewValue}>{previewSiswa.asal_sekolah || '—'}</span>
+                  </div>
+                  <div className={styles.previewFieldFull}>
+                    <span className={styles.previewLabel}>Alamat</span>
+                    <span className={styles.previewValue}>{previewSiswa.alamat || '—'}</span>
+                  </div>
+                  <div className={styles.previewFieldFull}>
+                    <span className={styles.previewLabel}>Mata Pelajaran</span>
+                    <div>
+                      {(() => {
+                        const ids = parseMapelIds(previewSiswa.mapel);
+                        const names = ids.map((id) => getMapelName(id, mapelOptions)).filter(Boolean);
+                        return names.length > 0
+                          ? names.map((name) => (
+                              <span key={name} className={styles.previewChip}>{name}</span>
+                            ))
+                          : <span className={styles.previewValue}>—</span>;
+                      })()}
+                    </div>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>SPP Bulanan</span>
+                    <span className={styles.previewValue}>{formatRupiah(previewSiswa.spp)}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>ID Siswa</span>
+                    <span className={styles.previewValue}>#{previewSiswa.id_siswa}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Data Orang Tua / Wali */}
+              <div className={styles.previewSection}>
+                <h4 className={styles.previewSectionTitle}>
+                  <MdPhone style={{ marginRight: 6, verticalAlign: 'middle' }} />
+                  Data Orang Tua / Wali
+                </h4>
+                <div className={styles.previewGrid}>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Nama Wali</span>
+                    <span className={styles.previewValue}>{previewSiswa.nama_ortu || '—'}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Pekerjaan</span>
+                    <span className={styles.previewValue}>{previewSiswa.pekerjaan_ortu || '—'}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>No. HP</span>
+                    <span className={styles.previewValue}>{previewSiswa.no_hp_ortu || '—'}</span>
+                  </div>
+                  <div className={styles.previewField}>
+                    <span className={styles.previewLabel}>Pendidikan</span>
+                    <span className={styles.previewValue}>{previewSiswa.pendidikan_ortu || '—'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.modalActions} style={{ padding: '12px 24px', borderTop: '1px solid #e2e8f0' }}>
+              <button
+                type="button"
+                className={styles.btnPrimary}
+                onClick={closePreviewModal}
+              >
+                <MdClose className={styles.btnIcon} />
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       )}

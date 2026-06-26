@@ -9,11 +9,13 @@ import {
   createOwnerBonus,
   updateInfal,
   deleteInfal,
+  getInfalMe,
 } from '../controllers/infalController.js';
 
 const router = Router();
 
 router.get('/', authMiddleware, getAllInfal);
+router.get('/me', authMiddleware, getInfalMe);
 router.get('/tutor/:id_tutor', authMiddleware, getInfalByTutor);
 router.get('/total/:id_tutor', authMiddleware, getTotalInfalByTutor);
 router.get('/available-tutors', authMiddleware, getAvailableTutors);

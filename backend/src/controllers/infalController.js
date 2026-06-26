@@ -327,3 +327,68 @@ export const createOwnerBonus = async (req, res) => {
     handleError(res, error);
   }
 };
+
+// ─── GET /api/infal/me — tutor lihat data infal sendiri ───
+export const getInfalMe = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { bulan, tahun } = req.query;
+    const targetMonth = bulan ? parseInt(bulan, 10) : new Date().getMonth() + 1;
+    const targetYear = tahun ? parseInt(tahun, 10) : new Date().getFullYear();
+
+    const tutor = await queryOne(
+      `SELECT id_tutor, nama_tutor FROM tutor WHERE id_user = ? LIMIT 1`,
+      [userId]
+    );
+
+    if (!tutor) {
+      return res.status(404).json({ success: false, message: 'Data tutor tidak ditemukan' });
+    }
+
+    // Ambil data infal (jadwal di mana tutor ini menjadi pengganti)
+    const rows = await query(
+      `SELECT 
+         i.id_infal,
+         i.id_tutor_pengganti,
+         tp.nama_tutor AS nama_tutor_pengganti,
+         i.id_tutor_absen,
+         ta.nama_tutor AS nama_tutor_absen,
+         i.id_kelas,
+         k.nama_kelas,
+         i.tanggal,
+         DATE_FORMAT(i.tanggal, '%d/%m/%Y') AS tanggal_formatted,
+         i.nominal,
+         i.keterangan
+       FROM infal_tutor i
+       INNER JOIN tutor tp ON tp.id_tutor = i.id_tutor_pengganti
+       INNER JOIN tutor ta ON ta.id_tutor = i.id_tutor_absen
+       INNER JOIN kelas k ON k.id_kelas = i.id_kelas
+       WHERE i.id_tutor_pengganti = ?
+         AND MONTH(i.tanggal) = ? AND YEAR(i.tanggal) = ?
+       ORDER BY i.tanggal DESC, i.id_infal DESC`,
+      [tutor.id_tutor, targetMonth, targetYear]
+    );
+
+    // Hitung total nominal
+    const totalResult = await queryOne(
+      `SELECT COUNT(*) AS jumlah_infal, COALESCE(SUM(nominal), 0) AS total_nominal
+       FROM infal_tutor
+       WHERE id_tutor_pengganti = ?
+         AND MONTH(tanggal) = ? AND YEAR(tanggal) = ?`,
+      [tutor.id_tutor, targetMonth, targetYear]
+    );
+
+    res.json({
+      success: true,
+      data: {
+        list: rows,
+        ringkasan: {
+          jumlah_infal: Number(totalResult?.jumlah_infal || 0),
+          total_nominal: Number(totalResult?.total_nominal || 0),
+        },
+      },
+    });
+  } catch (error) {
+    handleError(res, error);
+  }
+};

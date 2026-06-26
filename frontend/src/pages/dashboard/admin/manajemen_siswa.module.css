@@ -9,6 +9,12 @@
   gap: 12px;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .pageTitle {
   font-size: 1.5rem;
   font-weight: 700;
@@ -59,6 +65,26 @@
   font-size: 1.05rem;
 }
 
+.btnExport {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #ffffff;
+  color: #047857;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btnExport:hover {
+  background-color: #d1fae5;
+  border-color: #047857;
+}
 
 .alertError {
   display: flex;
@@ -438,6 +464,12 @@
   text-align: center;
 }
 
+.actionGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .muted {
   color: #94a3b8;
   font-style: italic;
@@ -791,4 +823,110 @@
 .btnSecondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* ─── Preview Modal ──────────────────── */
+
+.previewDialog {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.previewBody {
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.previewSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.previewSectionTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #00236f;
+  margin: 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.previewGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .previewGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.previewField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.previewFieldFull {
+  grid-column: 1 / -1;
+}
+
+.previewLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #757682;
+}
+
+.previewValue {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #191c1e;
+  line-height: 1.5;
+}
+
+.previewBadge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+}
+
+.previewBadgeAktif {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.previewBadgeNonaktif {
+  background-color: #fef2f2;
+  color: #dc2626;
+}
+
+.previewChip {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background-color: rgba(0, 35, 111, 0.08);
+  color: #00236f;
+  border: 1px solid rgba(0, 35, 111, 0.15);
+  margin: 2px 4px 2px 0;
 }

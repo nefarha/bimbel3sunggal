@@ -8,7 +8,9 @@ import {
   MdClose,
   MdSave,
   MdBook,
+  MdFileDownload,
 } from 'react-icons/md';
+import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './manajemen_mapel.module.css';
@@ -49,6 +51,15 @@ const ManajemenMapel = () => {
     const lower = search.toLowerCase();
     return mapelList.filter((m) => m.nama_mapel.toLowerCase().includes(lower));
   }, [mapelList, search]);
+
+  const handleExport = () => {
+    const columns = [
+      { header: 'No', key: 'no' },
+      { header: 'Nama Mata Pelajaran', key: 'nama_mapel' },
+    ];
+    const data = filteredMapel.map((m, i) => ({ no: i + 1, nama_mapel: m.nama_mapel }));
+    exportToExcel(data, columns, 'Manajemen_Mapel');
+  };
 
   const openAddModal = () => {
     setEditingId(null);
@@ -120,6 +131,10 @@ const ManajemenMapel = () => {
           <button className={styles.btnRefresh} onClick={fetchMapel} disabled={loading}>
             <MdRefresh className={styles.btnIcon} />
             Refresh
+          </button>
+          <button className={styles.btnExport} onClick={handleExport}>
+            <MdFileDownload className={styles.btnIcon} />
+            Export Excel
           </button>
           <button className={styles.btnPrimary} onClick={openAddModal}>
             <MdAdd /> Tambah Mapel

@@ -12,7 +12,9 @@ import {
   MdDelete,
   MdPerson,
   MdGroup,
+  MdFileDownload,
 } from 'react-icons/md';
+import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './daftar_kelas.module.css';
@@ -225,20 +227,48 @@ const DaftarKelas = () => {
     }
   };
 
+  const handleExport = () => {
+    const columns = [
+      { header: 'No', key: 'no' },
+      { header: 'Nama Kelas', key: 'nama_kelas' },
+      { header: 'Tutor', key: 'tutor' },
+      { header: 'Mapel', key: 'mapel' },
+      { header: 'Jumlah Siswa', key: 'jumlah_siswa' },
+    ];
+    const rows = filteredKelas.map((k, i) => ({
+      no: i + 1,
+      nama_kelas: k.nama_kelas || '',
+      tutor: k.nama_tutor || '',
+      mapel: k.nama_mapel || '',
+      jumlah_siswa: k.jumlah_siswa || 0,
+    }));
+    exportToExcel(rows, columns, 'Daftar_Kelas');
+  };
+
   return (
     <AdminLayout>
       {}
       <div className={styles.pageHeader}>
         <h2 className={styles.pageTitle}>DAFTAR KELAS</h2>
-        <button
-          type="button"
-          className={styles.btnRefresh}
-          onClick={fetchKelas}
-          disabled={loading}
-        >
-          <MdRefresh className={styles.btnIcon} />
-          {loading ? 'Memuat…' : 'Refresh Data'}
-        </button>
+        <div className={styles.headerActions}>
+          <button
+            type="button"
+            className={styles.btnRefresh}
+            onClick={fetchKelas}
+            disabled={loading}
+          >
+            <MdRefresh className={styles.btnIcon} />
+            {loading ? 'Memuat…' : 'Refresh Data'}
+          </button>
+          <button
+            type="button"
+            className={styles.btnExport}
+            onClick={handleExport}
+          >
+            <MdFileDownload className={styles.btnIcon} />
+            Export Excel
+          </button>
+        </div>
       </div>
 
       {}

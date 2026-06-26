@@ -67,6 +67,7 @@ const INITIAL_FORM = {
   jenisPembayaran: '',
   metodePembayaran: 'Tunai',
   jumlahDibayar: '',
+  keterangan: '',
 };
 
 const PembayaranSiswa = () => {
@@ -321,7 +322,7 @@ const PembayaranSiswa = () => {
             diskon: 0,
             status: 'Verified',
             tanggal_verifikasi: p.tanggal_bayar,
-            catatan: `Pembayaran tunggakan (${paymentMode === 'all' ? 'bulk' : '1 periode'})`,
+            catatan: `Pembayaran tunggakan (${paymentMode === 'all' ? 'bulk' : '1 periode'})${form.keterangan ? ' — ' + form.keterangan : ''}`,
           };
 
           const res = await api.post('/pembayaran', payload);
@@ -367,7 +368,7 @@ const PembayaranSiswa = () => {
         diskon: 0,
         status: 'Verified',
         tanggal_verifikasi: tanggalVerifikasi,
-        catatan: null,
+        catatan: form.keterangan.trim() || null,
       };
 
       const response = await api.post('/pembayaran', payload);
@@ -749,6 +750,23 @@ const PembayaranSiswa = () => {
                       />
                     </div>
                   )}
+
+                  {}
+                  <div className={styles.field}>
+                    <label className={styles.label} htmlFor="keterangan">
+                      Keterangan (opsional)
+                    </label>
+                    <textarea
+                      id="keterangan"
+                      name="keterangan"
+                      className={styles.textarea}
+                      placeholder="cth: Pembayaran SPP bulan Juli, Pembayaran Modul Matematika, dll."
+                      value={form.keterangan}
+                      onChange={handleInputChange}
+                      rows={3}
+                      maxLength={500}
+                    />
+                  </div>
 
                   {}
                   <div className={styles.actionRow}>

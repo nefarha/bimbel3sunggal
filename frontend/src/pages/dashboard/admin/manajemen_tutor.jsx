@@ -13,7 +13,9 @@ import {
   MdSave,
   MdChevronLeft,
   MdChevronRight,
+  MdFileDownload,
 } from 'react-icons/md';
+import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
 import styles from './manajemen_tutor.module.css';
@@ -285,20 +287,50 @@ const ManajemenTutor = () => {
     setViewingTutor(tutor);
   };
 
+  const handleExport = () => {
+    const columns = [
+      { header: 'No', key: 'no' },
+      { header: 'Nama', key: 'nama' },
+      { header: 'No. HP', key: 'no_hp' },
+      { header: 'Alamat', key: 'alamat' },
+      { header: 'Mapel', key: 'mapel' },
+      { header: 'Status', key: 'status' },
+    ];
+    const rows = filteredTutors.map((t, i) => ({
+      no: i + 1,
+      nama: t.nama_tutor || '',
+      no_hp: t.no_hp || '',
+      alamat: t.alamat || '',
+      mapel: t.nama_mapel || '',
+      status: t.status || '',
+    }));
+    exportToExcel(rows, columns, 'Manajemen_Tutor');
+  };
+
   return (
     <AdminLayout>
       {}
       <div className={styles.pageHeader}>
         <h2 className={styles.pageTitle}>MANAJEMEN TUTOR</h2>
-        <button
-          type="button"
-          className={styles.btnRefresh}
-          onClick={fetchTutor}
-          disabled={loading}
-        >
-          <MdRefresh className={styles.btnIcon} />
-          {loading ? 'Memuat…' : 'Refresh Data'}
-        </button>
+        <div className={styles.headerActions}>
+          <button
+            type="button"
+            className={styles.btnRefresh}
+            onClick={fetchTutor}
+            disabled={loading}
+          >
+            <MdRefresh className={styles.btnIcon} />
+            {loading ? 'Memuat…' : 'Refresh Data'}
+          </button>
+          <button
+            type="button"
+            className={styles.btnExport}
+            onClick={handleExport}
+          >
+            <MdFileDownload className={styles.btnIcon} />
+            Export Excel
+          </button>
+        </div>
       </div>
 
       {}
