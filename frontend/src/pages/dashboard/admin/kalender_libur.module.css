@@ -1,0 +1,405 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 8px 0;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.pageTitle {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #00236f;
+  margin: 0;
+}
+
+.pageSubtitle {
+  font-size: 0.85rem;
+  color: #757682;
+  margin: 4px 0 0;
+}
+
+/* ─── Navigation ─── */
+
+.calNav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.navBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #fff;
+  color: #444651;
+  cursor: pointer;
+  font-size: 1.25rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.navBtn:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.navTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #00236f;
+  min-width: 180px;
+  text-align: center;
+}
+
+/* ─── Calendar Card ─── */
+
+.calendarCard {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+.calendarGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 640px;
+}
+
+.calRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.calDayHeader {
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.calDayEmpty {
+  min-height: 100px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.calDay {
+  min-height: 100px;
+  background: #fff;
+  border: 1px solid #f1f5f9;
+  border-radius: 8px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.15s;
+}
+
+.calDay:hover {
+  border-color: #bfdbfe;
+}
+
+.calDayWeekend {
+  background: #fafafa;
+}
+
+.calDayLibur {
+  background: #fef9e7;
+  border-color: #fde68a;
+}
+
+.calDayTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.calDayNum {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.calDayWeekend .calDayNum {
+  color: #94a3b8;
+}
+
+.calDayLibur .calDayNum {
+  color: #92400e;
+  background: #fde68a;
+}
+
+.calDayAddBtn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  background: #dbeafe;
+  color: #1e40af;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s;
+}
+
+.calDay:hover .calDayAddBtn {
+  display: inline-flex;
+}
+
+.calDayAddBtn:hover {
+  background: #bfdbfe;
+}
+
+/* ─── Libur Items in Calendar ─── */
+
+.calDayLiburs {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.liburItem {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #92400e;
+  background: #fef3c7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.liburIcon {
+  font-size: 0.7rem;
+  flex-shrink: 0;
+}
+
+.liburText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.liburMore {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: #92400e;
+  padding: 1px 4px;
+}
+
+/* ─── Modal ─── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modalClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  transition: background 0.15s;
+}
+
+.modalClose:hover {
+  background: #e2e8f0;
+}
+
+.modalTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #00236f;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modalTitleIcon {
+  font-size: 1.25rem;
+  color: #d97706;
+}
+
+/* ─── Libur List (modal) ─── */
+
+.liburListSection {
+  margin-bottom: 20px;
+}
+
+.emptyText {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  padding: 16px;
+  font-style: italic;
+}
+
+.liburList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.liburRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+}
+
+.liburRowIcon {
+  font-size: 1rem;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.liburRowText {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #92400e;
+}
+
+.liburRowDel {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  transition: background 0.15s;
+}
+
+.liburRowDel:hover {
+  background: #fee2e2;
+}
+
+/* ─── Add Section (modal) ─── */
+
+.addSection {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 16px;
+}
+
+.addLabel {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+
+.addRow {
+  display: flex;
+  gap: 8px;
+}
+
+.addInput {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.addInput:focus {
+  border-color: #00236f;
+  box-shadow: 0 0 0 2px rgba(0, 35, 111, 0.1);
+}
+
+.addBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 16px;
+  background: #00236f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.addBtn:hover {
+  background: #0033a0;
+}
+
+.addBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

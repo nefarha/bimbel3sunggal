@@ -8,6 +8,7 @@ import {
 } from 'react-icons/md';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
+import { useLiburDate } from '../../../hooks/useLibur';
 import styles from './presensi_tutor.module.css';
 
 const parseMapelIds = (value) => {
@@ -98,6 +99,7 @@ const PresensiTutor = () => {
 
   const tanggalLabel = useMemo(() => formatTanggalPanjang(meta.tanggal), [meta.tanggal]);
 
+  const liburList = useLiburDate(meta.tanggal);
   const isWeekend = useMemo(() => {
     return meta.hari === 'Sabtu' || meta.hari === 'Minggu';
   }, [meta.hari]);
@@ -192,6 +194,13 @@ const PresensiTutor = () => {
         <div className={styles.alertInfo} role="status">
           <MdInfo />
           <span>Hari ini adalah hari {meta.hari} (Libur). Tidak ada presensi tutor untuk hari libur.</span>
+        </div>
+      )}
+
+      {liburList.length > 0 && !isWeekend && (
+        <div className={styles.alertLibur} role="status">
+          <MdInfo />
+          <span>Tanggal ini merupakan hari libur: {liburList.map((l) => l.keterangan || 'Libur').join(', ')}</span>
         </div>
       )}
 

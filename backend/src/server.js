@@ -18,6 +18,7 @@ import gajiRoutes from './routes/gaji.js'
 import keuanganRoutes from './routes/keuangan.js'
 import infalRoutes from './routes/infal.js'
 import settingsRoutes from './routes/settings.js'
+import liburRoutes from './routes/libur.js'
 
 dotenv.config()
 
@@ -48,6 +49,7 @@ app.use('/api/gaji', gajiRoutes)
 app.use('/api/keuangan', keuanganRoutes)
 app.use('/api/infal', infalRoutes)
 app.use('/api/settings', settingsRoutes)
+app.use('/api/libur', liburRoutes)
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route not found' })

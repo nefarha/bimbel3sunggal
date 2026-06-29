@@ -153,6 +153,11 @@
   border: 1px solid #e2e8f0;
 }
 
+.colorBoxLibur {
+  background-color: #fef9c3;
+  border: 1px solid #fde68a;
+}
+
 .tutorCard {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
@@ -272,6 +277,12 @@
   background-color: #f1f5f9;
   color: #cbd5e1;
   border: 1px solid #e2e8f0;
+}
+
+.dayCircleLibur {
+  background-color: #fef9c3;
+  color: #92400e;
+  border: 1px solid #fde68a;
 }
 
 .loadingState,

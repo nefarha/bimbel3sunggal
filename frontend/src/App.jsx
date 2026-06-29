@@ -40,6 +40,7 @@ import ManajemenMapel from './pages/dashboard/admin/manajemen_mapel'
 import RekapAbsensiSiswaAdmin from './pages/dashboard/admin/rekap_absensi_siswa'
 import SemuaPembayaran from './pages/dashboard/admin/semua_pembayaran'
 import TagihanSiswa from './pages/dashboard/admin/tagihan_siswa'
+import KalenderLibur from './pages/dashboard/admin/kalender_libur'
 import './App.css'
 
 function App() {
@@ -164,6 +165,14 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['admin']}>
               <TagihanSiswa />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/kalender-libur"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <KalenderLibur />
             </ProtectedRoute>
           }
         />

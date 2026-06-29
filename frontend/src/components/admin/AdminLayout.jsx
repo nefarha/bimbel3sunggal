@@ -17,6 +17,7 @@ import {
   MdPeople,
   MdReceipt,
   MdAttachMoney,
+  MdEventBusy,
 } from 'react-icons/md';
 import styles from './AdminLayout.module.css';
 import logogrand from '../../assets/logogrand.png';
@@ -36,6 +37,7 @@ const NAV_ITEMS = [
   { label: 'Rekap Absensi Siswa', icon: MdPeople, to: '/admin/rekap-absensi-siswa' },
   { label: 'Infal Tutor', icon: MdSwapHoriz, to: '/admin/infal-tutor' },
   { label: 'Tagihan Siswa', icon: MdAttachMoney, to: '/admin/tagihan' },
+  { label: 'Kalender Libur', icon: MdEventBusy, to: '/admin/kalender-libur' },
 ];
 
 function AdminLayout({ children }) {

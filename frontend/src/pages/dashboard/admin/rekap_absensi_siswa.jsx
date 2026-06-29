@@ -3,6 +3,7 @@ import { MdFileDownload } from 'react-icons/md';
 import { exportToExcel } from '../../../utils/exportExcel';
 import api from '../../../services/api';
 import AdminLayout from '../../../components/admin/AdminLayout';
+import { useLibur } from '../../../hooks/useLibur';
 import styles from './rekap_absensi.module.css';
 
 const MONTHS = [
@@ -59,6 +60,7 @@ const RekapAbsensiSiswa = () => {
   }, [bulan, tahun]);
 
   const selectedMonthLabel = MONTHS.find((m) => m.value === Number(bulan))?.label || '';
+  const liburMap = useLibur(tahun, bulan);
 
   const handleExport = () => {
     const columns = [
@@ -143,6 +145,10 @@ const RekapAbsensiSiswa = () => {
               <div className={`${styles.colorBox} ${styles.colorBoxWeekend}`} />
               <span>Weekend (Sabtu & Minggu)</span>
             </div>
+            <div className={styles.legendItem}>
+              <div className={`${styles.colorBox} ${styles.colorBoxLibur}`} />
+              <span>Hari Libur</span>
+            </div>
           </div>
         </div>
 
@@ -188,7 +194,10 @@ const RekapAbsensiSiswa = () => {
               <div className={styles.calendarGrid}>
                 {siswa.days.map((day) => {
                   let circleClass = styles.dayCircle;
-                  if (day.status === 'hadir') {
+                  const isLibur = liburMap[day.day] && liburMap[day.day].length > 0;
+                  if (isLibur) {
+                    circleClass += ` ${styles.dayCircleLibur}`;
+                  } else if (day.status === 'hadir') {
                     circleClass += ` ${styles.dayCircleHadir}`;
                   } else if (day.status === 'alpha') {
                     circleClass += ` ${styles.dayCircleAlpha}`;
@@ -196,8 +205,9 @@ const RekapAbsensiSiswa = () => {
                     circleClass += ` ${styles.dayCircleWeekend}`;
                   }
 
+                  const liburText = isLibur ? ` (${liburMap[day.day].join(', ')})` : '';
                   return (
-                    <div key={day.day} className={circleClass} title={`Tanggal ${day.day}`}>
+                    <div key={day.day} className={circleClass} title={`Tanggal ${day.day}${liburText}`}>
                       {day.day}
                     </div>
                   );

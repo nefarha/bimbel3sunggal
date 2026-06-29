@@ -57,27 +57,31 @@ const Kehadiran = () => {
 
   const selectedMonthLabel = MONTHS.find((m) => m.value === Number(bulan))?.label || '';
 
-  const getCircleClass = (status) => {
-    switch (status) {
-      case 'hadir':
-        return styles.dayCircleHadir;
-      case 'sakit':
-      case 'izin':
-      case 'absen':
-        return styles.dayCircleAlpha;
-      case 'weekend':
-        return styles.dayCircleWeekend;
-      default:
-        return styles.dayCircleNoData;
-    }
-  };
-
   const dayRows = data?.days
-    ? [
-        data.days.slice(0, 13),
-        data.days.slice(13, 26),
-        data.days.slice(26),
-      ]
+    ? (() => {
+        const numDays = new Date(tahun, bulan, 0).getDate();
+        const dayMap = {};
+        data.days.forEach((d) => { dayMap[d.day] = d.status; });
+
+        const weeks = [];
+        let week = [];
+        for (let d = 1; d <= numDays; d++) {
+          const dow = new Date(tahun, bulan - 1, d).getDay();
+          if (d === 1) {
+            // Fill leading empty slots
+            for (let i = 0; i < dow; i++) week.push(null);
+          }
+          const status = dayMap[d];
+          week.push({ day: d, status: status || null });
+          if (dow === 6 || d === numDays) {
+            // Fill remaining slots of last week
+            while (week.length < 7) week.push(null);
+            weeks.push(week);
+            week = [];
+          }
+        }
+        return weeks;
+      })()
     : [];
 
   return (
@@ -174,6 +178,10 @@ const Kehadiran = () => {
                   <div className={`${styles.colorBox} ${styles.colorBoxNoData}`} />
                   <span>Belum Ada Data</span>
                 </div>
+                <div className={styles.legendItem}>
+                  <div className={`${styles.colorBox} ${styles.colorBoxLibur}`} />
+                  <span>Hari Libur</span>
+                </div>
               </div>
             </div>
 
@@ -183,14 +191,31 @@ const Kehadiran = () => {
                 {selectedMonthLabel} {tahun}
               </div>
               <div className={styles.calendarGridWrapper}>
-                <div className={styles.calendarGrid}>
-                  {dayRows.map((row, rowIdx) => (
-                    <div key={rowIdx} className={styles.calendarRow}>
-                      {row.map((day) => {
-                        const circleClass = `${styles.dayCircle} ${getCircleClass(day.status)}`;
+                <div className={styles.miniCalendar}>
+                  <div className={styles.calendarRow}>
+                    {['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'].map((d) => (
+                      <div key={d} className={styles.dayHeader}>{d}</div>
+                    ))}
+                  </div>
+                  {dayRows.map((week, wi) => (
+                    <div key={wi} className={styles.calendarRow}>
+                      {week.map((cell, ci) => {
+                        if (cell === null) {
+                          return <div key={ci} className={`${styles.dayCircle} ${styles.dayEmpty}`} />;
+                        }
+                        const isWeekend = ci === 0 || ci === 6;
+                        let cls, symbol;
+                        if (isWeekend) {
+                          cls = styles.dayCircleWeekend;
+                          symbol = '';
+                        } else if (cell.status === 'hadir') { cls = styles.dayHadir; symbol = '✓'; }
+                        else if (cell.status === 'alpha' || cell.status === 'absen') { cls = styles.dayAlpha; symbol = '✗'; }
+                        else if (cell.status === 'sakit') { cls = styles.daySakit; symbol = 'S'; }
+                        else if (cell.status === 'izin') { cls = styles.dayIzin; symbol = 'I'; }
+                        else { cls = styles.dayNoData; symbol = '-'; }
                         return (
-                          <div key={day.day} className={circleClass} title={`Tanggal ${day.day}`}>
-                            {day.day}
+                          <div key={ci} className={`${styles.dayCircle} ${cls}`} title={`${cell.day}/${bulan}/${tahun}`}>
+                            {symbol}
                           </div>
                         );
                       })}

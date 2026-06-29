@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { MdHowToReg } from 'react-icons/md';
 import api from '../../../services/api';
+import { useLibur } from '../../../hooks/useLibur';
 import styles from './rekap_absensi.module.css';
 
 const MONTHS = [
@@ -41,6 +42,7 @@ const RekapAbsensi = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedJadwal, setSelectedJadwal] = useState(null);
+  const liburMap = useLibur(tahun, bulan);
 
   const fetchData = useCallback(async () => {
     try {
@@ -155,7 +157,7 @@ const RekapAbsensi = () => {
                       <span className={styles.jadwalMapel}>{jadwal.nama_mapel || '-'}</span>
                       <span className={styles.jadwalBadgeHari}>{Array.isArray(jadwal.hari) ? jadwal.hari.join(', ') : jadwal.hari}</span>
                       <span className={styles.jadwalJam}>
-                        {formatJam(jadwal.jam)}{jadwal.jam_selesai ? ` - ${formatJam(jadwal.jam_selesai)}` : ''}
+                        {formatJam(jadwal.jam)}{jadwal.jam_selesai ? ` - ${formatJam(jadwal.jam_selesai)}` : ''} ({MONTHS.find(m => m.value === bulan)?.label} {tahun})
                       </span>
                     </div>
                     <span
@@ -223,28 +225,33 @@ const RekapAbsensi = () => {
                             if (d === 1 || dow === 0) {
                               if (d > 1) { weeks.push(week); week = new Array(7).fill(null); }
                               // Fill leading nulls
-                              for (let i = 0; i < dow; i++) week[i] = 'empty';
+                              for (let i = 0; i < dow; i++) week[i] = null;
                             }
                             const status = dayMap[d] || null;
-                            week[dow] = status || 'nodata';
+                            week[dow] = { day: d, status: status || 'nodata' };
                             if (d === numDays) weeks.push(week);
                           }
                           return weeks.map((w, wi) => (
                             <div key={wi} className={styles.calendarRow}>
                               {w.map((cell, ci) => {
-                                if (cell === 'empty' || cell === null) {
+                                if (cell === null) {
                                   return <div key={ci} className={`${styles.dayCircle} ${styles.dayEmpty}`} />;
                                 }
+                                const s = cell.status;
+                                const isLibur = liburMap[cell.day] && liburMap[cell.day].length > 0;
                                 let cls = styles.dayNoData;
-                                if (cell === 'hadir') cls = styles.dayHadir;
-                                else if (cell === 'alpha') cls = styles.dayAlpha;
-                                else if (cell === 'sakit') cls = styles.daySakit;
-                                else if (cell === 'izin') cls = styles.dayIzin;
-                                // Find the day number for tooltip
-                                const dayNum = jadwal.days.find((dItem) => dItem.status === cell);
+                                let symbol = '-';
+                                if (isLibur) {
+                                  cls = styles.dayCircleLibur;
+                                  symbol = '★';
+                                } else if (s === 'hadir') { cls = styles.dayHadir; symbol = '✓'; }
+                                else if (s === 'alpha') { cls = styles.dayAlpha; symbol = '✗'; }
+                                else if (s === 'sakit') { cls = styles.daySakit; symbol = 'S'; }
+                                else if (s === 'izin') { cls = styles.dayIzin; symbol = 'I'; }
+                                const liburText = isLibur ? ` (${liburMap[cell.day].join(', ')})` : '';
                                 return (
-                                  <div key={ci} className={`${styles.dayCircle} ${cls}`}>
-                                    {cell === 'hadir' ? '✓' : cell === 'alpha' ? '✗' : cell === 'sakit' ? 'S' : cell === 'izin' ? 'I' : '-'}
+                                  <div key={ci} className={`${styles.dayCircle} ${cls}`} title={`${cell.day}/${bulan}/${tahun}${liburText}`}>
+                                    {symbol}
                                   </div>
                                 );
                               })}

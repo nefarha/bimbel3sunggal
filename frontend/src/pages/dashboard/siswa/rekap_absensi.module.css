@@ -216,6 +216,7 @@
 .dayIzin { background: #3b82f6; color: #fff; }
 .dayNoData { background: #fff; color: #94a3b8; border: 1px solid #e2e8f0; }
 .dayEmpty { background: transparent; border: none; }
+.dayCircleLibur { background: #fef9c3; color: #92400e; border: 1px solid #fde68a; }
 
 
 .tableCard {
