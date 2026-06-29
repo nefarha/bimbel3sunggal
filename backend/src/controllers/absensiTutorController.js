@@ -1,5 +1,7 @@
 import { query, queryOne } from '../config/query.js';
+import { LiburRepository } from '../repository/libur/liburRepository.js';
 
+const liburRepository = new LiburRepository();
 const HARI_MAP_ID = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
 const VALID_STATUS = ['Hadir', 'Absen', 'Sakit', 'Izin'];
 
@@ -157,6 +159,9 @@ export const getTutorAttendanceRecap = async (req, res) => {
       [targetMonth, targetYear]
     );
 
+    const liburRecords = await liburRepository.findByMonth(targetYear, targetMonth);
+    const liburDays = new Set(liburRecords.map(libur => new Date(libur.tanggal).getDate()));
+
     const attendanceMap = {};
     attendanceRecords.forEach((rec) => {
       if (!attendanceMap[rec.id_tutor]) {
@@ -177,6 +182,7 @@ export const getTutorAttendanceRecap = async (req, res) => {
         const dateObj = new Date(targetYear, targetMonth - 1, d);
         const dayOfWeek = dateObj.getDay(); // 0 = Sunday, 6 = Saturday
         const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+        const isLibur = liburDays.has(d) && !isWeekend;
 
         const status = tutorAttendance[d] || null;
 
@@ -192,6 +198,12 @@ export const getTutorAttendanceRecap = async (req, res) => {
         } else {
           displayStatus = 'alpha';
           alphaCount++;
+        }
+        
+        // Hitung libur sebagai hadir, tapi jangan ubah displayStatus
+        if (isLibur) {
+          hadirCount++;
+          alphaCount--; // Kurangi alpha karena libur tidak dianggap alpha
         }
 
         days.push({
@@ -250,6 +262,9 @@ export const getMyAttendanceRecap = async (req, res) => {
       [idTutor, targetMonth, targetYear]
     );
 
+    const liburRecords = await liburRepository.findByMonth(targetYear, targetMonth);
+    const liburDays = new Set(liburRecords.map(libur => new Date(libur.tanggal).getDate()));
+
     const attendanceMap = {};
     attendanceRecords.forEach((rec) => {
       attendanceMap[rec.hari] = rec.status;
@@ -271,6 +286,7 @@ export const getMyAttendanceRecap = async (req, res) => {
       const dateObj = new Date(targetYear, targetMonth - 1, d);
       const dayOfWeek = dateObj.getDay();
       const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+      const isLibur = liburDays.has(d) && !isWeekend;
       const status = attendanceMap[d] || null;
 
       let displayStatus = 'no-data';
@@ -292,6 +308,12 @@ export const getMyAttendanceRecap = async (req, res) => {
         absenDates.push(d);
       } else if (isWeekend) {
         displayStatus = 'weekend';
+      }
+      
+      // Hitung libur sebagai hadir, tapi jangan ubah displayStatus
+      if (isLibur) {
+        hadirCount++;
+        hadirDates.push(d);
       }
 
       days.push({ day: d, status: displayStatus });

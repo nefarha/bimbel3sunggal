@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../../services/api';
+import { useLibur } from '../../../hooks/useLibur';
 import styles from './kehadiran.module.css';
 
 const MONTHS = [
@@ -24,6 +25,45 @@ const Kehadiran = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const liburMap = useLibur(tahun, bulan);
+
+  const renderDayCell = useCallback((cell, ci) => {
+    if (cell === null) {
+      return <div key={ci} className={`${styles.dayCircle} ${styles.dayEmpty}`} />;
+    }
+    const isWeekend = ci === 0 || ci === 6;
+    const isLibur = liburMap[cell.day] && liburMap[cell.day].length > 0;
+    let cls, symbol;
+
+    if (isLibur) {
+      cls = styles.dayLibur;
+      symbol = '★';
+    } else if (cell.status === 'hadir') {
+      cls = styles.dayHadir;
+      symbol = '✓';
+    } else if (cell.status === 'alpha' || cell.status === 'absen') {
+      cls = styles.dayAlpha;
+      symbol = '✗';
+    } else if (cell.status === 'sakit') {
+      cls = styles.daySakit;
+      symbol = 'S';
+    } else if (cell.status === 'izin') {
+      cls = styles.dayIzin;
+      symbol = 'I';
+    } else if (isWeekend) {
+      cls = styles.dayCircleWeekend;
+      symbol = cell.day;
+    } else {
+      cls = styles.dayNoData;
+      symbol = cell.day;
+    }
+    const liburText = isLibur ? ` (${liburMap[cell.day].join(', ')})` : '';
+    return (
+      <div key={ci} className={`${styles.dayCircle} ${cls}`} title={`${cell.day}/${bulan}/${tahun}${liburText}`}>
+        {symbol}
+      </div>
+    );
+  }, [styles, liburMap, bulan, tahun]);
 
   const years = [];
   const currentYear = today.getFullYear();
@@ -158,7 +198,6 @@ const Kehadiran = () => {
               </div>
             </div>
 
-            {}
             <div className={styles.legendCard}>
               <span className={styles.legendLabel}>Keterangan:</span>
               <div className={styles.legendItems}>
@@ -185,7 +224,6 @@ const Kehadiran = () => {
               </div>
             </div>
 
-            {}
             <div className={styles.calendarCard}>
               <div className={styles.monthLabel}>
                 {selectedMonthLabel} {tahun}
@@ -199,33 +237,14 @@ const Kehadiran = () => {
                   </div>
                   {dayRows.map((week, wi) => (
                     <div key={wi} className={styles.calendarRow}>
-                      {week.map((cell, ci) => {
-                        if (cell === null) {
-                          return <div key={ci} className={`${styles.dayCircle} ${styles.dayEmpty}`} />;
-                        }
-                        const isWeekend = ci === 0 || ci === 6;
-                        let cls, symbol;
-                        if (isWeekend) {
-                          cls = styles.dayCircleWeekend;
-                          symbol = '';
-                        } else if (cell.status === 'hadir') { cls = styles.dayHadir; symbol = '✓'; }
-                        else if (cell.status === 'alpha' || cell.status === 'absen') { cls = styles.dayAlpha; symbol = '✗'; }
-                        else if (cell.status === 'sakit') { cls = styles.daySakit; symbol = 'S'; }
-                        else if (cell.status === 'izin') { cls = styles.dayIzin; symbol = 'I'; }
-                        else { cls = styles.dayNoData; symbol = '-'; }
-                        return (
-                          <div key={ci} className={`${styles.dayCircle} ${cls}`} title={`${cell.day}/${bulan}/${tahun}`}>
-                            {symbol}
-                          </div>
-                        );
-                      })}
+                      {week.map((cell, ci) => renderDayCell(cell, ci))}
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            {}
+            {/* Table Card */}
             <div className={styles.tableCard}>
               <h3 className={styles.tableTitle}>Rekap Kehadiran</h3>
               <div className={styles.tableWrapper}>

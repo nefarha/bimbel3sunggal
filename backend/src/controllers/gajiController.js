@@ -1,5 +1,7 @@
 import { query, queryOne } from '../config/query.js';
+import { LiburRepository } from '../repository/libur/liburRepository.js';
 
+const liburRepository = new LiburRepository();
 const handleError = (res, error) => {
   console.error('❌ GajiController error:', error);
   res.status(500).json({ success: false, message: error.message });
@@ -77,7 +79,11 @@ const hitungGaji = async (idTutor, targetMonth, targetYear, useSavedIfExists = f
   // 4. Hitung hari kerja aktual (Senin-Jumat) dalam bulan ini
   const hariKerjaAktual = countWorkingDays(targetYear, targetMonth);
 
-  // 5. Ambil absensi tutor — hanya hari kerja (Senin-Jumat) yang diperhitungkan
+  // 5. Ambil libur dates
+  const liburRecords = await liburRepository.findByMonth(targetYear, targetMonth);
+  const liburDates = new Set(liburRecords.map(libur => new Date(libur.tanggal).toDateString()));
+
+  // 6. Ambil absensi tutor — hanya hari kerja (Senin-Jumat) yang diperhitungkan
   const attendanceRecords = await query(
     `SELECT tanggal, status
      FROM absensi_tutor
@@ -91,27 +97,40 @@ const hitungGaji = async (idTutor, targetMonth, targetYear, useSavedIfExists = f
   let tidakMasukCount = 0; // Semua status selain 'Hadir' di hari kerja
   let absenHariKerja = [];
 
+  // Buat map attendance untuk mudah diakses
+  const attendanceMap = new Map();
   attendanceRecords.forEach((rec) => {
-    const tanggal = new Date(rec.tanggal);
-    const dow = tanggal.getDay(); // 0=Minggu, 6=Sabtu
-    const isWeekend = dow === 0 || dow === 6;
+    const dateStr = new Date(rec.tanggal).toDateString();
+    attendanceMap.set(dateStr, rec.status);
+  });
 
-    // Lewati absensi yang terjadi di akhir pekan
-    if (isWeekend) return;
+  // Iterasi semua hari kerja di bulan ini
+  const numDays = new Date(targetYear, targetMonth, 0).getDate();
+  for (let d = 1; d <= numDays; d++) {
+    const dateObj = new Date(targetYear, targetMonth - 1, d);
+    const dow = dateObj.getDay(); // 0=Minggu, 6=Sabtu
+    const isWeekend = dow === 0 || dow === 6;
+    if (isWeekend) continue;
+
+    const dateStr = dateObj.toDateString();
+    const isLibur = liburDates.has(dateStr);
+    const status = attendanceMap.get(dateStr);
 
     absenHariKerja.push({
-      tanggal: rec.tanggal,
-      status: rec.status,
+      tanggal: dateObj,
+      status: status || (isLibur ? 'Libur' : null),
       hari: dow,
     });
 
-    if (rec.status === 'Hadir') {
+    if (status === 'Hadir' || isLibur) {
       hadirCount++;
+    } else if (status === 'Sakit' || status === 'Izin' || status === 'Absen') {
+      tidakMasukCount++;
     } else {
-      // Absen, Sakit, Izin di hari kerja = tidak masuk
+      // Tidak ada data absensi dan bukan libur = tidak masuk
       tidakMasukCount++;
     }
-  });
+  }
 
   // 6. Cek apakah sudah ada record gaji tersimpan
   const periodeStart = `${targetYear}-${String(targetMonth).padStart(2, '0')}-01 00:00:00`;
